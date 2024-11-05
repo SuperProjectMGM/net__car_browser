@@ -1,3 +1,5 @@
+using System.Globalization;
+using NanoidDotNet;
 using search.api.DTOs.User;
 using search.api.Models;
 
@@ -13,6 +15,25 @@ public static class UserMappers
             Surname = userModel.Surname,
             Email = userModel.Email,
             PhoneNumber = userModel.PhoneNumber
+        };
+    }
+
+    public static User CreateUserFromDefPost(this CreateUserDto userDto)
+    {
+        return new User
+        {
+            Id = Nanoid.Generate(Nanoid.Alphabets.LowercaseLettersAndDigits, 10),
+            Login = userDto.Login,
+            Password = userDto.Password,
+            Name = userDto.Name,
+            Surname = userDto.Surname,
+            BirthDate = userDto.BirthDate,
+            DateOfReceiptOfDrivingLicense = userDto.DateOfReceiptOfDrivingLicense,
+            PersonalNumber = userDto.PersonalNumber,
+            LicenceNumber = userDto.LicenceNumber,
+            Email = userDto.Email,
+            Address = userDto.Address,
+            PhoneNumber = userDto.PhoneNumber
         };
     }
 }

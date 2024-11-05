@@ -2,7 +2,7 @@ namespace search.api.Models;
 
 public class Rental
 {
-    public int Id { get; set; }
+    public string Id { get; set; } = string.Empty;
     
     public int? UserId { get; set; }
     

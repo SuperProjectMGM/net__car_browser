@@ -1,11 +1,7 @@
-using System.Runtime.InteropServices.JavaScript;
+namespace search.api.DTOs.User;
 
-namespace search.api.Models;
-
-public class User
+public class CreateUserDto
 {
-    public string Id { get; set; } = string.Empty;
-
     public string Login { get; set; } = string.Empty;
 
     public string Password { get; set; } = string.Empty;
