@@ -56,7 +56,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+    needs: [build, migrate-database]
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
