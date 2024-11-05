@@ -32,9 +32,10 @@ jobs:
         with:
           name: .net-app
           path: "${{env.DOTNET_ROOT}}/BrowserApi"
-      migrate-database:
+          
+  migrate-database:
     runs-on: ubuntu-latest
-    needs: build-dotnet
+    needs: build
     steps:    
       - name: Checkout code
         uses: actions/checkout@v2
