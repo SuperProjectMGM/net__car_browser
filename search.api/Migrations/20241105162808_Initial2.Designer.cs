@@ -12,8 +12,8 @@ using search.api.Data;
 namespace search.api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241104161814_Initial")]
-    partial class Initial
+    [Migration("20241105162808_Initial2")]
+    partial class Initial2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,11 +27,8 @@ namespace search.api.Migrations
 
             modelBuilder.Entity("search.api.Models.Rental", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -40,8 +37,9 @@ namespace search.api.Migrations
                     b.Property<DateTime>("End")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int?>("RentalFirmId")
-                        .HasColumnType("int");
+                    b.Property<string>("RentalFirmId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
 
                     b.Property<DateTime>("Start")
                         .HasColumnType("datetime(6)");
@@ -50,8 +48,9 @@ namespace search.api.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("VinId")
                         .HasColumnType("int");
@@ -67,11 +66,8 @@ namespace search.api.Migrations
 
             modelBuilder.Entity("search.api.Models.RentalFirm", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("IpAddress")
                         .IsRequired()
@@ -88,11 +84,8 @@ namespace search.api.Migrations
 
             modelBuilder.Entity("search.api.Models.User", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -101,21 +94,29 @@ namespace search.api.Migrations
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<DateTime>("DateOfReceiptOfDrivingLicense")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("LicenceDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("LicenceId")
+                    b.Property<int>("LicenceNumber")
                         .HasColumnType("int");
+
+                    b.Property<string>("Login")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("PersonalId")
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("PersonalNumber")
                         .HasColumnType("int");
 
                     b.Property<string>("PhoneNumber")
@@ -135,11 +136,15 @@ namespace search.api.Migrations
                 {
                     b.HasOne("search.api.Models.RentalFirm", "RentalFirm")
                         .WithMany()
-                        .HasForeignKey("RentalFirmId");
+                        .HasForeignKey("RentalFirmId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("search.api.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("RentalFirm");
 

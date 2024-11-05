@@ -35,6 +35,7 @@ namespace search.api.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("RentalFirmId")
+                        .IsRequired()
                         .HasColumnType("varchar(255)");
 
                     b.Property<DateTime>("Start")
@@ -44,10 +45,8 @@ namespace search.api.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("varchar(255)");
 
                     b.Property<int>("VinId")
@@ -57,7 +56,7 @@ namespace search.api.Migrations
 
                     b.HasIndex("RentalFirmId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Rentals");
                 });
@@ -134,11 +133,15 @@ namespace search.api.Migrations
                 {
                     b.HasOne("search.api.Models.RentalFirm", "RentalFirm")
                         .WithMany()
-                        .HasForeignKey("RentalFirmId");
+                        .HasForeignKey("RentalFirmId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("search.api.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("RentalFirm");
 

@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using search.api.Data;
 using search.api.DTOs.User;
+using search.api.Interfaces;
 using search.api.Mappers;
 using search.api.Models;
+using search.api.Repositories;
 
 namespace search.api.Controllers;
 
@@ -11,52 +13,55 @@ namespace search.api.Controllers;
 public class UserController : ControllerBase
 {
     private readonly AppDbContext _context;
-
-    public UserController(AppDbContext context)
+    private readonly IUserRepository _userRepo;
+    public UserController(AppDbContext context, IUserRepository userRepo)
     {
         _context = context;
+        _userRepo = userRepo;
     }
     
-    /// <summary>
-    /// Default means that narrowed User model is returned.
-    /// Name, Surname, Email and Phone number
-    /// </summary>
-    /// <returns></returns>
-
     [HttpGet]
-    public IActionResult GetAllDefault()
+    public async Task<IActionResult> GetAllDefault()
     {
-        var users = _context.Users.ToList()
-            .Select(s => s.ToUserDefaultDto());
-        return Ok(users);
+        var users = await _userRepo.GetAllAsync();
+        var usersDto = users.Select(s => s.ToUserDefaultDto());
+        return Ok(usersDto);
     }
     
-    
-    /// <summary>
-    /// Default means that narrowed User model is returned.
-    /// Name, Surname, Email and Phone number
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-
     [HttpGet("{id}")]
-    public IActionResult GetByIdDefault([FromRoute] string id)
+    public async Task<IActionResult> GetByIdDefault([FromRoute] string id)
     {
-        var user = _context.Users.Find(id);
-
+        var user = await _userRepo.GetByIdDefaultAsync(id);
         if (user == null)
             return NotFound();
-
         return Ok(user.ToUserDefaultDto());
     }
 
     [HttpPost]
-    public IActionResult CreateUser([FromBody] CreateUserDto userDto)
+    public async Task<IActionResult> CreateUser([FromBody] CreateUserDto userDto)
     {
         var userModel = userDto.CreateUserFromDefPost();
-        _context.Users.Add(userModel);
-        _context.SaveChanges();
+        await _userRepo.CreateUserAsync(userModel);
         return CreatedAtAction(nameof(GetByIdDefault), new { id = userModel.Id },userModel.ToUserDefaultDto());
     }
-    
+
+    [HttpPut]
+    [Route("{id}")]
+    public async Task<IActionResult> UpdateUser([FromRoute] string id, [FromBody] UpdateUserDto userDto)
+    {
+        var userModel = await _userRepo.UpdateUserAsync(id, userDto);
+        if (userModel == null)
+            return NotFound();
+        return Ok(userModel.ToUserDefaultDto());
+    }
+
+    [HttpDelete]
+    [Route("{id}")]
+    public async Task<IActionResult> DeleteUser([FromRoute] string id)
+    {
+        var userModel = await _userRepo.DeleteUserAsync(id);
+        if (userModel == null)
+            return NotFound();
+        return NoContent();
+    }
 }
