@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using search.api.Data;
 using search.api.Interfaces;
 using search.api.Repositories;
+using search.api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,9 +18,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Devconnection")));
 
 
+builder.Services.AddHttpClient<ISearchInterface, SearchMainService>(c =>
+c.BaseAddress = new Uri(builder.Configuration["HttpClientSettings:BaseUrl"]!));
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
