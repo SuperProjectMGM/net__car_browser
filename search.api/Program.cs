@@ -19,24 +19,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 
 builder.Services.AddHttpClient<ISearchInterface, SearchMainService>(c =>
-{
-    c.BaseAddress = new Uri("https://localhost:5076/");
-})
-.ConfigurePrimaryHttpMessageHandler(() =>
-{
-    var handler = new HttpClientHandler();
-
-    // Set TLS protocols explicitly (optional, depending on your server's configuration)
-    handler.SslProtocols = System.Security.Authentication.SslProtocols.Tls12 | System.Security.Authentication.SslProtocols.Tls13;
-
-    // Only bypass SSL certificate errors in development
-    if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
-    {
-        handler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true;
-    }
-
-    return handler;
-});
+c.BaseAddress = new Uri("https://localhost:5076/"));
 
 var app = builder.Build();
 
