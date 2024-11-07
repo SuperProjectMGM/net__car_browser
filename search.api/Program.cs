@@ -19,11 +19,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 
 builder.Services.AddHttpClient<ISearchInterface, SearchMainService>(c =>
-c.BaseAddress = new Uri("https://localhost:5076/"));
+c.BaseAddress = new Uri(builder.Configuration["HttpClientSettings:BaseUrl"]!));
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

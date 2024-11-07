@@ -20,7 +20,6 @@ namespace search.api.Services
         public async Task<SearchInfo> Search()
         {
             var response = await _client.GetAsync(BasePath);
-
             var listOfVehiclesDto = await response.ReadContentAsync<List<VehicleOurDto>>();
             // I don't know now how to manage Id from logged or authenticated user
             SearchInfo info = new SearchInfo();
