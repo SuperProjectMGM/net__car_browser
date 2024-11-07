@@ -10,8 +10,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<AppDbContext>();
+//builder.Services.AddDbContext<AppDbContext>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Services.AddDbContext<AppDbContext>(options => 
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Devconnection")));
+
 
 var app = builder.Build();
 
