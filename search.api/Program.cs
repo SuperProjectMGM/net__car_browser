@@ -45,6 +45,15 @@ builder.Services.AddAuthentication(options =>
         };
     });
 
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequiredLength = 6; // Example
+});
+
 
 builder.Services.AddHttpClient<ISearchInterface, SearchMainService>(c =>
 c.BaseAddress = new Uri(builder.Configuration["HttpClientSettings:BaseUrl"]!));

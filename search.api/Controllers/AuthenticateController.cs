@@ -29,7 +29,7 @@ public class AuthenticateController: ControllerBase
     public async Task<IActionResult> Register([FromBody] RegisterModel model)
     {
         // Now check if exists the user with same email. I think we can't have two users with same email
-        var userExists = await _userManager.FindByEmailAsync(model.Email);
+        var userExists = await _userManager.FindByEmailAsync(model.Email!);
         if (userExists != null)
         {
             return StatusCode(StatusCodes.Status400BadRequest, "User with this email already exists!");
@@ -37,13 +37,15 @@ public class AuthenticateController: ControllerBase
         IdentityUser user = new () 
         {
             Email = model.Email,
+            UserName = model.Email,
             // It should be changed whenever any cridential was changed???
             SecurityStamp = Guid.NewGuid().ToString()
         };
-        var result = await _userManager.CreateAsync(user, model.Password);
+        var result = await _userManager.CreateAsync(user, model.Password!);
         if (!result.Succeeded)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, "User creation failed! Please, try again.");
+            var errorMessages = string.Join(", ", result.Errors.Select(e => $"{e.Code}: {e.Description}"));
+            return StatusCode(StatusCodes.Status500InternalServerError, $"User creation failed: {errorMessages}");
         }
         return Ok();
     }
@@ -52,12 +54,13 @@ public class AuthenticateController: ControllerBase
     [Route("login")]
     public async Task<IActionResult> Login([FromBody] LoginModel model)
     {
-        var user = await _userManager.FindByEmailAsync(model.Email);
-        if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
+        var user = await _userManager.FindByEmailAsync(model.Email!);
+        if (user != null && await _userManager.CheckPasswordAsync(user, model.Password!))
         {
             var userRoles = await _userManager.GetRolesAsync(user);
             var authClaims = new List<Claim>
             {
+                new Claim(ClaimTypes.Name, user.UserName!),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
             foreach (var userRole in userRoles)
@@ -76,7 +79,7 @@ public class AuthenticateController: ControllerBase
 
     private JwtSecurityToken GetToken(List<Claim> authClaims)
     {
-        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]!));
         var token = new JwtSecurityToken(
             issuer: _configuration["JWT:ValidIssuer"],
             audience: _configuration["JWT:ValidAudience"],
