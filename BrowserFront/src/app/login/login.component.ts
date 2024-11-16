@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.serive';
 
 @Component({
   selector: 'app-login',
@@ -16,12 +17,12 @@ export class LoginComponent {
   errorMessage: string = ''; // Zmienna na komunikaty błędów
   isLoading: boolean = false;
 
-  constructor(/*private authService: AuthService*/ private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   login() {
     this.isLoading = true;
 
-    // Tu trzeba zmodyfikowac by było zpaytanie do serwera o logowanie
+    //Tu trzeba zmodyfikowac by było zpaytanie do serwera o logowanie
     // this.authService.login(this.email, this.password).subscribe({
     //   next: (response) => {
     //     localStorage.setItem('loggedIn', 'true'); // Ustaw flagę zalogowania
