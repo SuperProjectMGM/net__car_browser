@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "o2adEBTZtZepWL20iGvIbSnupLBqrRAJVCS5iH3fYrI=",
+  "Source": "search.api",
+  "BasePath": "_content/search.api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
