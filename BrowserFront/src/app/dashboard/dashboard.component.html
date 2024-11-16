@@ -1,0 +1,28 @@
+<div class="main-container">
+  <!-- Pasek z formularzem -->
+  <div class="search-bar">
+    <button class="profile-button" (click)="goToProfile()">
+      <i *ngIf="!isLoading" class="fa fa-user profile-icon"></i>
+      <i *ngIf="isLoading" class="fa fa-spinner fa-spin profile-icon"></i>
+    </button>
+    <div class="input-with-icon">
+      <input type="text" placeholder="     Pick-up Location" class="search-input" />
+      <i class="fa fa-search search-icon"></i>
+    </div>
+    <input type="date" placeholder="Pick-up Date" class="search-input" />
+    <input type="string" placeholder="Pick-up time" class="search-input" />
+    <input type="date" placeholder="Return Date" class="search-input" />
+    <input type="string" placeholder="Return time" class="search-input" />
+    <button class="search-button">Search</button>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="dashboard">
+    <div class="filters-container">
+      <app-filters></app-filters>
+    </div>
+    <div class="cars-list-container">
+      <app-cars-list></app-cars-list>
+    </div>
+  </div>
+</div>
