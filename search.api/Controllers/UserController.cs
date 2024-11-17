@@ -12,11 +12,11 @@ namespace search.api.Controllers;
 [ApiController]
 public class UserController : ControllerBase
 {
-    private readonly AppDbContext _context;
+    //private readonly AppDbContext _context;
     private readonly IUserRepository _userRepo;
     public UserController(AppDbContext context, IUserRepository userRepo)
     {
-        _context = context;
+        //_context = context;
         _userRepo = userRepo;
     }
     

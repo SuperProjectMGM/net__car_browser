@@ -17,7 +17,6 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddDbContext<AppDbContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("Devconnection")));
 
-
 builder.Services.AddHttpClient<ISearchInterface, SearchMainService>(c =>
 c.BaseAddress = new Uri(builder.Configuration["HttpClientSettings:BaseUrl"]!));
 
@@ -29,7 +28,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.MapControllers();
 app.Run();
 
