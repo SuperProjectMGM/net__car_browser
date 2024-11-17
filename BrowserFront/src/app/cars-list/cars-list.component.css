@@ -2,7 +2,6 @@
 .cars-list {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 16px;
 }
 
 /* Car item */
@@ -13,18 +12,6 @@
   padding: 24px;
   margin-bottom: 16px;
   position: relative;
-}
-
-.car-item__badge {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  background: #0052CC;
-  color: white;
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 500;
 }
 
 .car-item__container {
@@ -133,7 +120,7 @@
 .feature-icon {
   width: 24px;
   height: 24px;
-  background: #6B778C;
+  background: #ffffff;
   border-radius: 50%;
   display: inline-block;
 }
@@ -185,20 +172,8 @@
 .car-item__feature:hover {
   color: #0052CC;
 }
-
-/* Helper classes for spacing */
-.mt-8 {
-  margin-top: 8px;
-}
-
-.mb-8 {
-  margin-bottom: 8px;
-}
-
-.mr-8 {
-  margin-right: 8px;
-}
-
-.ml-8 {
-  margin-left: 8px;
+.cars-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }

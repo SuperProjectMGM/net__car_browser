@@ -1,7 +1,51 @@
 <div class="cars-list">
   <ul>
-    <li *ngFor="let car of cars">
-      <strong>{{ car.brand }}</strong> - {{ car.model }} zł<br>
+    <li *ngFor="let car of cars" class="car-item">
+      <div class="car-item__container">
+        <div class="car-item__image-wrapper">
+          <img 
+            [src]="'/assets/cars/' + car.carId + '.jpg'" 
+            alt="{{ car.brand }} {{ car.model }}" 
+            class="car-item__image"
+          />
+        </div>
+        <div class="car-item__content">
+          <div class="car-item__header">
+            <div class="car-item__title-group">
+              <h2 class="car-item__title">{{ car.brand }} {{ car.model }}</h2>
+              <p class="car-item__subtitle">{{ car.type }}</p>
+            </div>
+            <!-- TODO: trzeba zrobic obliczanie inforacji i wyswietlanie zamiast GPS itp to jakiś info o furze -->
+            <div class="car-item__price-group">
+              <p class="car-item__price"> --- </p>
+              <p class="car-item__price-period">Price per day</p>
+            </div>
+          </div>
+          <div class="car-item__features">
+            <div class="car-item__feature">
+              <span class="feature-icon"></span> High Performance
+            </div>
+            <div class="car-item__feature">
+              <span class="feature-icon"></span> Fuel Efficient
+            </div>
+            <div class="car-item__feature">
+              <span class="feature-icon"></span> GPS Navigation
+            </div>
+            <div class="car-item__feature">
+              <span class="feature-icon"></span> Premium Interior
+            </div>
+          </div>
+          <div class="car-item__location">
+            <span class="feature-icon"></span> Available in Warsaw
+          </div>
+          <div class="car-item__registration">
+            Guaranteed 2023/2024 registered car model.
+          </div>
+          <div class="car-item__action">
+            <button class="btn btn--primary">Rent Now</button>
+          </div>
+        </div>
+      </div>
     </li>
   </ul>
 </div>

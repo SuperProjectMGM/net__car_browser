@@ -11,18 +11,18 @@ import { CommonModule } from '@angular/common';
   styleUrl: './cars-list.component.css',
 })
 export class CarsListComponent {
-  cars: VehicleDetail[] = []; // To hold the list of cars
+  cars: VehicleDetail[] = [];
   ApiUrl = environment.apiBaseUrl;
 
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    this.loadCars(); // Call the method to load car data
+    this.loadCars();
   }
 
   loadCars() {
     this.getCars().subscribe((data) => {
-      this.cars = data; // Assign fetched data to the cars array
+      this.cars = data;
     });
   }
 
@@ -31,6 +31,8 @@ export class CarsListComponent {
   }
 }
 
+// zwiekszyć ilość pobieranych danych
+
 export class VehicleDetail {
   carId: number = 0;
   brand: string = '';
@@ -38,10 +40,9 @@ export class VehicleDetail {
   //serialNo: string = '';
   //vinId: string = '';
   //registryNo: string = '';
-  yearOfProduction: string = ''; // Można również użyć `number` jeśli potrzebujesz tylko roku
+  yearOfProduction: string = '';
   //rentalFrom: string = ''; // Zakładam, że data jest przechowywana w formacie string
   //rentalTo: string = ''; // Zakładam, że data jest przechowywana w formacie string
   //description: string = '';
   type: string = '';
 }
-

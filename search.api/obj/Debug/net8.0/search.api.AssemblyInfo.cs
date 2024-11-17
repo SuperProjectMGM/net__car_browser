@@ -13,10 +13,10 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("search.api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e4ec5bd258fabe62cda2936b5c35c82f8d2932be")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e6fd52e87918844104ccff6979ffd93fcebf55a4")]
 [assembly: System.Reflection.AssemblyProductAttribute("search.api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("search.api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 
-// Создано классом WriteCodeFragment MSBuild.
+// Wygenerowane przez klasę WriteCodeFragment programu MSBuild.
 
