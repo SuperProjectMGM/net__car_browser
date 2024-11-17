@@ -51,10 +51,16 @@ jobs:
       - name: Install Entity Framework Core Tools
         run: dotnet tool install --global dotnet-ef
 
-      - name: Run EF Core Migrations 
+      - name: Run EF Core Migrations Classes
         env:
           ConnectionStrings__DefaultConnection: ${{ secrets.AZURE_SQL_CONNECTION_STRING }}
         run: dotnet ef database update --project search.api --connection ${{ secrets.AZURE_SQL_CONNECTION_STRING }} --context AppDbContext
+      
+      - name: Run EF Core Migrations For identity
+        env:
+          ConnectionStrings__DefaultConnection: ${{ secrets.AZURE_SQL_CONNECTION_STRING }}
+        run: dotnet ef database update --project search.api --connection ${{ secrets.AZURE_SQL_CONNECTION_STRING }} --context AuthDbContext
+
           
 
   deploy:

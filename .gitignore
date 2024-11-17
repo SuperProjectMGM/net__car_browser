@@ -3,6 +3,9 @@
 bin/
 obj/
 
+# bash scripts
+*ps1
+
 # Common node modules locations
 /node_modules
 /wwwroot/node_modules
@@ -384,3 +387,4 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+BrowserFront/
