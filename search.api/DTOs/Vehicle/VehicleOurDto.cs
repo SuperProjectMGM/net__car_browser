@@ -5,7 +5,7 @@ namespace search.api.DTOs;
 public class VehicleOurDto
 {
     [JsonPropertyName("carId")]
-    public int CarId { get; set; } 
+    public int CarId { get; set; }
     [JsonPropertyName("brand")]
     public string Brand { get; set; } = "";
     [JsonPropertyName("model")]
