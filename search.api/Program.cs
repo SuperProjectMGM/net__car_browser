@@ -47,6 +47,7 @@ builder.Services.AddAuthentication(options =>
     {
         googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
         googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
+        googleOptions.CallbackPath = "/search.api/Authenticate/login/google-callback";
     });
 
 builder.Services.Configure<IdentityOptions>(options =>

@@ -87,7 +87,7 @@ public class AuthenticateController: ControllerBase
     {
         var properties = new AuthenticationProperties
         {
-            RedirectUri = Url.Action("GoogleCallback") // Generate URL for the callback endpoint
+            RedirectUri = "http://localhost:5178/search.api/Authenticate/login/google-callback"
         };
         return Challenge(properties, GoogleDefaults.AuthenticationScheme);
     }
