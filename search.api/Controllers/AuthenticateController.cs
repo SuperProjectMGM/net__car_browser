@@ -2,6 +2,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Azure;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -76,6 +78,34 @@ public class AuthenticateController: ControllerBase
         }
         return Unauthorized();
     }
+
+    
+    // I don't understand why get not post?
+    [HttpGet]
+    [Route("login/google-login")]
+    public IActionResult GoogleLogin()
+    {
+        var properties = new AuthenticationProperties
+        {
+            RedirectUri = Url.Action("GoogleCallback") // Generate URL for the callback endpoint
+        };
+        return Challenge(properties, GoogleDefaults.AuthenticationScheme);
+    }
+
+    [HttpGet]
+    [Route("login/google-callback")]
+    public async Task<IActionResult> GoogleCallback()
+    {
+        var authenticateResult = await HttpContext.AuthenticateAsync();
+        if (!authenticateResult.Succeeded)
+            return Unauthorized();
+        
+        var claims = authenticateResult.Principal?.Claims;
+        var email = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+        var name = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+        return Ok(new { Name = name, Email = email });
+    }
+
 
     private JwtSecurityToken GetToken(List<Claim> authClaims)
     {
