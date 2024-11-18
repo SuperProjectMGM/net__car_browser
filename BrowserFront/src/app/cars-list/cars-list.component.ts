@@ -37,12 +37,16 @@ export class VehicleDetail {
   carId: number = 0;
   brand: string = '';
   model: string = '';
-  //serialNo: string = '';
-  //vinId: string = '';
-  //registryNo: string = '';
-  yearOfProduction: string = '';
-  //rentalFrom: string = ''; // Zakładam, że data jest przechowywana w formacie string
-  //rentalTo: string = ''; // Zakładam, że data jest przechowywana w formacie string
-  //description: string = '';
+  serialNo: string = '';
+  vinId: string = '';
+  yearOfProduction: number = 0; // Zmieniamy na liczbę
+  rentalFrom: Date = new Date(); // Używamy typu Date
+  rentalTo: Date = new Date(); // Używamy typu Date
+  prize: number = 0.0;
+  driveType: string = '';
+  transmission: string = '';
+  description: string = '';
   type: string = '';
+  rate: number = 0.0;
+  localization: string = '';
 }

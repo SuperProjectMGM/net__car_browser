@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using search.api.Interfaces;
 using search.api.Mappers;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace search.api.Controllers
 {
@@ -18,9 +20,14 @@ namespace search.api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllDefault()
         {
+            // Pobieranie danych
             SearchInfo info = await _service.Search();
             var cars = info.Vehicles;
-            var dto = cars.Select(veh => veh.VehicletoVehicleOurDto());
+
+            // Konwertowanie pojazdów na DTO
+            var dto = cars.Select(veh => veh.VehicleToVehicleOurDto()); // Zmienione na VehicleToVehicleOurDto()
+
+            // Zwrócenie odpowiedzi
             return Ok(dto);
         }
     }
