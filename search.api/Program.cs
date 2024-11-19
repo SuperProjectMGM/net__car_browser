@@ -46,8 +46,6 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-builder.Services.AddScoped<IUserInterface, UserRepository>();
-builder.Services.AddScoped<IUserInterface, UserRepository>();
 builder.Services.AddScoped<IEmailInterface, EmailService>();
 builder.Services.AddScoped<IRentalInterface, RentalRepository>();
 
