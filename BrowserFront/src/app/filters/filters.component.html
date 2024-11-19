@@ -11,83 +11,142 @@
       </select>
     </div>
   
-    <!-- Price filter -->
-    <div class="filter-group">
-        <label class="filter-title">Price per day:</label>
-      <div class="price-option">
-        <input type="checkbox" id="price1" />
-        <label for="price1">0 zł - 200 zł</label>
-      </div>
-      <div class="price-option">
-        <input type="checkbox" id="price2" />
-        <label for="price2">200 zł - 400 zł</label>
-      </div>
-      <div class="price-option">
-        <input type="checkbox" id="price3" />
-        <label for="price3">400 zł - 600 zł</label>
-      </div>
-      <div class="price-option">
-        <input type="checkbox" id="price4" />
-        <label for="price4">600 zł - 800 zł</label>
-      </div>
-      <div class="price-option">
-        <input type="checkbox" id="price5" />
-        <label for="price5">800 zł +</label>
-      </div>
+     <!-- Price filter -->
+  <div class="filter-group">
+    <label class="filter-title">Price per day:</label>
+    <div class="price-option">
+      <input 
+        type="checkbox" 
+        id="price1" 
+        (change)="toggleArrayFilter('price', '0-200')" 
+      />
+      <label for="price1">0 zł - 200 zł</label>
     </div>
-  
-    <!-- Drive type filter -->
-    <div class="filter-group">
-      <label class="filter-title">Drive type:</label>
-      <div class="spec-option">
-        <input type="checkbox" id="electric" />
-        <label for="electric">Electric</label>
-      </div>
-      <div class="spec-option">
-        <input type="checkbox" id="petrol" />
-        <label for="petrol">Petrol</label>
-      </div>
-      <div class="spec-option">
-        <input type="checkbox" id="diesel" />
-        <label for="diesel">Diesel</label>
-      </div>
-      <div class="spec-option">
-        <input type="checkbox" id="hybrid" />
-        <label for="hybrid">Hybrid</label>
-      </div>
-      <div class="spec-option">
-        <input type="checkbox" id="lpg" />
-        <label for="lpg">LPG</label>
-      </div>
+    <div class="price-option">
+      <input 
+        type="checkbox" 
+        id="price2" 
+        (change)="toggleArrayFilter('price', '200-400')" 
+      />
+      <label for="price2">200 zł - 400 zł</label>
     </div>
-  
-    <!-- Transmission filter -->
-    <div class="filter-group">
-      <label class="filter-title">Transmission:</label>
-      <div class="spec-option">
-        <input type="checkbox" id="automatic" />
-        <label for="automatic">Automatic</label>
-      </div>
-      <div class="spec-option">
-        <input type="checkbox" id="manual" />
-        <label for="manual">Manual</label>
-      </div>
+    <div class="price-option">
+      <input 
+        type="checkbox" 
+        id="price3" 
+        (change)="toggleArrayFilter('price', '400-600')" 
+      />
+      <label for="price3">400 zł - 600 zł</label>
     </div>
-  
-    <!-- Rating filter -->
-    <div class="filter-group">
-      <label class="filter-title">Rate:</label>
-      <div class="spec-option">
-        <input type="checkbox" id="rateExcellent" />
-        <label for="rateExcellent">Excellent: 9+</label>
-      </div>
-      <div class="spec-option">
-        <input type="checkbox" id="rateVgood" />
-        <label for="rateVgood">Very good: 8+</label>
-      </div>
-      <div class="spec-option">
-        <input type="checkbox" id="rateGood" />
-        <label for="rateGood">Good: 7+</label>
-      </div>
+    <div class="price-option">
+      <input 
+        type="checkbox" 
+        id="price4" 
+        (change)="toggleArrayFilter('price', '600-800')" 
+      />
+      <label for="price4">600 zł - 800 zł</label>
     </div>
+    <div class="price-option">
+      <input 
+        type="checkbox" 
+        id="price5" 
+        (change)="toggleArrayFilter('price', '800+')" 
+      />
+      <label for="price5">800 zł +</label>
+    </div>
+  </div>
+
+  <!-- Drive type filter -->
+  <div class="filter-group">
+    <label class="filter-title">Drive type:</label>
+    <div class="spec-option">
+      <input 
+        type="checkbox" 
+        id="electric" 
+        (change)="toggleArrayFilter('driveType', 'Electric')" 
+      />
+      <label for="electric">Electric</label>
+    </div>
+    <div class="spec-option">
+      <input 
+        type="checkbox" 
+        id="petrol" 
+        (change)="toggleArrayFilter('driveType', 'Petrol')" 
+      />
+      <label for="petrol">Petrol</label>
+    </div>
+    <div class="spec-option">
+      <input 
+        type="checkbox" 
+        id="diesel" 
+        (change)="toggleArrayFilter('driveType', 'Diesel')" 
+      />
+      <label for="diesel">Diesel</label>
+    </div>
+    <div class="spec-option">
+      <input 
+        type="checkbox" 
+        id="hybrid" 
+        (change)="toggleArrayFilter('driveType', 'Hybrid')" 
+      />
+      <label for="hybrid">Hybrid</label>
+    </div>
+    <div class="spec-option">
+      <input 
+        type="checkbox" 
+        id="lpg" 
+        (change)="toggleArrayFilter('driveType', 'LPG')" 
+      />
+      <label for="lpg">LPG</label>
+    </div>
+  </div>
+  <!-- Transmission filter -->
+  <div class="filter-group">
+    <label class="filter-title">Transmission:</label>
+    <div class="spec-option">
+      <input 
+        type="checkbox" 
+        id="automatic" 
+        (change)="toggleArrayFilter('transmission', 'Automatic')" 
+      />
+      <label for="automatic">Automatic</label>
+    </div>
+    <div class="spec-option">
+      <input 
+        type="checkbox" 
+        id="manual" 
+        (change)="toggleArrayFilter('transmission', 'Manual')" 
+      />
+      <label for="manual">Manual</label>
+    </div>
+  </div>
+
+  <!-- Rating filter -->
+  <div class="filter-group">
+    <label class="filter-title">Rate:</label>
+    <div class="spec-option">
+      <input 
+        type="checkbox" 
+        id="rateExcellent" 
+        (change)="toggleArrayFilter('rate', '9+')" 
+      />
+      <label for="rateExcellent">Excellent: 9+</label>
+    </div>
+    <div class="spec-option">
+      <input 
+        type="checkbox" 
+        id="rateVgood" 
+        (change)="toggleArrayFilter('rate', '8+')" 
+      />
+      <label for="rateVgood">Very good: 8+</label>
+    </div>
+    <div class="spec-option">
+      <input 
+        type="checkbox" 
+        id="rateGood" 
+        (change)="toggleArrayFilter('rate', '7+')" 
+      />
+      <label for="rateGood">Good: 7+</label>
+    </div>
+  </div>
 </div>

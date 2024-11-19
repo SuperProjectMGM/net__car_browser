@@ -12,12 +12,25 @@ import { CommonModule } from '@angular/common';
 export class CarsListComponent {
   ApiUrl = environment.apiBaseUrl;
   @Input() cars: VehicleDetail[] = [];
+  @Input() pickupDateTime: Date | null = null;
+  @Input() returnDateTime: Date | null = null;
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['cars']) {
-      // Możesz tutaj wykonać jakieś operacje po otrzymaniu nowych danych
       console.log('Nowe dane samochodów:', this.cars);
     }
+  }
+
+  // tu trzeba zrobić wysyłanie na backend z chęcią wynajęcia samochodu
+  rentCar(car: VehicleDetail) {
+    console.log(
+      'chęć wynajecia fury:',
+      car.model,
+      'w okresie:',
+      this.pickupDateTime,
+      ' - ',
+      this.returnDateTime
+    );
   }
 }
 
