@@ -43,7 +43,7 @@ public class RentalController : ControllerBase
         
         var token = _emailService.GenerateConfirmationToken(userEmail, userName, userId, _configuration);
         
-        var confirmationUrl = $"{Request.Scheme}://{Request.Host}/confirm-rental?token={token}";
+        var confirmationUrl = $"{Request.Scheme}://{Request.Host}/search.api/Rental/confirm-rental?token={token}";
         
          await _emailService.SendRentalConfirmationEmailAsync(userEmail, "Rental Confirmation", 
              $"Please confirm your rental of a car. You have 10 minutes to do so.",

@@ -23,4 +23,13 @@
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Remove="ConfirmRent.cshtml" />
+      <Content Remove="RentConfirm.razor" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="ConfirmRent.cshtml.cs" />
+    </ItemGroup>
+
 </Project>
