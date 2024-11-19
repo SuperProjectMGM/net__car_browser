@@ -1,0 +1,47 @@
+<div class="main-container">
+  <div class="search-bar">
+    <button class="profile-button" (click)="goToProfile()">
+      <i *ngIf="!isLoading" class="fa fa-user profile-icon"></i>
+      <i *ngIf="isLoading" class="fa fa-spinner fa-spin profile-icon"></i>
+    </button>
+    
+    <div class="input-with-icon">
+      <!-- Wyświetlanie ikonki tylko, gdy pole tekstowe jest puste -->
+      <i *ngIf="!pickupLocation" class="fa fa-search search-icon"></i>
+      <input 
+        type="text" 
+        placeholder="      Pick-up Location" 
+        class="search-input" 
+        [(ngModel)]="pickupLocation" 
+      />
+    </div>
+    
+    
+    <!-- Formularz z polami daty -->
+    <input
+      type="datetime-local"
+      [(ngModel)]="pickupDateTime"
+      class="search-input date-input pickup-date"
+      placeholder="Pick-up Date and Time"
+    />
+    <input
+      type="datetime-local"
+      [(ngModel)]="returnDateTime"
+      class="search-input date-input return-date"
+      placeholder="Return Date and Time"
+    />
+
+    
+    <!-- Przycisk wyszukiwania -->
+    <button class="search-button" (click)="onSearch()">Search</button>
+  </div>
+  
+  <div class="dashboard">
+    <div class="filters-container">
+      <app-filters></app-filters>
+    </div>
+    <div class="cars-list-container">
+      <app-cars-list [cars]="availableCars"></app-cars-list>
+    </div>
+  </div>
+</div>
