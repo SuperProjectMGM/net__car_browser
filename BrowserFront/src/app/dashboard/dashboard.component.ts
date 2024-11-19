@@ -32,7 +32,6 @@ export class DashboardComponent {
   filteredCars: VehicleDetail[] = [];
   pickupDateTimeToreserve: Date | null = null;
   returnDateTimeToreserve: Date | null = null;
-
   constructor(private carsService: CarsService, private router: Router) {
     console.log('HttpClient is ready');
   }
@@ -91,7 +90,6 @@ export class DashboardComponent {
     );
     return combinedDate;
   }
-
   onFiltersChanged(filters: any) {
     this.filteredCars = this.availableCars.filter((car) => {
       return (
