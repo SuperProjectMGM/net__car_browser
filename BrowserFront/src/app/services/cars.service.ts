@@ -14,7 +14,11 @@ export class CarsService {
     console.log('HttpClient is ready');
   }
 
-  searchCars(rentalFrom: Date, rentalTo: Date): Observable<VehicleDetail[]> {
+  searchCars(
+    rentalFrom: Date,
+    rentalTo: Date,
+    location: string
+  ): Observable<VehicleDetail[]> {
     if (!rentalFrom || !rentalTo) {
       throw new Error(
         'RentalFrom and RentalTo dates must be provided and valid'
@@ -25,9 +29,8 @@ export class CarsService {
     const params = {
       rentalFrom: rentalFrom.toISOString(),
       rentalTo: rentalTo.toISOString(),
+      location: location,
     };
-
-    console.log('params', params.rentalFrom, params.rentalTo);
 
     // Wysyłanie zapytania do API
     return this.http.get<VehicleDetail[]>(`${this.apiUrl}/Search`, { params });

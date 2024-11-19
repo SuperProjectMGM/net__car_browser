@@ -36,7 +36,7 @@ export class DashboardComponent {
 
   onSearch() {
     this.availableCars = [];
-    if (this.pickupDateTime && this.returnDateTime) {
+    if (this.pickupDateTime && this.returnDateTime && this.pickupLocation) {
       const pickupDate = new Date(this.pickupDateTime); // Konwersja string -> Date
       const returnDate = new Date(this.returnDateTime);
 
@@ -47,19 +47,24 @@ export class DashboardComponent {
 
       this.isLoading = true;
 
-      this.carsService.searchCars(pickupDate, returnDate).subscribe(
-        (cars) => {
-          this.isLoading = false;
-          this.availableCars = cars; // Przechowujemy dostępne samochody
-        },
-        (error) => {
-          this.isLoading = false;
-          console.error('Wystąpił błąd przy wyszukiwaniu samochodów:', error);
-        }
-      );
+      this.carsService
+        .searchCars(pickupDate, returnDate, this.pickupLocation)
+        .subscribe(
+          (cars) => {
+            this.isLoading = false;
+            this.availableCars = cars; // Przechowujemy dostępne samochody
+          },
+          (error) => {
+            this.isLoading = false;
+            console.error('Wystąpił błąd przy wyszukiwaniu samochodów:', error);
+          }
+        );
     } else {
       console.error('Both pickup and return dates must be set.');
     }
+    this.pickupLocation = '';
+    this.pickupDateTime = null;
+    this.returnDateTime = null;
   }
 
   goToProfile() {
