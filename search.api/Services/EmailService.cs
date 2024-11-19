@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using search.api.DTOs;
 using search.api.Interfaces;
 using SendGrid;
 using SendGrid.Helpers.Mail;
@@ -41,16 +42,17 @@ public class EmailService : IEmailInterface
         var response = await client.SendEmailAsync(msg);
     }
     
-    public string GenerateConfirmationToken(string email, string username, string id, IConfiguration configuration)
+    public string GenerateConfirmationRentToken(string email, string username, string id, string rentId, IConfiguration configuration)
     {
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Email, email),
             new Claim(ClaimTypes.Name, username),
-            new Claim(ClaimTypes.NameIdentifier, id)
+            new Claim(ClaimTypes.NameIdentifier, id),
+            new Claim("RentalId", rentId)
         };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]!));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(

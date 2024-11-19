@@ -4,9 +4,13 @@ namespace search.api.DTOs;
 
 public class VehicleRentRequest
 {
-    public int CarId { get; set; }
+    public int VehicleVin { get; set; }
+
+    public string UserId { get; set; } = string.Empty;
+
+    public string RentalFirmId { get; set; } = string.Empty;
     
-    public DateTime StartRent { get; set; }
+    public DateTime Start { get; set; }
     
-    public DateTime EndRent { get; set; }
+    public DateTime End { get; set; }
 }

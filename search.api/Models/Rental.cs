@@ -4,11 +4,11 @@ public class Rental
 {
     public string Id { get; set; } = string.Empty;
     
-    public User? User { get; set; }
+    //public User? User { get; set; }
     
     public string UserId { get; set; } = string.Empty;
     
-    public RentalFirm? RentalFirm { get; set; }
+    //public RentalFirm? RentalFirm { get; set; }
 
     public string RentalFirmId { get; set; } = string.Empty;
     
