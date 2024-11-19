@@ -24,7 +24,7 @@
   .input-with-icon {
     position: relative;
     display: inline-block;
-    width: 250px; /* Wydłużenie pola tekstowego z ikoną */
+    width: 100%; /* Wydłużenie pola tekstowego z ikoną */
   }
 
   .search-input {
@@ -55,21 +55,6 @@
   .search-input:focus + .search-icon {
     color: #0056b3; /* Zmiana koloru ikony przy focus */
   }
-
-  input[type="date"],
-input[type="string"] {
-  width: 180px; /* Ustaw tę samą szerokość dla obu pól */
-  padding: 0.8rem;
-  border-radius: 8px;
-  border: 2px solid #ddd;
-  font-size: 1rem;
-  transition: border 0.3s ease, box-shadow 0.3s ease;
-
-  &:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
-  }
-}
 
 
   button.search-button {
@@ -132,4 +117,14 @@ input[type="string"] {
 .profile-button .fa-spinner {
   font-size: 24px; /* Rozmiar spinnera */
   color: #007bff; /* Kolor spinnera */
+}
+
+.search-input{
+  width: 240;
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: 2px solid #ddd;
+  font-size: 1rem;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+
 }

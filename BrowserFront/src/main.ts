@@ -6,6 +6,7 @@ import { LoginComponent } from './app/login/login.component';
 import { DashboardComponent } from './app/dashboard/dashboard.component';
 import { ErrorLoginComponent } from './app/error-login/error-login.component';
 import { RegistrationComponent } from './app/registration/registration.component';
+import { provideHttpClient } from '@angular/common/http';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' }, // Domyślnie przekieruj na login
@@ -17,5 +18,5 @@ const routes: Routes = [
 ];
 
 bootstrapApplication(AppComponent, {
-  providers: [provideRouter(routes)],
+  providers: [provideRouter(routes), provideHttpClient()],
 }).catch((err) => console.error(err));

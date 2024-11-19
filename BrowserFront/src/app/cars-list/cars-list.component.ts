@@ -1,37 +1,25 @@
-import { Component } from '@angular/core';
+import { Component, Input, SimpleChanges } from '@angular/core';
 import { environment } from '../../enviroments/environment';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-cars-list',
   standalone: true,
-  imports: [CommonModule, HttpClientModule],
+  imports: [CommonModule],
   templateUrl: './cars-list.component.html',
   styleUrl: './cars-list.component.css',
 })
 export class CarsListComponent {
-  cars: VehicleDetail[] = [];
   ApiUrl = environment.apiBaseUrl;
+  @Input() cars: VehicleDetail[] = [];
 
-  constructor(private http: HttpClient) {}
-
-  ngOnInit() {
-    this.loadCars();
-  }
-
-  loadCars() {
-    this.getCars().subscribe((data) => {
-      this.cars = data;
-    });
-  }
-
-  getCars() {
-    return this.http.get<VehicleDetail[]>(`${this.ApiUrl}/Search`);
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['cars']) {
+      // Możesz tutaj wykonać jakieś operacje po otrzymaniu nowych danych
+      console.log('Nowe dane samochodów:', this.cars);
+    }
   }
 }
-
-// zwiekszyć ilość pobieranych danych
 
 export class VehicleDetail {
   carId: number = 0;
@@ -39,9 +27,9 @@ export class VehicleDetail {
   model: string = '';
   serialNo: string = '';
   vinId: string = '';
-  yearOfProduction: number = 0; // Zmieniamy na liczbę
-  rentalFrom: Date = new Date(); // Używamy typu Date
-  rentalTo: Date = new Date(); // Używamy typu Date
+  yearOfProduction: number = 0;
+  rentalFrom: Date = new Date();
+  rentalTo: Date = new Date();
   prize: number = 0.0;
   driveType: string = '';
   transmission: string = '';

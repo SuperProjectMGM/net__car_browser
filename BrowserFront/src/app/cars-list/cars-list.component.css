@@ -169,9 +169,6 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.car-item__feature:hover {
-  color: #0052CC;
-}
 .cars-list ul {
   list-style: none;
   padding: 0;
