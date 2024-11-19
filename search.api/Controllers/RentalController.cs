@@ -1,31 +1,24 @@
-using System.Collections.Immutable;
 using System.IdentityModel.Tokens.Jwt;
-using System.Runtime.InteropServices.JavaScript;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using NanoidDotNet;
 using search.api.DTOs;
 using search.api.Interfaces;
-using search.api.Services;
-
+using search.api.Repositories;
 
 namespace search.api.Controllers;
 
 [Route("search.api/[controller]")]
 [ApiController]
-public class RentalController : ControllerBase
+public class RentalController : Controller
 {
-    private readonly IEmailInterface _emailService;
-    private readonly IConfiguration _configuration;
+    private readonly IRentalInterface _rentalRepo;
     
-    public RentalController(IConfiguration configuration, IEmailInterface emailService)
+    public RentalController(IRentalInterface rentalRepo)
     {
-        _emailService = emailService;
-        _configuration = configuration;
+        _rentalRepo = rentalRepo;
     }
 
     [Authorize]
@@ -58,7 +51,7 @@ public class RentalController : ControllerBase
     {
         if (string.IsNullOrEmpty(token))
         {
-            return BadRequest("Token is required.");
+            return View("ErrorMessage", "Token is required.");
         }
         try
         {
@@ -76,24 +69,26 @@ public class RentalController : ControllerBase
             }, out SecurityToken validatedToken);
 
             var email = claimsPrincipal.FindFirst(ClaimTypes.Email)?.Value;
+            var id = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var username = claimsPrincipal.FindFirst(ClaimTypes.Name)?.Value;
 
-            if (string.IsNullOrEmpty(email))
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(id) || string.IsNullOrEmpty(username))
             {
-                return BadRequest("Invalid token payload.");
+                return View("ErrorMessage", "Token is required.");
             }
             
             // here should be logic to inform data provider worker that car has been rented
             // also logic to store in data provider db information about rental
             
-            return Ok(new { message = "Rental confirmed successfully!" });
+            return View("RentalConfirm", "Rental confirmed successfully.");
         }
         catch (SecurityTokenExpiredException)
         {
-            return Unauthorized("Token has expired.");
+            return View("ErrorMessage", "Token has expired.");
         }
         catch (Exception ex)
         {
-            return BadRequest($"Error confirming rental: {ex.Message}");
+            return View("ErrorMessage", "Error while confirming email/username/id.");
         }
     }
 }

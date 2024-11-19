@@ -15,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
-
+builder.Services.AddControllersWithViews();
 builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -43,17 +43,12 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
-
-
-//builder.Services.AddDbContext<AppDbContext>();
 builder.Services.AddScoped<IUserInterface, UserRepository>();
 builder.Services.AddScoped<IEmailInterface, EmailService>();
-
 builder.Services.AddDbContext<AppDbContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("Devconnection")));
 builder.Services.AddDbContext<AuthDbContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("Devconnection")));
-
 builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AuthDbContext>().AddDefaultTokenProviders();
 builder.Services.AddAuthentication(options => 
     {
@@ -66,7 +61,6 @@ builder.Services.AddAuthentication(options =>
         options.RequireHttpsMetadata = false;
         options.TokenValidationParameters = new()
         {
-            // ???
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidAudience = builder.Configuration["JWT:ValidAudience"],
@@ -74,7 +68,6 @@ builder.Services.AddAuthentication(options =>
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
         };
     });
-
 builder.Services.Configure<IdentityOptions>(options =>
 {
     options.Password.RequireDigit = true;
@@ -83,7 +76,6 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireNonAlphanumeric = true;
     options.Password.RequiredLength = 6; // Example
 });
-
 builder.Services.AddHttpClient<ISearchInterface, SearchMainService>(c =>
 c.BaseAddress = new Uri(builder.Configuration["HttpClientSettings:BaseUrl"]!));
 
