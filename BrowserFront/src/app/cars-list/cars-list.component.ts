@@ -1,5 +1,5 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
-import { environment } from '../../enviroments/environment';
+import { environment } from '../../environments/environment';
 import { CommonModule } from '@angular/common';
 
 @Component({
