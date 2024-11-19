@@ -29,6 +29,9 @@ export class DashboardComponent {
   pickupDateTime: Date | null = null;
   returnDateTime: Date | null = null;
   availableCars: VehicleDetail[] = [];
+  filteredCars: VehicleDetail[] = [];
+  pickupDateTimeToreserve: Date | null = null;
+  returnDateTimeToreserve: Date | null = null;
 
   constructor(private carsService: CarsService, private router: Router) {
     console.log('HttpClient is ready');
@@ -53,6 +56,7 @@ export class DashboardComponent {
           (cars) => {
             this.isLoading = false;
             this.availableCars = cars; // Przechowujemy dostępne samochody
+            this.filteredCars = cars;
           },
           (error) => {
             this.isLoading = false;
@@ -62,6 +66,8 @@ export class DashboardComponent {
     } else {
       console.error('Both pickup and return dates must be set.');
     }
+    this.pickupDateTimeToreserve = this.pickupDateTime;
+    this.returnDateTimeToreserve = this.returnDateTime;
     this.pickupLocation = '';
     this.pickupDateTime = null;
     this.returnDateTime = null;
@@ -84,5 +90,32 @@ export class DashboardComponent {
       0
     );
     return combinedDate;
+  }
+
+  onFiltersChanged(filters: any) {
+    this.filteredCars = this.availableCars.filter((car) => {
+      return (
+        (!filters.price.length ||
+          filters.price.some((p: string) =>
+            this.isPriceInRange(car.prize, p)
+          )) &&
+        (!filters.driveType.length ||
+          filters.driveType.includes(car.driveType)) &&
+        (!filters.transmission.length ||
+          filters.transmission.includes(car.transmission)) &&
+        (!filters.rate.length ||
+          filters.rate.some((r: string) => this.isRateInRange(car.rate, r)))
+      );
+    });
+  }
+
+  private isPriceInRange(price: number, range: string): boolean {
+    const [min, max] = range.split('-').map((v) => parseInt(v, 10));
+    return !isNaN(max) ? price >= min && price <= max : price >= min;
+  }
+
+  private isRateInRange(rate: number, range: string): boolean {
+    const minRate = parseInt(range.replace('+', ''), 10);
+    return rate >= minRate;
   }
 }

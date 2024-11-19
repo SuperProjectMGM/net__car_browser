@@ -16,7 +16,7 @@
               <p class="car-item__subtitle">{{ car.type }}</p>
             </div>
             <div class="car-item__price-group">
-              <p class="car-item__price">{{ car.prize | currency }}</p>
+              <p class="car-item__price">{{ car.prize}}</p>
               <p class="car-item__price-period">Price per day</p>
             </div>
           </div>
@@ -42,7 +42,11 @@
             Guaranteed {{ car.yearOfProduction }} registered car model.
           </div>
           <div class="car-item__action">
-            <button class="btn btn--primary">Rent Now</button>
+            <button 
+              class="btn btn--primary" 
+              (click)="rentCar(car)">
+              Rent Now
+            </button>
           </div>
         </div>
       </div>

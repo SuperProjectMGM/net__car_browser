@@ -38,10 +38,14 @@
   
   <div class="dashboard">
     <div class="filters-container">
-      <app-filters></app-filters>
+      <app-filters (filtersChanged)="onFiltersChanged($event)"></app-filters>
     </div>
     <div class="cars-list-container">
-      <app-cars-list [cars]="availableCars"></app-cars-list>
+      <app-cars-list 
+        [cars]="filteredCars"
+        [pickupDateTime]="pickupDateTimeToreserve"
+        [returnDateTime]="returnDateTimeToreserve">
+      </app-cars-list>
     </div>
   </div>
 </div>
