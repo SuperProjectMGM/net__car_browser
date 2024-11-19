@@ -1,6 +1,7 @@
 using search.api.Data;
 using search.api.DTOs;
 using search.api.Interfaces;
+using search.api.Mappers;
 using search.api.Models;
 
 namespace search.api.Repositories;
@@ -25,19 +26,27 @@ public class RentalRepository : IRentalInterface
         {
             return await Task.FromResult(false);
         }
+
+        var rentalModel = request.ToRentalFromRequest(userId);
+        await _context.Rentals.AddAsync(rentalModel);
         
-        
-        
-        var token = _emailService.GenerateConfirmationRentToken(userEmail, userName, userId, _configuration);
-        
+        var token = _emailService.GenerateConfirmationRentToken(userEmail, userName, userId, rentalModel.Id, _configuration);
         var confirmationUrl = $"{scheme}://{host}/search.api/Rental/confirm-rental?token={token}";
         
-         await _emailService.SendRentalConfirmationEmailAsync(userEmail, "Rental Confirmation", 
+         await _emailService.SendRentalConfirmationEmailAsync(
+             userEmail,
+             "Rental Confirmation", 
              $"Please confirm your rental of a car. You have 10 minutes to do so.",
-             userName, confirmationUrl, request.StartRent.ToString(), request.EndRent.ToString());
-
+             userName, rentalModel.Id, confirmationUrl);
+         
          return await Task.FromResult(true);
     }
     
+    public enum RentalStatus
+    {
+        Pending = 1,    // Rental request is pending
+        Confirmed = 2,  // Rental has been confirmed
+        Completed = 3,  // Rental has been completed
+    }
     
 }

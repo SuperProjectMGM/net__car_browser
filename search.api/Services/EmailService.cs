@@ -16,8 +16,7 @@ public class EmailService : IEmailInterface
     private readonly string _searchName = "SuperSamochodziki";
     
     public async Task SendRentalConfirmationEmailAsync(string toUser, string subject, string message, 
-                                                       string username, string confirmationLink, string startDate,
-                                                       string endDate)
+                                                       string username, string rentId, string confirmationLink)
     {
         var apiKey = _apiKey;
         var client = new SendGridClient(apiKey);
@@ -30,7 +29,7 @@ public class EmailService : IEmailInterface
                 <h1>Rental Confirmation</h1>
                 <p>Dear {username},</p>
                 <p>{message}</p>
-                <p>Your rental is valid from {startDate} to {endDate}.</p>
+                <p>Your rental {rentId} is waiting for your confirmation!.</p>
                 <p>To validate your rental please click in <a href={confirmationLink}>this link.</a><br /><br /></p>               
                 <p>Thank you for using {_searchName}!</p>
                 <footer>

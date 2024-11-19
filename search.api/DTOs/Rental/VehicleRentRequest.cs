@@ -6,8 +6,6 @@ public class VehicleRentRequest
 {
     public int VehicleVin { get; set; }
 
-    public string UserId { get; set; } = string.Empty;
-
     public string RentalFirmId { get; set; } = string.Empty;
     
     public DateTime Start { get; set; }
