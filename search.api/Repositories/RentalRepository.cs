@@ -110,6 +110,7 @@ public class RentalRepository : IRentalInterface
         
         // TODO: send message to data provider api
         
+        
         return (rental, rentalFirm);
     }
 

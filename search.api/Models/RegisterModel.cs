@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
+
 using System.Runtime.InteropServices.JavaScript;
+
 
 public class RegisterModel
 {
@@ -8,6 +10,6 @@ public class RegisterModel
 
     [Required(ErrorMessage = "Password is required!")]
     public string? Password { get; set; } = String.Empty;
-    
     public string? UserName { get; set; } = String.Empty;
+
 }
