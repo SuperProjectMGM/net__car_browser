@@ -46,7 +46,7 @@ builder.Services.AddSwaggerGen(options =>
 
 
 //builder.Services.AddDbContext<AppDbContext>();
-builder.Services.AddScoped<IUserInterface, UserInterface>();
+builder.Services.AddScoped<IUserInterface, UserRepository>();
 builder.Services.AddScoped<IEmailInterface, EmailService>();
 
 builder.Services.AddDbContext<AppDbContext>(options => 

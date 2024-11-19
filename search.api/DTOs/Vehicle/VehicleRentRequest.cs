@@ -9,6 +9,4 @@ public class VehicleRentRequest
     public DateTime StartRent { get; set; }
     
     public DateTime EndRent { get; set; }
-
-    public string RentMessage { get; set; } = String.Empty;
 }

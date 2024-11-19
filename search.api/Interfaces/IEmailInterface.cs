@@ -2,5 +2,8 @@ namespace search.api.Interfaces;
 
 public interface IEmailInterface
 {
-    public Task SendRentalConfirmationEmailAsync(string subject, string toUser, string message);
+    public Task SendRentalConfirmationEmailAsync(string toUser, string subject, string message,
+        string username, string confirmationLink, string startDate, string endDate);
+
+    public string GenerateConfirmationToken(string email, string username, string id, IConfiguration configuration);
 }

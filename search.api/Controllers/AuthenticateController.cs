@@ -5,6 +5,7 @@ using Azure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using NanoidDotNet;
 
 
 namespace search.api.Controllers;
@@ -37,7 +38,7 @@ public class AuthenticateController: ControllerBase
         IdentityUser user = new () 
         {
             Email = model.Email,
-            UserName = model.Email,
+            UserName = model.UserName,
             // It should be changed whenever any cridential was changed???
             SecurityStamp = Guid.NewGuid().ToString()
         };
@@ -61,6 +62,8 @@ public class AuthenticateController: ControllerBase
             var authClaims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.UserName!),
+                new Claim(ClaimTypes.Email, user.Email!),
+                new Claim(ClaimTypes.NameIdentifier, user.Id!),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
             foreach (var userRole in userRoles)

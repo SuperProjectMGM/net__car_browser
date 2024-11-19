@@ -7,11 +7,11 @@ using search.api.Models;
 
 namespace search.api.Repositories;
 
-public class UserInterface : IUserInterface
+public class UserRepository : IUserInterface
 {
     private readonly AppDbContext _context;
 
-    public UserInterface(AppDbContext context)
+    public UserRepository(AppDbContext context)
     {
         _context = context;
     }
