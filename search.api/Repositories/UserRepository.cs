@@ -16,26 +16,26 @@ public class UserRepository : IUserInterface
         _context = context;
     }
     
-    public async Task<List<User>> GetAllAsync()
+    public async Task<List<UserDetails>> GetAllAsync()
     {
-        return await _context.Users.ToListAsync();
+        return await _context.UsersDetails.ToListAsync();
     }
 
-    public async Task<User?> GetByIdDefaultAsync(string id)
+    public async Task<UserDetails?> GetByIdDefaultAsync(string id)
     {
-        return await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
+        return await _context.UsersDetails.FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task<User> CreateUserAsync(User userModel)
+    public async Task<UserDetails> CreateUserAsync(UserDetails userDetailsModel)
     {
-        await _context.Users.AddAsync(userModel);
+        await _context.UsersDetails.AddAsync(userDetailsModel);
         await _context.SaveChangesAsync();
-        return userModel;
+        return userDetailsModel;
     }
 
-    public async Task<User?> UpdateUserAsync(string id, UpdateUserDto userDto)
+    public async Task<UserDetails?> UpdateUserAsync(string id, UpdateUserDto userDto)
     {
-        var existingUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
+        var existingUser = await _context.UsersDetails.FirstOrDefaultAsync(x => x.Id == id);
         if (existingUser == null)
             return null;
         
@@ -46,13 +46,13 @@ public class UserRepository : IUserInterface
         return existingUser;
     }
 
-    public async Task<User?> DeleteUserAsync(string id)
+    public async Task<UserDetails?> DeleteUserAsync(string id)
     {
-        var userModel = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
+        var userModel = await _context.UsersDetails.FirstOrDefaultAsync(x => x.Id == id);
         if (userModel == null)
             return null;
         
-        _context.Users.Remove(userModel);
+        _context.UsersDetails.Remove(userModel);
         await _context.SaveChangesAsync();
         return userModel;
     }

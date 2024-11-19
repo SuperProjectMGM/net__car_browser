@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using search.api.DTOs;
 using search.api.Interfaces;
+using search.api.Models;
 using search.api.Repositories;
 
 namespace search.api.Controllers;
@@ -43,48 +44,22 @@ public class RentalController : Controller
     
     [AllowAnonymous]
     [HttpGet("confirm-rental")]
-    public IActionResult ConfirmRental([FromQuery] string token)
+    public async Task<IActionResult> ConfirmRental([FromQuery] string token)
     {
-        if (string.IsNullOrEmpty(token))
+        var succeed = _rentalRepo.ValidateRentalConfirmationToken(token);
+        
+        if (!succeed.Item1)
         {
-            return View("ErrorMessage", "Token is required.");
+            return BadRequest("Invalid or expired token.");
         }
-        try
+
+        var tuple = await _rentalRepo.CompleteRentalAndSend(succeed.Item2, succeed.Item3, succeed.Item4, succeed.Item5);
+
+        if (tuple.Item1 is null || tuple.Item2 is null)
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]);
-            var claimsPrincipal = tokenHandler.ValidateToken(token, new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key),
-                ValidIssuer = _configuration["JWT:ValidIssuer"],
-                ValidAudience = _configuration["JWT:ValidAudience"]
-            }, out SecurityToken validatedToken);
-    
-            var email = claimsPrincipal.FindFirst(ClaimTypes.Email)?.Value;
-            var id = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var username = claimsPrincipal.FindFirst(ClaimTypes.Name)?.Value;
-    
-            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(id) || string.IsNullOrEmpty(username))
-            {
-                return View("ErrorMessage", "Token is required.");
-            }
-            
-            // here should be logic to inform data provider worker that car has been rented
-            // also logic to store in data provider db information about rental
-            
-            return View("RentalConfirm", "Rental confirmed successfully.");
+            return NotFound();
         }
-        catch (SecurityTokenExpiredException)
-        {
-            return View("ErrorMessage", "Token has expired.");
-        }
-        catch (Exception ex)
-        {
-            return View("ErrorMessage", "Error while confirming email/username/id.");
-        }
+
+        return View("RentalConfirm", new Tuple<Rental, string, string, RentalFirm>(tuple.Item1, succeed.Item2, succeed.Item4, tuple.Item2));
     }
 }

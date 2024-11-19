@@ -7,22 +7,22 @@ namespace search.api.Mappers;
 
 public static class UserMappers
 {
-    public static UserDefaultDto ToUserDefaultDto(this User userModel)
+    public static UserDefaultDto ToUserDefaultDto(this UserDetails userDetailsModel)
     {
         return new UserDefaultDto
         {
-            Id = userModel.Id,
-            Login = userModel.Login,
-            Name = userModel.Name,
-            Surname = userModel.Surname,
-            Email = userModel.Email,
-            PhoneNumber = userModel.PhoneNumber
+            Id = userDetailsModel.Id,
+            Login = userDetailsModel.Login,
+            Name = userDetailsModel.Name,
+            Surname = userDetailsModel.Surname,
+            Email = userDetailsModel.Email,
+            PhoneNumber = userDetailsModel.PhoneNumber
         };
     }
 
-    public static User CreateUserFromDefPost(this CreateUserDto userDto)
+    public static UserDetails CreateUserFromDefPost(this CreateUserDto userDto)
     {
-        return new User
+        return new UserDetails
         {
             Id = Nanoid.Generate(Nanoid.Alphabets.LowercaseLettersAndDigits, 10),
             Login = userDto.Login,

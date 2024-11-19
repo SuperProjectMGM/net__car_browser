@@ -9,8 +9,8 @@ public class Rental
     public string UserId { get; set; } = string.Empty;
 
     public string RentalFirmId { get; set; } = string.Empty;
-    
-    public int VinId { get; set; }
+
+    public string VinId { get; set; } = string.Empty;
     
     public DateTime Start { get; set; }
     

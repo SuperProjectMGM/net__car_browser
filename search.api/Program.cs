@@ -45,6 +45,7 @@ builder.Services.AddSwaggerGen(options =>
 });
 builder.Services.AddScoped<IUserInterface, UserRepository>();
 builder.Services.AddScoped<IEmailInterface, EmailService>();
+builder.Services.AddScoped<IRentalInterface, RentalRepository>();
 builder.Services.AddDbContext<AppDbContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("Devconnection")));
 builder.Services.AddDbContext<AuthDbContext>(options => 

@@ -4,7 +4,7 @@ namespace search.api.DTOs;
 
 public class VehicleRentRequest
 {
-    public int VehicleVin { get; set; }
+    public string VehicleVin { get; set; } = string.Empty;
 
     public string RentalFirmId { get; set; } = string.Empty;
     

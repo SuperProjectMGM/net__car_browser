@@ -2,7 +2,7 @@ using System.Runtime.InteropServices.JavaScript;
 
 namespace search.api.Models;
 
-public class User
+public class UserDetails
 {
     public string Id { get; set; } = string.Empty;
 
