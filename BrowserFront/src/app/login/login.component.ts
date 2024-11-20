@@ -21,21 +21,19 @@ export class LoginComponent {
 
   login() {
     this.isLoading = true;
-
     //Tu trzeba zmodyfikowac by było zpaytanie do serwera o logowanie
-    // this.authService.login(this.email, this.password).subscribe({
-    //   next: (response) => {
-    //     localStorage.setItem('loggedIn', 'true'); // Ustaw flagę zalogowania
-    //     this.router.navigate(['/protected']); // Przekierowanie do chronionej strony
-    //     this.isLoading = false;
-    //   },
-    //   error: (err) => {
-    //     console.error('Login failed', err);
-    //     this.errorMessage = 'Login failed. Please try again.';
-    //   },
-    // });
-    this.router.navigate(['/dashboard']);
-    this.isLoading = false;
+    this.authService.login(this.email, this.password).subscribe({
+      next: (response) => {
+        console.log('logujemy sie');
+        //localStorage.setItem('loggedIn', 'true'); // Ustaw flagę zalogowania
+        this.router.navigate(['/dashboard']); // Przekierowanie do chronionej strony
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Login failed', err);
+        this.errorMessage = 'Login failed. Please try again.';
+      },
+    });
   }
   onSignUpClick() {
     this.isLoading = true;

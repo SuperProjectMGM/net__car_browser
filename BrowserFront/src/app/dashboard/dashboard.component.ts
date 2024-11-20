@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { FiltersComponent } from '../filters/filters.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -32,7 +33,11 @@ export class DashboardComponent {
   filteredCars: VehicleDetail[] = [];
   pickupDateTimeToreserve: Date | null = null;
   returnDateTimeToreserve: Date | null = null;
-  constructor(private carsService: CarsService, private router: Router) {
+  constructor(
+    private carsService: CarsService,
+    private router: Router,
+    private authService: AuthService
+  ) {
     console.log('HttpClient is ready');
   }
 
@@ -73,9 +78,13 @@ export class DashboardComponent {
   }
 
   goToProfile() {
-    this.isLoading = true;
-    this.router.navigate(['/profile']);
-    this.isLoading = false;
+    console.log('sprawdzamy stan logowania', this.authService.isLoggedIn());
+    if (this.authService.isLoggedIn()) {
+      console.log('chcemy isc do profilu');
+      this.router.navigate(['/profile']);
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 
   combineDateAndTimeObjects(date: Date, time: Time): Date {

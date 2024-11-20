@@ -1,6 +1,8 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-cars-list',
@@ -15,6 +17,11 @@ export class CarsListComponent {
   @Input() pickupDateTime: Date | null = null;
   @Input() returnDateTime: Date | null = null;
 
+  constructor(
+    private authService: AuthService, // Obsługa autoryzacji
+    private router: Router // Obsługa nawigacji
+  ) {}
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes['cars']) {
       console.log('Nowe dane samochodów:', this.cars);
@@ -23,14 +30,22 @@ export class CarsListComponent {
 
   // tu trzeba zrobić wysyłanie na backend z chęcią wynajęcia samochodu
   rentCar(car: VehicleDetail) {
-    console.log(
-      'chęć wynajecia fury:',
-      car.model,
-      'w okresie:',
-      this.pickupDateTime,
-      ' - ',
-      this.returnDateTime
-    );
+    if (this.authService.isLoggedIn()) {
+      console.log(
+        'Chęć wynajęcia fury:',
+        car.model,
+        'w okresie:',
+        this.pickupDateTime,
+        ' - ',
+        this.returnDateTime
+      );
+      // TODO: Dodaj logikę wynajmu samochodu
+    } else {
+      console.warn(
+        'Użytkownik nie jest zalogowany. Przekierowanie na stronę logowania.'
+      );
+      this.router.navigate(['/login']);
+    }
   }
 }
 
