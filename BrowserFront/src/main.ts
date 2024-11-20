@@ -7,14 +7,18 @@ import { DashboardComponent } from './app/dashboard/dashboard.component';
 import { ErrorLoginComponent } from './app/error-login/error-login.component';
 import { RegistrationComponent } from './app/registration/registration.component';
 import { provideHttpClient } from '@angular/common/http';
+import { ProfileComponent } from './app/profile/profile.component';
+import { EditProfileComponent } from './app/edit-profile/edit-profile.component';
 
-const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' }, // Domyślnie przekieruj na login
+export const routes: Routes = [
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegistrationComponent },
   { path: 'dashboard', component: DashboardComponent },
+  { path: 'edit-profile', component: EditProfileComponent },
+  { path: 'profile', component: ProfileComponent },
   { path: 'error', component: ErrorLoginComponent },
-  { path: '**', redirectTo: 'login' }, // Catch-all
+  { path: '**', redirectTo: 'dashboard' },
 ];
 
 bootstrapApplication(AppComponent, {

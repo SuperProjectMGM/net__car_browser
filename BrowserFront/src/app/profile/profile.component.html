@@ -1,0 +1,102 @@
+<div class="container">
+    <div class="form-container">
+      <h1 class="form-header">User Profile</h1>
+      <div class="profile-form">
+  
+        <!-- Basic Information -->
+        <div class="form-section">
+          <label class="form-section-title">Basic Information</label>
+          <div class="form-row">
+            <div class="form-group">
+              <label>First Name</label>
+              <p class="form-text">{{ user?.firstName || 'Not Provided' }}</p>
+            </div>
+            <div class="form-group">
+              <label>Last Name</label>
+              <p class="form-text">{{ user?.lastName || 'Not Provided' }}</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <p class="form-text">{{ user?.email || 'Not Provided' }}</p>
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <p class="form-text">{{ user?.phoneNumber || 'Not Provided' }}</p>
+          </div>
+        </div>
+  
+        <!-- Address Information -->
+        <div class="form-section">
+          <label class="form-section-title">Address Information</label>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Street and Number</label>
+              <p class="form-text">{{ user?.address?.street || 'Not Provided' }}</p>
+            </div>
+            <div class="form-group">
+              <label>Postal Code</label>
+              <p class="form-text">{{ user?.address?.postalCode || 'Not Provided' }}</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>City</label>
+            <p class="form-text">{{ user?.address?.city || 'Not Provided' }}</p>
+          </div>
+        </div>
+  
+        <!-- Personal Information -->
+        <div class="form-section">
+          <label class="form-section-title">Personal Information</label>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Date of Birth</label>
+              <p class="form-text">{{ user?.dateOfBirth || 'Not Provided' }}</p>
+            </div>
+            <div class="form-group">
+              <label>Driving License Number</label>
+              <p class="form-text">{{ user?.drivingLicense?.number || 'Not Provided' }}</p>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Driving License Issue Date</label>
+              <p class="form-text">{{ user?.drivingLicense?.issueDate || 'Not Provided' }}</p>
+            </div>
+            <div class="form-group">
+              <label>Driving License Expiration Date</label>
+              <p class="form-text">{{ user?.drivingLicense?.expirationDate || 'Not Provided' }}</p>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>ID Card Number</label>
+              <p class="form-text">{{ user?.idCard?.number || 'Not Provided' }}</p>
+            </div>
+            <div class="form-group">
+              <label>Issued By</label>
+              <p class="form-text">{{ user?.idCard?.issuedBy || 'Not Provided' }}</p>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>ID Card Issue Date</label>
+              <p class="form-text">{{ user?.idCard?.issueDate || 'Not Provided' }}</p>
+            </div>
+            <div class="form-group">
+              <label>ID Card Expiration Date</label>
+              <p class="form-text">{{ user?.idCard?.expirationDate || 'Not Provided' }}</p>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Buttons -->
+        <div class="submit-section">
+          <button class="btn btn-primary" (click)="editProfile()">Edit Profile</button>
+          <button class="btn btn-secondary" (click)="logout()">Logout</button>
+          <button class="btn btn-third" (click)="GotoDashborad()">Go back</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

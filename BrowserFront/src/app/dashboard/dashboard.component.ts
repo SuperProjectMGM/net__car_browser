@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { FiltersComponent } from '../filters/filters.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -32,9 +33,11 @@ export class DashboardComponent {
   filteredCars: VehicleDetail[] = [];
   pickupDateTimeToreserve: Date | null = null;
   returnDateTimeToreserve: Date | null = null;
-  constructor(private carsService: CarsService, private router: Router) {
-    console.log('HttpClient is ready');
-  }
+  constructor(
+    private carsService: CarsService,
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   onSearch() {
     this.availableCars = [];
@@ -73,9 +76,11 @@ export class DashboardComponent {
   }
 
   goToProfile() {
-    this.isLoading = true;
-    this.router.navigate(['/profile']);
-    this.isLoading = false;
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/profile']);
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 
   combineDateAndTimeObjects(date: Date, time: Time): Date {
@@ -115,5 +120,9 @@ export class DashboardComponent {
   private isRateInRange(rate: number, range: string): boolean {
     const minRate = parseInt(range.replace('+', ''), 10);
     return rate >= minRate;
+  }
+
+  get isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
   }
 }

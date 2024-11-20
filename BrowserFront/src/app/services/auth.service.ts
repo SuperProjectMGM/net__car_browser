@@ -1,48 +1,28 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = environment.apiBaseUrl;
+  private isAuthenticated = false; // Domyślnie użytkownik jest niezalogowany
 
-  //   constructor(private http: HttpClient) {}
+  // Symulacja logowania
+  login(
+    email: string,
+    password: string
+  ): Observable<{ success: boolean; message: string }> {
+    console.log(`Logowanie: email=${email}, password=${password}`);
+    this.isAuthenticated = true;
+    return of({ success: true, message: 'Login successful' });
+  }
 
-  //   login(email: string, password: string): Observable<any> {
-  //     return this.http
-  //       .post<any>(
-  //         `${this.apiUrl}/Auth/login`,
-  //         { email, password },
-  //         { withCredentials: true }
-  //       )
-  //       .pipe(
-  //         tap((response) => {
-  //           if (response && response.token) {
-  //             localStorage.setItem('loggedIn', 'true'); // Ustawienie flagi logowania
-  //             console.log('ustawiono falge');
-  //           }
-  //         })
-  //       );
-  //   }
+  logout() {
+    this.isAuthenticated = false; // Wylogowanie
+    console.log('User logged out.');
+  }
 
-  //   logout(): Observable<any> {
-  //     return this.http
-  //       .post(`${this.apiUrl}/logout`, {}, { withCredentials: true })
-  //       .pipe(
-  //         tap(() => {
-  //           localStorage.removeItem('loggedIn'); // Usunięcie flagi logowania
-  //         })
-  //       );
-  //   }
-
-  //   isAuthenticated(): boolean {
-  //     // Tu możesz w przyszłości dodać logikę sprawdzającą sesję
-  //     if (localStorage.getItem('loggedIn') == 'true') {
-  //       return true;
-  //     }
-  //     return false;
-  //   }
+  isLoggedIn(): boolean {
+    return this.isAuthenticated; // Sprawdzenie stanu zalogowania
+  }
 }

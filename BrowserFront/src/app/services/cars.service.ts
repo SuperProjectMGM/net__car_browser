@@ -10,9 +10,7 @@ import { VehicleDetail } from '../cars-list/cars-list.component';
 export class CarsService {
   private apiUrl = environment.apiBaseUrl;
 
-  constructor(private http: HttpClient) {
-    console.log('HttpClient is ready');
-  }
+  constructor(private http: HttpClient) {}
 
   searchCars(
     rentalFrom: Date,

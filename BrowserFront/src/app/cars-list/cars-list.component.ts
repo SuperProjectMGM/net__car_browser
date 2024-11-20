@@ -1,6 +1,9 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
+import { ProfileService } from '../services/profile.service';
 
 @Component({
   selector: 'app-cars-list',
@@ -15,6 +18,12 @@ export class CarsListComponent {
   @Input() pickupDateTime: Date | null = null;
   @Input() returnDateTime: Date | null = null;
 
+  constructor(
+    private profileSerive: ProfileService,
+    private authService: AuthService, // Obsługa autoryzacji
+    private router: Router // Obsługa nawigacji
+  ) {}
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes['cars']) {
       console.log('Nowe dane samochodów:', this.cars);
@@ -22,15 +31,28 @@ export class CarsListComponent {
   }
 
   // tu trzeba zrobić wysyłanie na backend z chęcią wynajęcia samochodu
-  rentCar(car: VehicleDetail) {
-    console.log(
-      'chęć wynajecia fury:',
-      car.model,
-      'w okresie:',
-      this.pickupDateTime,
-      ' - ',
-      this.returnDateTime
-    );
+  rentCar(car: VehicleDetail): void {
+    if (this.authService.isLoggedIn()) {
+      this.profileSerive.isUserProfileComplete().subscribe((isComplete) => {
+        if (isComplete) {
+          console.log(
+            'Chęć wynajęcia fury:',
+            car.model,
+            'w okresie:',
+            this.pickupDateTime,
+            ' - ',
+            this.returnDateTime
+          );
+          // TODO: Dodaj logikę wynajmu samochodu
+        } else {
+          console.log('Nie ma wypełnionych danych profilu.');
+          this.router.navigate(['/edit-profile']);
+        }
+      });
+    } else {
+      console.log('Użytkownik nie jest zalogowany.');
+      this.router.navigate(['/login']);
+    }
   }
 }
 
