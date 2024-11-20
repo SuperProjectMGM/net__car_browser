@@ -92,4 +92,3 @@ jobs:
           app-name: 'BrowserAPI'
           slot-name: 'Production'
           package: .
-          

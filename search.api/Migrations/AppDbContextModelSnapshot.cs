@@ -36,27 +36,23 @@ namespace search.api.Migrations
 
                     b.Property<string>("RentalFirmId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Start")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("VinId")
-                        .HasColumnType("int");
+                    b.Property<string>("VinId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RentalFirmId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Rentals");
                 });
@@ -79,7 +75,7 @@ namespace search.api.Migrations
                     b.ToTable("Firms");
                 });
 
-            modelBuilder.Entity("search.api.Models.User", b =>
+            modelBuilder.Entity("search.api.Models.UserDetails", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -126,26 +122,7 @@ namespace search.api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("search.api.Models.Rental", b =>
-                {
-                    b.HasOne("search.api.Models.RentalFirm", "RentalFirm")
-                        .WithMany()
-                        .HasForeignKey("RentalFirmId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("search.api.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("RentalFirm");
-
-                    b.Navigation("User");
+                    b.ToTable("UsersDetails");
                 });
 #pragma warning restore 612, 618
         }

@@ -15,11 +15,11 @@ namespace search.api.Controllers;
 [ApiController]
 public class AuthenticateController: ControllerBase
 {
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<UserDetails> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IConfiguration _configuration;
 
-    public AuthenticateController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+    public AuthenticateController(UserManager<UserDetails> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
     {
         _userManager = userManager;
         _roleManager = roleManager;
@@ -36,10 +36,23 @@ public class AuthenticateController: ControllerBase
         {
             return StatusCode(StatusCodes.Status400BadRequest, "User with this email already exists!");
         }
-        IdentityUser user = new () 
+        UserDetails user = new () 
         {
             Email = model.Email,
-            UserName = model.Email,
+            UserName = model.UserName,
+            Name = model.FirstName,
+            Surname = model.SecondName,
+            BirthDate = model.DateOfBirth,
+            AddressStreet = model.AddressStreet,
+            PostalCode = model.PostalCode,
+            City = model.City,
+            DrivingLicenseNumber = model.DrivingLicenseNumber,
+            DrivingLicenseIssueDate = model.DrivingLicenseIssueDate,
+            DrivingLicenseExpirationDate = model.DrivingLicenseExpirationDate,
+            IdPersonalNumber = model.IdCardNumber,
+            IdCardIssuedBy = model.IdCardIssuedBy,
+            IdCardIssueDate = model.IdCardIssueDate,
+            IdCardExpirationDate = model.IdCardExpirationDate,
             // It should be changed whenever any cridential was changed???
             SecurityStamp = Guid.NewGuid().ToString()
         };
@@ -63,6 +76,8 @@ public class AuthenticateController: ControllerBase
             var authClaims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.UserName!),
+                new Claim(ClaimTypes.Email, user.Email!),
+                new Claim(ClaimTypes.NameIdentifier, user.Id!),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
             foreach (var userRole in userRoles)
@@ -79,7 +94,6 @@ public class AuthenticateController: ControllerBase
         return Unauthorized();
     }
 
-    
     // I don't understand why get not post?
     [HttpGet]
     [Route("login/google-login")]
@@ -105,8 +119,7 @@ public class AuthenticateController: ControllerBase
         var name = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
         return Ok(new { Name = name, Email = email });
     }
-
-
+    
     private JwtSecurityToken GetToken(List<Claim> authClaims)
     {
         var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]!));

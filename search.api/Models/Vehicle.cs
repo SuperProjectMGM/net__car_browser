@@ -1,11 +1,23 @@
+using System.Runtime.InteropServices.JavaScript;
 using search.api.Models;
 
 public class Vehicle
 {
-    public int CarId { get; set; } // Id of a car. I don't really know if it must be an id from another api.
+    public string CarId { get; set; } = "";
     public string Brand { get; set; } = "";
     public string Model { get; set; } = "";
-    public string YearOfProduction {get; set; } = "";// It shouldn't be string. But now I know, that in ours api now it is string. 
+    public string SerialNo { get; set; } = "";
+    public string VinId { get; set; } = "";
+    public string RegistryNo { get; set; } = "";
+    public int YearOfProduction { get; set; }
+    public DateTime RentalFrom { get; set; }
+    public DateTime RentalTo { get; set; }
+    public decimal Prize { get; set; }
+    public string DriveType { get; set; } = "";
+    public string Transmission { get; set; } = "";
+    public string Description { get; set; } = "";
     public string Type { get; set; } = "";
-    public RentalFirm RentalFirm { get; set; } = new RentalFirm(); // A firm that gives us that car
+    public decimal Rate { get; set; }
+    public string Localization { get; set; } = "";
+    public string RentalFirmId { get; set; } = string.Empty;
 }

@@ -1,0 +1,88 @@
+@model Tuple<search.api.Models.Rental, string, string, search.api.Models.RentalFirm>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rental Details</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f9f9f9;
+            font-family: Arial, sans-serif;
+        }
+        .centered-rectangle {
+            background-color: #90ee90; /* Light green */
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 16px;
+            width: 300px;
+            color: #333;
+        }
+        .centered-rectangle h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .detail {
+            margin-bottom: 10px;
+        }
+        .detail label {
+            font-weight: bold;
+            display: inline-block;
+            width: 120px;
+        }
+        .detail span {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="centered-rectangle">
+    <h2>Rental Details</h2>
+
+    <div class="detail">
+        <label>Rental ID:</label>
+        <span>@Model.Item1.Id</span>
+    </div>
+    <div class="detail">
+        <label>User Email:</label>
+        <span>@Model.Item2</span>
+    </div>
+    <div class="detail">
+        <label>Username:</label>
+        <span>@Model.Item3</span>
+    </div>
+    <div class="detail">
+        <label>Start Date:</label>
+        <span>@Model.Item1.Start.ToString("yyyy-MM-dd HH:mm")</span>
+    </div>
+    <div class="detail">
+        <label>End Date:</label>
+        <span>@Model.Item1.End.ToString("yyyy-MM-dd HH:mm")</span>
+    </div>
+    <div class="detail">
+        <label>Status:</label>
+        <span>@Model.Item1.Status</span>
+    </div>
+    <div class="detail">
+        <label>Description:</label>
+        <span>@Model.Item1.Description</span>
+    </div>
+    <div class="detail">
+        <label>Rental Firm:</label>
+        <span>@Model.Item4.Name</span>
+    </div>
+
+</div>
+
+</body>
+</html>
