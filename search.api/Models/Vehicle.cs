@@ -3,7 +3,7 @@ using search.api.Models;
 
 public class Vehicle
 {
-    public int CarId { get; set; } // string
+    public string CarId { get; set; } // string
     public string Brand { get; set; } = "";
     public string Model { get; set; } = "";
     public string SerialNo { get; set; } = "";
@@ -19,5 +19,6 @@ public class Vehicle
     public string Type { get; set; } = "";
     public decimal Rate { get; set; }
     public string Localization { get; set; } = "";
-    public RentalFirm RentalFirm { get; set; } = new RentalFirm(); // RentalFirmId
+    
+    public string RentalFirmId { get; set; } = string.Empty; // RentalFirmId
 }

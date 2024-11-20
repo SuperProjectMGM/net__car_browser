@@ -34,7 +34,7 @@ public class RentalController : Controller
         
         if (!success)
         {
-            return Unauthorized("User email/name/id not found in token.");
+            return Unauthorized("Something went wrong.");
         }
         else
         {

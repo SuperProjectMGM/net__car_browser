@@ -16,15 +16,17 @@ public class RentalRepository : IRentalInterface
     private readonly IEmailInterface _emailService;
     private readonly IConfiguration _configuration;
     private readonly AppDbContext _context;
+    private readonly ISendMessageInterface _sendMessageService;
 
-    public RentalRepository(IEmailInterface emailService, IConfiguration configuration, AppDbContext context)
+    public RentalRepository(IEmailInterface emailService, IConfiguration configuration, AppDbContext context, ISendMessageInterface sendMessageService)
     {
         _emailService = emailService;
         _configuration = configuration;
         _context = context;
+        _sendMessageService = sendMessageService;
     }
     
-    // TODO: delete rental if link expired or token invalid
+    // TODO: delete rental if link expired or token invalid???
 
     public async Task<bool> SendConfirmationEmail(string userEmail, string userName, string userId, string scheme, string host,
                                             VehicleRentRequest request)
@@ -33,7 +35,12 @@ public class RentalRepository : IRentalInterface
         {
             return await Task.FromResult(false);
         }
-
+        
+        //
+        var rentalFirm = await _context.Firms.FirstOrDefaultAsync(x => x.Id == request.RentalFirmId);
+        if (rentalFirm is null)
+            return await Task.FromResult(false);
+        
         // Rental creation
         var rentalModel = await CreateRental(request, userId);
         
@@ -104,19 +111,23 @@ public class RentalRepository : IRentalInterface
         var rentalFirm = await _context.Firms.FirstOrDefaultAsync(x => x.Id == rental.RentalFirmId);
         if (rentalFirm is null)
             return (null, null);
+
+        var userDetails = await _context.UserDetails.FirstOrDefaultAsync(x => x.UserId == id);
+        if (userDetails is null)
+            return (null, null);
         
         rental.Status = RentalStatus.Confirmed;
         await _context.SaveChangesAsync();
         
         // TODO: send message to data provider api
-        
+        var message = 
         
         return (rental, rentalFirm);
     }
 
     public async Task<Rental> CreateRental(VehicleRentRequest request, string userId)
     {
-        var rentalModel = request.ToRentalFromRequest(userId);
+        var rentalModel = request.ToRentalFromRequest(userId, request.Description);
         await _context.Rentals.AddAsync(rentalModel);
         await _context.SaveChangesAsync();
         return rentalModel;
