@@ -4,7 +4,7 @@ namespace search.api.Interfaces;
 
 public interface ISendMessageInterface
 {
-    public string CreateRentMessage();
+    public string CreateRentMessage(Rental rental, UserDetails userDetails, string email, string username);
 
-    public bool SendMessageToDataProvider();
+    public Task<bool> SendMessageToDataProvider(string message);
 }

@@ -120,7 +120,11 @@ public class RentalRepository : IRentalInterface
         await _context.SaveChangesAsync();
         
         // TODO: send message to data provider api
-        var message = 
+        var message = _sendMessageService.CreateRentMessage(rental, userDetails, email, username);
+        var success = await _sendMessageService.SendMessageToDataProvider(message);
+
+        if (!success)
+            return (null, null);
         
         return (rental, rentalFirm);
     }
