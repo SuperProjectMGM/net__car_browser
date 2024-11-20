@@ -3,9 +3,9 @@
     border: 1px solid #ddd;
     border-radius: 8px;
     background-color: #f9f9f9;
-    max-width: 350px; /* Maksymalna szerokość dla lepszej organizacji */
-    margin: 0 auto; /* Wyśrodkowanie formularza */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Lekki cień dla lepszej widoczności */
+    max-width: 350px; 
+    margin: 0 auto; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
   
     h4 {
       margin-bottom: 2rem;
@@ -17,16 +17,14 @@
     .filter-group {
       margin-bottom: 1.5rem;
       
-      /* Stylizacja tytułów filtrów (np. "Price per day", "Rate", "Drive type") */
       label.filter-title {
         display: block;
         font-weight: bold;
-        font-size: 1.3rem;  /* Zwiększony rozmiar czcionki tylko dla tytułów filtrów */
+        font-size: 1.3rem;  
         margin-bottom: 1rem;
         color: #444;
       }
   
-      /* Stylizacja dla checkboxów i ich tekstów */
       .price-option,
       .spec-option {
         display: flex;
@@ -37,7 +35,7 @@
   
       input[type="checkbox"] {
         margin: 0;
-        width: 20px;  /* Większy checkbox */
+        width: 20px;  
         height: 20px;
         transition: background-color 0.3s ease;
         cursor: pointer;
@@ -51,12 +49,10 @@
         transition: color 0.3s ease;
       }
   
-      /* Stylizacja po najechaniu na checkbox */
       input[type="checkbox"]:checked + label {
-        color: #0056b3;  /* Zmiana koloru tekstu po zaznaczeniu */
+        color: #0056b3;  
       }
   
-      /* Stylizacja przy najechaniu na label */
       label:hover {
         color: #007bff;
       }
@@ -67,9 +63,8 @@
       margin-top: 0.5rem;
     }
   
-    /* Dodatkowy efekt dla checkboxów */
     input[type="checkbox"]:hover {
-      background-color: #e9ecef; /* Jasny kolor przy hover */
+      background-color: #e9ecef; 
       border-color: #007bff;
     }
 }

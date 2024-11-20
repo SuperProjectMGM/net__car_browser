@@ -1,10 +1,8 @@
-/* Base styles */
 .cars-list {
   max-width: 1200px;
   margin: 0 auto;
 }
 
-/* Car item */
 .car-item {
   background: #FFFFFF;
   border: 1px solid #DFE1E6;
@@ -116,7 +114,6 @@
   margin-top: 16px;
 }
 
-/* Feature icons placeholder styles */
 .feature-icon {
   width: 24px;
   height: 24px;
@@ -125,7 +122,6 @@
   display: inline-block;
 }
 
-/* Button styles */
 .btn {
   padding: 12px 24px;
   border-radius: 8px;
@@ -144,7 +140,6 @@
   background: #0047B3;
 }
 
-/* Media queries for responsive design */
 @media (max-width: 768px) {
   .car-item__container {
     flex-direction: column;
@@ -164,7 +159,6 @@
   }
 }
 
-/* Additional hover effects */
 .car-item:hover {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }

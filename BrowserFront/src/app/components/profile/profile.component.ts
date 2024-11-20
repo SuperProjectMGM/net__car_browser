@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ProfileService } from '../services/profile.service';
+import { ProfileService } from '../../services/profile.service';
+import { UserProfile } from '../../models/UserProfile.model';
 
 @Component({
   selector: 'app-profile',
@@ -18,7 +19,6 @@ export class ProfileComponent implements OnInit {
     this.loadUserProfile();
   }
 
-  // Ładowanie danych użytkownika
   loadUserProfile() {
     this.profileService.getUserProfile().subscribe(
       (profile: UserProfile) => {
@@ -33,12 +33,10 @@ export class ProfileComponent implements OnInit {
     );
   }
 
-  // Przekierowanie do edycji profilu
   editProfile() {
     this.router.navigate(['/edit-profile']);
   }
 
-  // Wylogowanie użytkownika
   logout() {
     this.profileService.logout();
     this.router.navigate(['/login']);
@@ -47,28 +45,4 @@ export class ProfileComponent implements OnInit {
   GotoDashborad() {
     this.router.navigate(['/dashborad']);
   }
-}
-
-export interface UserProfile {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phoneNumber: string;
-  address: {
-    street: string;
-    postalCode: string;
-    city: string;
-  };
-  dateOfBirth: string;
-  drivingLicense: {
-    number: string;
-    issueDate: string;
-    expirationDate: string;
-  };
-  idCard: {
-    number: string;
-    issuedBy: string;
-    issueDate: string;
-    expirationDate: string;
-  };
 }
