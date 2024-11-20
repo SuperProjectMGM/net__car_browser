@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using search.api.Models;
 
@@ -18,6 +19,7 @@ namespace search.api.Controllers;
 [ApiController]
 public class AuthenticateController: ControllerBase
 {
+
     private readonly UserManager<UserDetails> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IConfiguration _configuration;
@@ -104,7 +106,7 @@ public class AuthenticateController: ControllerBase
     {
         var properties = new AuthenticationProperties
         {
-            RedirectUri = "http://localhost:5178/search.api/Authenticate/login/google-callback"
+            RedirectUri = _configuration["GOOGLE_AUTH_REDIRECT_URI"]
         };
         return Challenge(properties, GoogleDefaults.AuthenticationScheme);
     }
@@ -125,10 +127,10 @@ public class AuthenticateController: ControllerBase
     
     private JwtSecurityToken GetToken(List<Claim> authClaims)
     {
-        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]!));
+        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT_KEY"]!));
         var token = new JwtSecurityToken(
-            issuer: _configuration["JWT:ValidIssuer"],
-            audience: _configuration["JWT:ValidAudience"],
+            issuer: _configuration["JWT_ISSUER"],
+            audience: _configuration["JWT_AUDIENCE"],
             expires: DateTime.Now.AddMinutes(15),
             claims: authClaims,
             signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256));
