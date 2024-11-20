@@ -1,30 +1,21 @@
 using System.Runtime.InteropServices.JavaScript;
+using Microsoft.AspNetCore.Identity;
 
 namespace search.api.Models;
 
-public class UserDetails
+public class UserDetails : IdentityUser
 {
-    public string Id { get; set; } = string.Empty;
-
-    public string Login { get; set; } = string.Empty;
-
-    public string Password { get; set; } = string.Empty;
     
     public string Name { get; set; } = String.Empty;
-
     public string Surname { get; set; } = String.Empty;
-    
-    public DateTime BirthDate { get; set; }
-    
-    public DateTime DateOfReceiptOfDrivingLicense { get; set; }
-    
-    public int PersonalNumber { get; set; }
-    
-    public int LicenceNumber { get; set; }
-
-    public string Email { get; set; } = String.Empty;
-    
-    public string Address { get; set; } = String.Empty;
-
-    public string PhoneNumber { get; set; } = string.Empty;
+    public string BirthDate { get; set; } = String.Empty;
+    public string IssueDateDrivingLicense { get; set; } = String.Empty;
+    public string ExpirationDateDrivingLicense { get; set; } = String.Empty;
+    public string LicenseNumber { get; set; } = String.Empty;
+    public string AddressStreet { get; set; } = String.Empty;
+    public string PostalCode { get; set; } = String.Empty;
+    public string City { get; set; } = String.Empty;
+    public string PersonalNumber { get; set; } = String.Empty;
+    public string IssueDateIdCard { get; set; } = String.Empty;
+    public string ExpirationDateIdCard { get; set; } = String.Empty;
 }

@@ -26,7 +26,8 @@ namespace search.api.Mappers
                 Type = dto.Type,
                 Rate = dto.Rate,  // Zmienna jest już typu decimal
                 Localization = dto.Localization,
-                RentalFirm = new RentalFirm() // TODO: Uzupełnij dane RentalFirm, jeśli są dostępne
+                RentalFirmId = "" // TODO: Uzupełnij dane RentalFirm, jeśli są dostępne !!! Musimy sięgnąć w database sprawdzić adres i dopasować
+                // TODO: !!! BARDZO WAzNE
             };
         }
 

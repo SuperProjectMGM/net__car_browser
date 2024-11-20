@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using search.api.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,8 +47,6 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-builder.Services.AddScoped<IUserInterface, UserRepository>();
-builder.Services.AddScoped<IUserInterface, UserRepository>();
 builder.Services.AddScoped<IEmailInterface, EmailService>();
 builder.Services.AddScoped<IRentalInterface, RentalRepository>();
 
@@ -56,7 +55,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddDbContext<AuthDbContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("Devconnection")));
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AuthDbContext>().AddDefaultTokenProviders();
+builder.Services.AddIdentity<UserDetails, IdentityRole>().AddEntityFrameworkStores<AuthDbContext>().AddDefaultTokenProviders();
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

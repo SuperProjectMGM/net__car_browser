@@ -6,7 +6,7 @@ namespace search.api.DTOs
     public class VehicleOurDto
     {
         [JsonPropertyName("carId")]
-        public int CarId { get; set; } // Integer ID, żeby jednoznacznie reprezentować identyfikator pojazdu
+        public string CarId { get; set; } = ""; // Integer ID, żeby jednoznacznie reprezentować identyfikator pojazdu
 
         [JsonPropertyName("brand")]
         public string Brand { get; set; } = ""; // Marka jako string, bo jest to tekstowa właściwość
