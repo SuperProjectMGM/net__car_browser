@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using search.api.Data;
@@ -8,6 +9,7 @@ using search.api.DTOs;
 using search.api.Interfaces;
 using search.api.Mappers;
 using search.api.Models;
+using search.api.Services;
 
 namespace search.api.Repositories;
 
@@ -16,14 +18,14 @@ public class RentalRepository : IRentalInterface
     private readonly IEmailInterface _emailService;
     private readonly IConfiguration _configuration;
     private readonly AppDbContext _context;
-    private readonly ISendMessageInterface _sendMessageService;
+    private readonly RabbitMessageService _messageService;
 
-    public RentalRepository(IEmailInterface emailService, IConfiguration configuration, AppDbContext context, ISendMessageInterface sendMessageService)
+    public RentalRepository(IEmailInterface emailService, IConfiguration configuration, AppDbContext context, RabbitMessageService messageService)
     {
         _emailService = emailService;
         _configuration = configuration;
         _context = context;
-        _sendMessageService = sendMessageService;
+        _messageService = messageService;
     }
     
     // TODO: delete rental if link expired or token invalid???
@@ -120,12 +122,10 @@ public class RentalRepository : IRentalInterface
         await _context.SaveChangesAsync();
         
         // TODO: send message to data provider api
-        var message = _sendMessageService.CreateRentMessage(rental, userDetails, email, username);
-        var success = await _sendMessageService.SendMessageToDataProvider(message);
-
+        var message = CreateRentMessage(rental, userDetails, email, username);
+        var success = await _messageService.SendRentalMessage(message);
         if (!success)
             return (null, null);
-        
         return (rental, rentalFirm);
     }
 
@@ -136,7 +136,31 @@ public class RentalRepository : IRentalInterface
         await _context.SaveChangesAsync();
         return rentalModel;
     }
+    
+    public string CreateRentMessage(Rental rental, UserDetails userDetails, string email, string username)
+    {
+        RentalMessage message = new RentalMessage
+        {
+            Name = userDetails.Name,
+            Surname = userDetails.Surname,
+            BirthDate = userDetails.BirthDate,
+            DateOfReceiptOfDrivingLicense = userDetails.DateOfReceiptOfDrivingLicense,
+            PersonalNumber = userDetails.PersonalNumber,
+            LicenceNumber = userDetails.LicenceNumber,
+            Address = userDetails.Address,
+            PhoneNumber = userDetails.PhoneNumber,
+            VinId = rental.VinId,
+            Start = rental.Start,
+            End = rental.End,
+            Status = rental.Status,
+            Description = rental.Description
+        };
+        
+        string jsonString = JsonSerializer.Serialize(message);
 
+        return jsonString;
+    }
+    
     public enum RentalStatus
     {
         Pending = 1,    // Rental request is pending
