@@ -43,6 +43,10 @@ export class ProfileComponent implements OnInit {
     this.profileService.logout();
     this.router.navigate(['/login']);
   }
+
+  GotoDashborad() {
+    this.router.navigate(['/dashborad']);
+  }
 }
 
 export interface UserProfile {

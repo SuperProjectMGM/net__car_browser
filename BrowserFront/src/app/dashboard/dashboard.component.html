@@ -1,9 +1,11 @@
 <div class="main-container">
   <div class="search-bar">
     <button class="profile-button" (click)="goToProfile()">
-      <i *ngIf="!isLoading" class="fa fa-user profile-icon"></i>
+      <i *ngIf="!isLoading && !isLoggedIn" class="fa fa-user profile-icon"></i>
+      <i *ngIf="!isLoading && isLoggedIn" class="fa fa-user-check profile-icon"></i>
       <i *ngIf="isLoading" class="fa fa-spinner fa-spin profile-icon"></i>
     </button>
+    
     
     <div class="input-with-icon">
       <!-- Wyświetlanie ikonki tylko, gdy pole tekstowe jest puste -->

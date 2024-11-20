@@ -37,9 +37,7 @@ export class DashboardComponent {
     private carsService: CarsService,
     private router: Router,
     private authService: AuthService
-  ) {
-    console.log('HttpClient is ready');
-  }
+  ) {}
 
   onSearch() {
     this.availableCars = [];
@@ -78,9 +76,7 @@ export class DashboardComponent {
   }
 
   goToProfile() {
-    console.log('sprawdzamy stan logowania', this.authService.isLoggedIn());
     if (this.authService.isLoggedIn()) {
-      console.log('chcemy isc do profilu');
       this.router.navigate(['/profile']);
     } else {
       this.router.navigate(['/login']);
@@ -124,5 +120,9 @@ export class DashboardComponent {
   private isRateInRange(rate: number, range: string): boolean {
     const minRate = parseInt(range.replace('+', ''), 10);
     return rate >= minRate;
+  }
+
+  get isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
   }
 }

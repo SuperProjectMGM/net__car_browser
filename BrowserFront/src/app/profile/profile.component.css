@@ -74,4 +74,20 @@
     color: #fff;
     margin-left: 10px;
   }
+
+  .btn-third {
+    background: #28a745; 
+    color: #fff; 
+    margin-left: 10px; 
+    padding: 10px 20px; 
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-third:hover {
+    background: #218838; 
+}
   

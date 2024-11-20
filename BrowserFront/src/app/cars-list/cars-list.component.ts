@@ -3,6 +3,7 @@ import { environment } from '../../environments/environment';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { ProfileService } from '../services/profile.service';
 
 @Component({
   selector: 'app-cars-list',
@@ -18,6 +19,7 @@ export class CarsListComponent {
   @Input() returnDateTime: Date | null = null;
 
   constructor(
+    private profileSerive: ProfileService,
     private authService: AuthService, // Obsługa autoryzacji
     private router: Router // Obsługa nawigacji
   ) {}
@@ -29,21 +31,26 @@ export class CarsListComponent {
   }
 
   // tu trzeba zrobić wysyłanie na backend z chęcią wynajęcia samochodu
-  rentCar(car: VehicleDetail) {
+  rentCar(car: VehicleDetail): void {
     if (this.authService.isLoggedIn()) {
-      console.log(
-        'Chęć wynajęcia fury:',
-        car.model,
-        'w okresie:',
-        this.pickupDateTime,
-        ' - ',
-        this.returnDateTime
-      );
-      // TODO: Dodaj logikę wynajmu samochodu
+      this.profileSerive.isUserProfileComplete().subscribe((isComplete) => {
+        if (isComplete) {
+          console.log(
+            'Chęć wynajęcia fury:',
+            car.model,
+            'w okresie:',
+            this.pickupDateTime,
+            ' - ',
+            this.returnDateTime
+          );
+          // TODO: Dodaj logikę wynajmu samochodu
+        } else {
+          console.log('Nie ma wypełnionych danych profilu.');
+          this.router.navigate(['/edit-profile']);
+        }
+      });
     } else {
-      console.warn(
-        'Użytkownik nie jest zalogowany. Przekierowanie na stronę logowania.'
-      );
+      console.log('Użytkownik nie jest zalogowany.');
       this.router.navigate(['/login']);
     }
   }

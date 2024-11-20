@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
 interface UserProfile {
   firstName: string;
@@ -71,7 +71,7 @@ export class ProfileService {
         expirationDate: '2025-06-15',
       },
       idCard: {
-        number: 'ID987654',
+        number: 'ID123456',
         issuedBy: 'Government Office',
         issueDate: '2020-01-01',
         expirationDate: '2030-01-01',
@@ -91,5 +91,59 @@ export class ProfileService {
   logout(): void {
     localStorage.removeItem('authToken');
     console.log('User has been logged out.');
+  }
+
+  isUserProfileComplete(): Observable<boolean> {
+    return this.getUserProfile().pipe(
+      catchError(() => {
+        console.error('Error fetching user profile');
+        // Zwracamy profil z pustymi polami jako fallback
+        return of({
+          firstName: '',
+          lastName: '',
+          email: '',
+          phoneNumber: '',
+          address: { street: '', postalCode: '', city: '' },
+          dateOfBirth: '',
+          drivingLicense: { number: '', issueDate: '', expirationDate: '' },
+          idCard: {
+            number: '',
+            issuedBy: '',
+            issueDate: '',
+            expirationDate: '',
+          },
+        } as UserProfile);
+      }),
+      map((profile: UserProfile) => {
+        // Tworzymy listę wymaganych pól
+        const requiredFields = [
+          profile.firstName,
+          profile.lastName,
+          profile.email,
+          profile.phoneNumber,
+          profile.address?.street,
+          profile.address?.postalCode,
+          profile.address?.city,
+          profile.dateOfBirth,
+          profile.drivingLicense?.number,
+          profile.drivingLicense?.issueDate,
+          profile.drivingLicense?.expirationDate,
+          profile.idCard?.number,
+          profile.idCard?.issuedBy,
+          profile.idCard?.issueDate,
+          profile.idCard?.expirationDate,
+        ];
+
+        // Sprawdzamy, czy któreś pole jest puste lub zawiera tylko białe znaki
+        const isComplete = requiredFields.every((field) => {
+          if (typeof field === 'string') {
+            return field.trim() !== ''; // Sprawdzamy, czy tekst nie jest pusty ani nie zawiera tylko białych znaków
+          }
+          return field !== null && field !== undefined; // Sprawdzamy wartości inne niż tekst
+        });
+
+        return isComplete;
+      })
+    );
   }
 }
