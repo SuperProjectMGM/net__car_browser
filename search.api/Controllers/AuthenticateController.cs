@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using NanoidDotNet;
+using search.api.Models;
 
 
 
@@ -15,11 +16,11 @@ namespace search.api.Controllers;
 [ApiController]
 public class AuthenticateController: ControllerBase
 {
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<UserDetails> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IConfiguration _configuration;
 
-    public AuthenticateController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+    public AuthenticateController(UserManager<UserDetails> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
     {
         _userManager = userManager;
         _roleManager = roleManager;
@@ -36,12 +37,27 @@ public class AuthenticateController: ControllerBase
         {
             return StatusCode(StatusCodes.Status400BadRequest, "User with this email already exists!");
         }
-        IdentityUser user = new () 
+
+        UserDetails user = new () 
         {
             Email = model.Email,
             UserName = model.UserName,
+            Name = model.FirstName,
+            Surname = model.SecondName,
+            BirthDate = model.DateOfBirth,
+            AddressStreet = model.AddressStreet,
+            PostalCode = model.PostalCode,
+            City = model.City,
+            DrivingLicenseNumber = model.DrivingLicenseNumber,
+            DrivingLicenseIssueDate = model.DrivingLicenseIssueDate,
+            DrivingLicenseExpirationDate = model.DrivingLicenseExpirationDate,
+            IdPersonalNumber = model.IdCardNumber,
+            IdCardIssuedBy = model.IdCardIssuedBy,
+            IdCardIssueDate = model.IdCardIssueDate,
+            IdCardExpirationDate = model.IdCardExpirationDate,
             // It should be changed whenever any cridential was changed???
             SecurityStamp = Guid.NewGuid().ToString()
+
         };
         var result = await _userManager.CreateAsync(user, model.Password!);
         if (!result.Succeeded)

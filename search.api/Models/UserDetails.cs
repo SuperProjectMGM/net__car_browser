@@ -6,16 +6,17 @@ namespace search.api.Models;
 public class UserDetails : IdentityUser
 {
     
-    public string Name { get; set; } = String.Empty;
-    public string Surname { get; set; } = String.Empty;
-    public string BirthDate { get; set; } = String.Empty;
-    public string IssueDateDrivingLicense { get; set; } = String.Empty;
-    public string ExpirationDateDrivingLicense { get; set; } = String.Empty;
-    public string LicenseNumber { get; set; } = String.Empty;
-    public string AddressStreet { get; set; } = String.Empty;
-    public string PostalCode { get; set; } = String.Empty;
-    public string City { get; set; } = String.Empty;
-    public string PersonalNumber { get; set; } = String.Empty;
-    public string IssueDateIdCard { get; set; } = String.Empty;
-    public string ExpirationDateIdCard { get; set; } = String.Empty;
+    public string? Name { get; set; } 
+    public string? Surname { get; set; } 
+    public string? BirthDate { get; set; } 
+    public string? DrivingLicenseNumber { get; set; } 
+    public string? DrivingLicenseIssueDate { get; set; }
+    public string? DrivingLicenseExpirationDate { get; set; }
+    public string? AddressStreet { get; set; } 
+    public string? PostalCode { get; set; } 
+    public string? City { get; set; } 
+    public string? IdPersonalNumber { get; set; } 
+    public string? IdCardIssuedBy { get; set; } 
+    public string? IdCardIssueDate { get; set; } 
+    public string? IdCardExpirationDate { get; set; } 
 }
