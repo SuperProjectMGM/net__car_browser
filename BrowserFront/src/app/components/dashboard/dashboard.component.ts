@@ -1,15 +1,13 @@
 import { Component } from '@angular/core';
-import { CarsService } from '../services/cars.service';
-import {
-  CarsListComponent,
-  VehicleDetail,
-} from '../cars-list/cars-list.component';
+import { CarsService } from '../../services/cars.service';
+import { CarsListComponent } from '../cars-list/cars-list.component';
 import { CommonModule, Time } from '@angular/common';
 import { Router } from '@angular/router';
 import { FiltersComponent } from '../filters/filters.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../services/auth.service';
+import { VehicleDetail } from '../../models/VehicleDetail.model';
 
 @Component({
   selector: 'app-dashboard',

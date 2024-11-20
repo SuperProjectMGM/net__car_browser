@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -14,19 +14,18 @@ import { AuthService } from '../services/auth.service';
 export class LoginComponent {
   email: string = '';
   password: string = '';
-  errorMessage: string = ''; // Zmienna na komunikaty błędów
+  errorMessage: string = '';
   isLoading: boolean = false;
 
   constructor(private authService: AuthService, private router: Router) {}
 
   login() {
     this.isLoading = true;
-    //Tu trzeba zmodyfikowac by było zpaytanie do serwera o logowanie
     this.authService.login(this.email, this.password).subscribe({
       next: (response) => {
         console.log('logujemy sie');
-        //localStorage.setItem('loggedIn', 'true'); // Ustaw flagę zalogowania
-        this.router.navigate(['/dashboard']); // Przekierowanie do chronionej strony
+        //localStorage.setItem('loggedIn', 'true'); //TODO: ajkoś ogarnąc to logawanie w kontescie klucza Ustaw flagę zalogowania
+        this.router.navigate(['/dashboard']);
         this.isLoading = false;
       },
       error: (err) => {
@@ -35,6 +34,7 @@ export class LoginComponent {
       },
     });
   }
+
   onSignUpClick() {
     this.isLoading = true;
     this.router.navigate(['/register']);

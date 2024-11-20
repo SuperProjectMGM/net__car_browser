@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ProfileService } from '../services/profile.service';
 import { FormsModule } from '@angular/forms';
+import { ProfileService } from '../../services/profile.service';
 
 @Component({
   selector: 'app-edit-profile',

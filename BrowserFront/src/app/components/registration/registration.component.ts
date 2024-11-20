@@ -12,8 +12,7 @@ export class RegistrationComponent {
 
   onSubmit() {
     console.log('Form submitted');
-    // Tutaj możesz dodać kod obsługujący dane formularza,
-    // np. wysłanie danych do serwera
+    // TODO: obsługa rejestracji
   }
 
   gotoLogin() {

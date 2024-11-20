@@ -5,9 +5,9 @@ import { Observable, of } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
-  private isAuthenticated = false; // Domyślnie użytkownik jest niezalogowany
+  private isAuthenticated = false;
 
-  // Symulacja logowania
+  // TODO: zrobić tutaj obsługe logowania
   login(
     email: string,
     password: string
@@ -18,11 +18,11 @@ export class AuthService {
   }
 
   logout() {
-    this.isAuthenticated = false; // Wylogowanie
+    this.isAuthenticated = false;
     console.log('User logged out.');
   }
 
   isLoggedIn(): boolean {
-    return this.isAuthenticated; // Sprawdzenie stanu zalogowania
+    return this.isAuthenticated;
   }
 }

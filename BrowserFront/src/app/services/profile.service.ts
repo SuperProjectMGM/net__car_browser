@@ -2,30 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-
-interface UserProfile {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phoneNumber: string;
-  address: {
-    street: string;
-    postalCode: string;
-    city: string;
-  };
-  dateOfBirth: string;
-  drivingLicense: {
-    number: string;
-    issueDate: string;
-    expirationDate: string;
-  };
-  idCard: {
-    number: string;
-    issuedBy: string;
-    issueDate: string;
-    expirationDate: string;
-  };
-}
+import { UserProfile } from '../models/UserProfile.model';
 
 @Injectable({
   providedIn: 'root',
@@ -35,7 +12,7 @@ export class ProfileService {
 
   constructor(private http: HttpClient) {}
 
-  // Pobieranie danych użytkownika
+  // TODO: endpoint Pobieranie danych użytkownika
   getUserProfile(): Observable<UserProfile> {
     // return this.http.get<UserProfile>(`${this.apiUrl}/profile`).pipe(
     //   catchError((error) => {
@@ -97,7 +74,6 @@ export class ProfileService {
     return this.getUserProfile().pipe(
       catchError(() => {
         console.error('Error fetching user profile');
-        // Zwracamy profil z pustymi polami jako fallback
         return of({
           firstName: '',
           lastName: '',
@@ -115,7 +91,6 @@ export class ProfileService {
         } as UserProfile);
       }),
       map((profile: UserProfile) => {
-        // Tworzymy listę wymaganych pól
         const requiredFields = [
           profile.firstName,
           profile.lastName,
@@ -134,12 +109,11 @@ export class ProfileService {
           profile.idCard?.expirationDate,
         ];
 
-        // Sprawdzamy, czy któreś pole jest puste lub zawiera tylko białe znaki
         const isComplete = requiredFields.every((field) => {
           if (typeof field === 'string') {
-            return field.trim() !== ''; // Sprawdzamy, czy tekst nie jest pusty ani nie zawiera tylko białych znaków
+            return field.trim() !== '';
           }
-          return field !== null && field !== undefined; // Sprawdzamy wartości inne niż tekst
+          return field !== null && field !== undefined;
         });
 
         return isComplete;

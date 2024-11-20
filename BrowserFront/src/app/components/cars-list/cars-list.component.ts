@@ -1,9 +1,10 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
-import { ProfileService } from '../services/profile.service';
+import { AuthService } from '../../services/auth.service';
+import { ProfileService } from '../../services/profile.service';
+import { VehicleDetail } from '../../models/VehicleDetail.model';
 
 @Component({
   selector: 'app-cars-list',
@@ -20,8 +21,8 @@ export class CarsListComponent {
 
   constructor(
     private profileSerive: ProfileService,
-    private authService: AuthService, // Obsługa autoryzacji
-    private router: Router // Obsługa nawigacji
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnChanges(changes: SimpleChanges) {
@@ -30,7 +31,6 @@ export class CarsListComponent {
     }
   }
 
-  // tu trzeba zrobić wysyłanie na backend z chęcią wynajęcia samochodu
   rentCar(car: VehicleDetail): void {
     if (this.authService.isLoggedIn()) {
       this.profileSerive.isUserProfileComplete().subscribe((isComplete) => {
@@ -54,22 +54,4 @@ export class CarsListComponent {
       this.router.navigate(['/login']);
     }
   }
-}
-
-export class VehicleDetail {
-  carId: number = 0;
-  brand: string = '';
-  model: string = '';
-  serialNo: string = '';
-  vinId: string = '';
-  yearOfProduction: number = 0;
-  rentalFrom: Date = new Date();
-  rentalTo: Date = new Date();
-  prize: number = 0.0;
-  driveType: string = '';
-  transmission: string = '';
-  description: string = '';
-  type: string = '';
-  rate: number = 0.0;
-  localization: string = '';
 }
