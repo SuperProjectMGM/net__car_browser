@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using search.api.Models;
+using Microsoft.AspNetCore.Authentication.Google;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,7 +60,8 @@ builder.Services.AddIdentity<UserDetails, IdentityRole>().AddEntityFrameworkStor
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    // Changed here for google auth.
+    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
@@ -73,11 +75,12 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
     };
-})).AddGoogle(googleOptions =>
+}).AddCookie()
+    .AddGoogle(googleOptions =>
     {
         googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
         googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
-        googleOptions.CallbackPath = "/search.api/Authenticate/login/google-callback";
+        //googleOptions.CallbackPath = "/search.api/Authenticate/login/google-callback";
     });
 
 builder.Services.Configure<IdentityOptions>(options =>
@@ -111,7 +114,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseCors("AllowAll");

@@ -3,10 +3,13 @@ using System.Security.Claims;
 using System.Text;
 using Azure;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using search.api.Models;
 
 
 namespace search.api.Controllers;
@@ -110,9 +113,9 @@ public class AuthenticateController: ControllerBase
     [Route("login/google-callback")]
     public async Task<IActionResult> GoogleCallback()
     {
-        var authenticateResult = await HttpContext.AuthenticateAsync();
+        var authenticateResult = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
         if (!authenticateResult.Succeeded)
-            return Unauthorized();
+            return BadRequest();
         
         var claims = authenticateResult.Principal?.Claims;
         var email = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
