@@ -2,12 +2,11 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Azure;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using NanoidDotNet;
-using search.api.Models;
-
 
 
 namespace search.api.Controllers;
@@ -37,7 +36,6 @@ public class AuthenticateController: ControllerBase
         {
             return StatusCode(StatusCodes.Status400BadRequest, "User with this email already exists!");
         }
-
         UserDetails user = new () 
         {
             Email = model.Email,
@@ -57,7 +55,6 @@ public class AuthenticateController: ControllerBase
             IdCardExpirationDate = model.IdCardExpirationDate,
             // It should be changed whenever any cridential was changed???
             SecurityStamp = Guid.NewGuid().ToString()
-
         };
         var result = await _userManager.CreateAsync(user, model.Password!);
         if (!result.Succeeded)
@@ -97,6 +94,32 @@ public class AuthenticateController: ControllerBase
         return Unauthorized();
     }
 
+    // I don't understand why get not post?
+    [HttpGet]
+    [Route("login/google-login")]
+    public IActionResult GoogleLogin()
+    {
+        var properties = new AuthenticationProperties
+        {
+            RedirectUri = "http://localhost:5178/search.api/Authenticate/login/google-callback"
+        };
+        return Challenge(properties, GoogleDefaults.AuthenticationScheme);
+    }
+
+    [HttpGet]
+    [Route("login/google-callback")]
+    public async Task<IActionResult> GoogleCallback()
+    {
+        var authenticateResult = await HttpContext.AuthenticateAsync();
+        if (!authenticateResult.Succeeded)
+            return Unauthorized();
+        
+        var claims = authenticateResult.Principal?.Claims;
+        var email = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+        var name = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+        return Ok(new { Name = name, Email = email });
+    }
+    
     private JwtSecurityToken GetToken(List<Claim> authClaims)
     {
         var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]!));

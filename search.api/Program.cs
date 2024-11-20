@@ -10,7 +10,6 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using search.api.Models;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -55,6 +54,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddDbContext<AuthDbContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("Devconnection")));
 
+
 builder.Services.AddIdentity<UserDetails, IdentityRole>().AddEntityFrameworkStores<AuthDbContext>().AddDefaultTokenProviders();
 builder.Services.AddAuthentication(options =>
 {
@@ -73,7 +73,12 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
     };
-});
+})).AddGoogle(googleOptions =>
+    {
+        googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
+        googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
+        googleOptions.CallbackPath = "/search.api/Authenticate/login/google-callback";
+    });
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
@@ -106,7 +111,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 //app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
