@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Route, Router } from '@angular/router';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = environment.apiBaseUrl;
 
+  private apiUrl = environment.apiBaseUrl;
+  private _isAuthenticated: boolean = false;
   constructor(private http: HttpClient) {}
 
   login(email: string, password: string): Observable<any> {
@@ -27,20 +29,11 @@ export class AuthService {
             localStorage.setItem('loggedIn', 'true'); // Ustawienie flagi logowania
             localStorage.setItem('token', response.token); // Przechowywanie tokena w localStorage
             console.log('Zalogowano pomyślnie, ustawiono flagę i zapisano token.');
+            this._isAuthenticated = true;
           }
         })
       );
      }
-
-     //logout(): Observable<any> {
-     //  return this.http
-     //    .post(`${this.apiUrl}/logout`, {}, { withCredentials: true })
-     //    .pipe(
-     //      tap(() => {
-     //        localStorage.removeItem('loggedIn'); // Usunięcie flagi logowania
-     //      })
-     //    );
-     //}
 
      isAuthenticated(): boolean {
        // Tu możesz w przyszłości dodać logikę sprawdzającą sesję
@@ -49,6 +42,18 @@ export class AuthService {
        }
        return false;
      }
+
+  // TODO: zrobić tutaj obsługe logowania
+  
+
+  logout() {
+    this._isAuthenticated = false;
+    console.log('User logged out.');
+  }
+
+  isLoggedIn(): boolean {
+    return this._isAuthenticated;
+  }
 }
 
 export interface loginModel 

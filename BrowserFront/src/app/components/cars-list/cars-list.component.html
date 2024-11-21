@@ -1,0 +1,55 @@
+<div class="cars-list">
+  <ul>
+    <li *ngFor="let car of cars" class="car-item">
+      <div class="car-item__container">
+        <div class="car-item__image-wrapper">
+          <img 
+            [src]="'/assets/cars/' + car.carId + '.jpg'" 
+            alt="{{ car.brand }} {{ car.model }}" 
+            class="car-item__image"
+          />
+        </div>
+        <div class="car-item__content">
+          <div class="car-item__header">
+            <div class="car-item__title-group">
+              <h2 class="car-item__title">{{ car.brand }} {{ car.model }}</h2>
+              <p class="car-item__subtitle">{{ car.type }}</p>
+            </div>
+            <div class="car-item__price-group">
+              <p class="car-item__price">{{ car.prize}}</p>
+
+              <p class="car-item__price-period">Price per day</p>
+            </div>
+          </div>
+          <div class="car-item__features">
+            <div class="car-item__feature">
+              <span class="feature-icon"></span> {{ car.driveType }} Drive
+            </div>
+            <div class="car-item__feature">
+              <span class="feature-icon"></span> {{ car.transmission }} Transmission
+            </div>
+            <div class="car-item__feature">
+              <span class="feature-icon"></span> {{ car.yearOfProduction }} Model Year
+            </div>
+            <div class="car-item__feature">
+              <span class="feature-icon"></span> Premium Interior (or any feature you want)
+            </div>
+          </div>
+          <div class="car-item__location">
+            <span class="feature-icon"></span> Available in {{ car.localization }}
+          </div>
+          <div class="car-item__registration">
+            Guaranteed {{ car.yearOfProduction }} registered car model.
+          </div>
+          <div class="car-item__action">
+            <button 
+              class="btn btn--primary" 
+              (click)="rentCar(car)">
+              Rent Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>
