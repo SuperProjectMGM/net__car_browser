@@ -19,5 +19,6 @@ public class Vehicle
     public string Type { get; set; } = "";
     public decimal Rate { get; set; }
     public string Localization { get; set; } = "";
+    
     public string RentalFirmId { get; set; } = string.Empty;
 }

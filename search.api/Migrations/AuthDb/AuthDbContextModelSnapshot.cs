@@ -73,7 +73,6 @@ namespace search.api.Migrations.AuthDb
                     b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
@@ -258,6 +257,7 @@ namespace search.api.Migrations.AuthDb
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)

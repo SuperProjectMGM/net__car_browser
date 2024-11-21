@@ -5,6 +5,7 @@ using search.api.Models;
 
 
 public class AuthDbContext: IdentityDbContext<UserDetails>
+
 {
     public AuthDbContext(DbContextOptions<AuthDbContext> options): base(options)
     {   

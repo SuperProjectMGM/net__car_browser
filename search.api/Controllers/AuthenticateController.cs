@@ -13,13 +13,13 @@ using Microsoft.IdentityModel.Tokens;
 using search.api.Models;
 
 
+
 namespace search.api.Controllers;
 
 [Route("search.api/[controller]")]
 [ApiController]
 public class AuthenticateController: ControllerBase
 {
-
     private readonly UserManager<UserDetails> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IConfiguration _configuration;

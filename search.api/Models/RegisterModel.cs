@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.InteropServices.JavaScript;
+
 public class RegisterModel
 {
     [Required(ErrorMessage = "Email Name is required!")]
