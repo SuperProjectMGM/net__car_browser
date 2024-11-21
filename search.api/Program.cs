@@ -10,6 +10,7 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using search.api.Models;
 using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +50,7 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddScoped<IEmailInterface, EmailService>();
 builder.Services.AddScoped<IRentalInterface, RentalRepository>();
+builder.Services.AddScoped<IAuthorizationHandler, DrivingLicenseRequirementHandler>();
 
 builder.Services.AddDbContext<AppDbContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("Devconnection")));
@@ -82,6 +84,12 @@ builder.Services.AddAuthentication(options =>
         googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
         //googleOptions.CallbackPath = "/search.api/Authenticate/login/google-callback";
     });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("DrivingLicenseRequired", policy =>
+    policy.Requirements.Add(new DrivingLicenseRequirement()));
+});
 
 builder.Services.Configure<IdentityOptions>(options =>
 {

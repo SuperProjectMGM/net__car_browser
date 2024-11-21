@@ -118,11 +118,25 @@ public class AuthenticateController: ControllerBase
         var authenticateResult = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
         if (!authenticateResult.Succeeded)
             return BadRequest();
-        
+
         var claims = authenticateResult.Principal?.Claims;
         var email = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-        var name = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
-        return Ok(new { Name = name, Email = email });
+
+        var user = await _userManager.FindByEmailAsync(email!);
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+        var authClaims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, user.UserName!),
+            new Claim(ClaimTypes.Email, user.Email!),
+            new Claim(ClaimTypes.NameIdentifier, user.Id!),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        };
+        var token = GetToken(authClaims);
+        return Ok(new {token = new JwtSecurityTokenHandler().WriteToken(token),
+                expiration = token.ValidTo} );
     }
     
     private JwtSecurityToken GetToken(List<Claim> authClaims)
