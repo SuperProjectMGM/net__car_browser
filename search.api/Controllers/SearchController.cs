@@ -48,10 +48,10 @@ namespace search.api.Controllers
                 .Select(veh => veh.VehicleToVehicleOurDto());
 
             // Sprawdzamy, czy są dostępne samochody
-            if (!availableCars.Any())
-            {
-                return NotFound(new { message = "Brak dostępnych samochodów w podanym okresie i lokalizacji" });
-            }
+            //if (!availableCars.Any())
+            //{
+            //    return NotFound(new { message = "Brak dostępnych samochodów w podanym okresie i lokalizacji" });
+            //}
 
             return Ok(availableCars);
         }

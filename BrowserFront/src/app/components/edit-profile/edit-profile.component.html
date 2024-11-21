@@ -12,8 +12,8 @@
             <input
               type="text"
               class="form-control"
-              [(ngModel)]="user.firstName"
-              name="firstName"
+              [(ngModel)]="user.name"
+              name="name"
               required
             />
           </div>
@@ -22,8 +22,8 @@
             <input
               type="text"
               class="form-control"
-              [(ngModel)]="user.lastName"
-              name="lastName"
+              [(ngModel)]="user.surname"
+              name="surname"
               required
             />
           </div>
@@ -58,8 +58,8 @@
             <input
               type="text"
               class="form-control"
-              [(ngModel)]="user.address.street"
-              name="street"
+              [(ngModel)]="user.addressStreet"
+              name="addressStreet"
             />
           </div>
           <div class="form-group">
@@ -67,7 +67,7 @@
             <input
               type="text"
               class="form-control"
-              [(ngModel)]="user.address.postalCode"
+              [(ngModel)]="user.postalCode"
               name="postalCode"
             />
           </div>
@@ -77,7 +77,7 @@
           <input
             type="text"
             class="form-control"
-            [(ngModel)]="user.address.city"
+            [(ngModel)]="user.city"
             name="city"
           />
         </div>
@@ -92,8 +92,8 @@
             <input
               type="date"
               class="form-control"
-              [(ngModel)]="user.dateOfBirth"
-              name="dateOfBirth"
+              [(ngModel)]="user.birthDate"
+              name="birthDate"
             />
           </div>
           <div class="form-group">
@@ -101,7 +101,7 @@
             <input
               type="text"
               class="form-control"
-              [(ngModel)]="user.drivingLicense.number"
+              [(ngModel)]="user.drivingLicenseNumber"
               name="drivingLicenseNumber"
             />
           </div>
@@ -112,7 +112,7 @@
             <input
               type="date"
               class="form-control"
-              [(ngModel)]="user.drivingLicense.issueDate"
+              [(ngModel)]="user.drivingLicenseIssueDate"
               name="drivingLicenseIssueDate"
             />
           </div>
@@ -121,27 +121,18 @@
             <input
               type="date"
               class="form-control"
-              [(ngModel)]="user.drivingLicense.expirationDate"
+              [(ngModel)]="user.drivingLicenseExpirationDate"
               name="drivingLicenseExpirationDate"
             />
           </div>
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label>ID Card Number</label>
+            <label>ID Card Issued By</label>
             <input
               type="text"
               class="form-control"
-              [(ngModel)]="user.idCard.number"
-              name="idCardNumber"
-            />
-          </div>
-          <div class="form-group">
-            <label>Issued By</label>
-            <input
-              type="text"
-              class="form-control"
-              [(ngModel)]="user.idCard.issuedBy"
+              [(ngModel)]="user.idCardIssuedBy"
               name="idCardIssuedBy"
             />
           </div>
@@ -152,7 +143,7 @@
             <input
               type="date"
               class="form-control"
-              [(ngModel)]="user.idCard.issueDate"
+              [(ngModel)]="user.idCardIssueDate"
               name="idCardIssueDate"
             />
           </div>
@@ -161,7 +152,7 @@
             <input
               type="date"
               class="form-control"
-              [(ngModel)]="user.idCard.expirationDate"
+              [(ngModel)]="user.idCardExpirationDate"
               name="idCardExpirationDate"
             />
           </div>
@@ -170,7 +161,7 @@
 
       <!-- Buttons -->
       <div class="submit-section">
-        <button class="btn btn-primary" type="submit">Save Changes</button>
+        <button class="btn btn-primary" type="submit" (click)="onSubmit()">Save Changes</button>
         <button class="btn btn-secondary" type="button" (click)="cancel()">Cancel</button>
       </div>
     </form>

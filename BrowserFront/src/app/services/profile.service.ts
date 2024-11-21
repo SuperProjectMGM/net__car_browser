@@ -1,68 +1,76 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable, of, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { UserProfile } from '../models/UserProfile.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProfileService {
-  private apiUrl = 'https://api.example.com/user'; // TODO: ustawienie url po siegniecie po dane uzytkownika
+  private apiUrl = environment.apiBaseUrl;
 
   constructor(private http: HttpClient) {}
 
   // TODO: endpoint Pobieranie danych użytkownika
+
   getUserProfile(): Observable<UserProfile> {
-    // return this.http.get<UserProfile>(`${this.apiUrl}/profile`).pipe(
-    //   catchError((error) => {
-    //     console.error('Error fetching user profile:', error);
-    //     // Zwracamy pusty profil jako fallback
-    //     return of({
-    //       firstName: '',
-    //       lastName: '',
-    //       email: '',
-    //       phoneNumber: '',
-    //       address: { street: '', postalCode: '', city: '' },
-    //       dateOfBirth: '',
-    //       drivingLicense: { number: '', issueDate: '', expirationDate: '' },
-    //       idCard: { number: '', issuedBy: '', issueDate: '', expirationDate: '' },
-    //     } as UserProfile);
-    //   })
-    // );
-
-    const mockUserProfile: UserProfile = {
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john.doe@example.com',
-      phoneNumber: '+1234567890',
-      address: {
-        street: '123 Main St',
-        postalCode: '00-123',
-        city: 'Example City',
-      },
-      dateOfBirth: '1990-01-01',
-      drivingLicense: {
-        number: 'DL123456',
-        issueDate: '2015-06-15',
-        expirationDate: '2025-06-15',
-      },
-      idCard: {
-        number: 'ID123456',
-        issuedBy: 'Government Office',
-        issueDate: '2020-01-01',
-        expirationDate: '2030-01-01',
-      },
-    };
-
-    return of(mockUserProfile);
+    const token = localStorage.getItem('token');
+    if (token === null)
+    {
+      return throwError(() => new Error('Error with jwt token'));
+    }
+    const params = new HttpParams().set('token', token);
+    return this.http.get<UserProfile>(`${this.apiUrl}/UserInfo/user-info`, { params } ).pipe(
+      catchError((error) => {
+        console.error('Error fetching user profile:', error);
+        return of({
+          userName: '',
+          email: '',
+          phoneNumber: '',
+          name: '',
+          surname: '',
+          birthDate: '',
+          drivingLicenseNumber: '',
+          drivingLicenseIssueDate: '',
+          drivingLicenseExpirationDate: '',
+          addressStreet: '',
+          postalCode: '',
+          city: '',
+          idPersonalNumber: '',
+          idCardIssuedBy: '',
+          idCardIssueDate: '',
+          idCardExpirationDate: '',
+        } as UserProfile);
+      })
+    );
   }
+  
 
-  updateUserProfile(user: any): Observable<any> {
-    console.log('Simulating profile update:', user);
-    // TODO: wysłac put na api zeby zedytowac dane o uzytkowniku
-    return of({ success: true, message: 'Profile updated successfully!' });
+  updateUserProfile(user: UserProfile): Observable<any> {
+    const token = localStorage.getItem('token');
+    if (token === null) {
+      return throwError(() => new Error('Error with JWT token'));
+    }
+  
+    // Dodanie tokena jako parametru zapytania
+    const params = new HttpParams().set('token', token);
+  
+    // Przesyłanie `user` jako ciało zapytania (body)
+    return this.http.put(
+      `${this.apiUrl}/UserInfo/change-user-info`,
+      user, // Obiekt do edycji przesyłany w body
+      { params, responseType: 'text' as 'json' } // Token dodany jako parametr, oczekiwana odpowiedź tekstowa
+    ).pipe(
+      catchError((error) => {
+        console.error('Error updating user profile:', error);
+        return throwError(() => new Error('Error updating user profile'));
+      })
+    );
   }
+  
+  
 
   // Wylogowanie użytkownika
   logout(): void {
@@ -75,47 +83,50 @@ export class ProfileService {
       catchError(() => {
         console.error('Error fetching user profile');
         return of({
-          firstName: '',
-          lastName: '',
+          userName: '',
           email: '',
           phoneNumber: '',
-          address: { street: '', postalCode: '', city: '' },
-          dateOfBirth: '',
-          drivingLicense: { number: '', issueDate: '', expirationDate: '' },
-          idCard: {
-            number: '',
-            issuedBy: '',
-            issueDate: '',
-            expirationDate: '',
-          },
+          name: '',
+          surname: '',
+          birthDate: '',
+          drivingLicenseNumber: '',
+          drivingLicenseIssueDate: '',
+          drivingLicenseExpirationDate: '',
+          addressStreet: '',
+          postalCode: '',
+          city: '',
+          idPersonalNumber: '',
+          idCardIssuedBy: '',
+          idCardIssueDate: '',
+          idCardExpirationDate: '',
         } as UserProfile);
       }),
       map((profile: UserProfile) => {
         const requiredFields = [
-          profile.firstName,
-          profile.lastName,
+          profile.name,
+          profile.surname,
           profile.email,
           profile.phoneNumber,
-          profile.address?.street,
-          profile.address?.postalCode,
-          profile.address?.city,
-          profile.dateOfBirth,
-          profile.drivingLicense?.number,
-          profile.drivingLicense?.issueDate,
-          profile.drivingLicense?.expirationDate,
-          profile.idCard?.number,
-          profile.idCard?.issuedBy,
-          profile.idCard?.issueDate,
-          profile.idCard?.expirationDate,
+          profile.addressStreet,
+          profile.postalCode,
+          profile.city,
+          profile.birthDate,
+          profile.drivingLicenseNumber,
+          profile.drivingLicenseIssueDate,
+          profile.drivingLicenseExpirationDate,
+          profile.idPersonalNumber,
+          profile.idCardIssuedBy,
+          profile.idCardIssueDate,
+          profile.idCardExpirationDate,
         ];
-
+  
         const isComplete = requiredFields.every((field) => {
           if (typeof field === 'string') {
             return field.trim() !== '';
           }
           return field !== null && field !== undefined;
         });
-
+  
         return isComplete;
       })
     );

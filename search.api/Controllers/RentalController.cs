@@ -22,7 +22,8 @@ public class RentalController : Controller
     }
 
     [Authorize]
-    [Authorize(Policy = "DrivingLicenseRequired")]
+    // Moje pomysly to syf, nie udalo mi sie. Trza poprawic
+    //[Authorize(Policy = "DrivingLicenseRequired")]
     [HttpPost("rent-car")]
     public async Task<IActionResult> RentCar([FromBody] VehicleRentRequest request)
     {
@@ -35,7 +36,7 @@ public class RentalController : Controller
         
         if (!success)
         {
-            return Unauthorized("Something went wrong.");
+            return Unauthorized($"Something went wrong. {userEmail}, {userName}, {userId}");
         }
         else
         {
@@ -58,7 +59,7 @@ public class RentalController : Controller
 
         if (tuple.Item1 is null || tuple.Item2 is null)
         {
-            return NotFound();
+            return NotFound($"{tuple.Item1}, {tuple.Item2}");
         }
 
         return View("RentalConfirm", new Tuple<Rental, string, string, RentalFirm>(tuple.Item1, succeed.Item2, succeed.Item4, tuple.Item2));

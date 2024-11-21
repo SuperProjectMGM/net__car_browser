@@ -43,7 +43,17 @@ export class CarsListComponent {
             ' - ',
             this.returnDateTime
           );
-          // TODO: Dodaj logikę wynajmu samochodu
+          this.authService.wantRentVehicle(car, this.pickupDateTime, this.returnDateTime).subscribe(
+            (response) => {
+              // Obsługuje udaną odpowiedź
+              console.log('Rent request successful', response);// TODO: co na frocie po wysłaniu
+            },
+            (error) => {
+              // Obsługuje błąd
+              console.error('Error during vehicle rent request', error);// TODO: co dalej?
+              
+            }
+          );
         } else {
           console.log('Nie ma wypełnionych danych profilu.');
           this.router.navigate(['/edit-profile']);

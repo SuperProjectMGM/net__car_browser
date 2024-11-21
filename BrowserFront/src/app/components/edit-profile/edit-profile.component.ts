@@ -30,7 +30,6 @@ export class EditProfileComponent implements OnInit {
   onSubmit(): void {
     this.profileService.updateUserProfile(this.user).subscribe(
       () => {
-        alert('Profile updated successfully!');
         this.router.navigate(['/profile']);
       },
       (error) => {

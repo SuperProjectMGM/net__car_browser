@@ -21,3 +21,4 @@ export const routes: Routes = [
 bootstrapApplication(AppComponent, {
   providers: [provideRouter(routes), provideHttpClient()],
 }).catch((err) => console.error(err));
+// PaeGh6ei!

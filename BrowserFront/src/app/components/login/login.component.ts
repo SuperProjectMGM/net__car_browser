@@ -24,13 +24,14 @@ export class LoginComponent {
     this.authService.login(this.email, this.password).subscribe({
       next: (response) => {
         console.log('logujemy sie');
-        //localStorage.setItem('loggedIn', 'true'); //TODO: ajkoś ogarnąc to logawanie w kontescie klucza Ustaw flagę zalogowania
+        localStorage.setItem('loggedIn', 'true'); //TODO: ajkoś ogarnąc to logawanie w kontescie klucza Ustaw flagę zalogowania
         this.router.navigate(['/dashboard']);
         this.isLoading = false;
       },
       error: (err) => {
         console.error('Login failed', err);
         this.errorMessage = 'Login failed. Please try again.';
+        this.isLoading = false;
       },
     });
   }

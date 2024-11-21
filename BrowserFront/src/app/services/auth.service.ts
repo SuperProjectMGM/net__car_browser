@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { tap, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Route, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
+import { VehicleDetail } from '../models/VehicleDetail.model';
 
 @Injectable({
   providedIn: 'root',
@@ -15,19 +16,19 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(email: string, password: string): Observable<any> {
-    const loginModel = { email, password }; // Tworzymy model zgodny z backendem
+    const loginModel = { email, password };
 
     return this.http
       .post<{ token: string; expiration: string }>(
-        `${this.apiUrl}/Authenticate/login`, // Ścieżka do endpointu backendu
-        loginModel, // Wysyłamy model w formacie JSON
-        { withCredentials: true } // Opcjonalne, jeśli używasz ciasteczek do autoryzacji
+        `${this.apiUrl}/Authenticate/login`,
+        loginModel,
+        { withCredentials: true }
       )
       .pipe(
         tap((response) => {
           if (response && response.token) {
-            localStorage.setItem('loggedIn', 'true'); // Ustawienie flagi logowania
-            localStorage.setItem('token', response.token); // Przechowywanie tokena w localStorage
+            localStorage.setItem('loggedIn', 'true');
+            localStorage.setItem('token', response.token);
             console.log('Zalogowano pomyślnie, ustawiono flagę i zapisano token.');
             this._isAuthenticated = true;
           }
@@ -43,8 +44,27 @@ export class AuthService {
        return false;
      }
 
-  // TODO: zrobić tutaj obsługe logowania
   
+  wantRentVehicle(car: VehicleDetail, pickupDateTime: Date | null, returnDateTime: Date| null): Observable<any> {
+
+    if(!pickupDateTime || !returnDateTime) return throwError(() => new Error('Pickup date and return date are required'));
+
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    const vehicleRentRequest = {
+      vehicleVin: car.vinId,        
+      rentalFirmId: '1',  // TODO: zrobić wybieranie firmy          
+      start: pickupDateTime,        
+      end: returnDateTime,          
+      description: car.description
+    };
+    return this.http.post<any>(
+      `${this.apiUrl}/Rental/rent-car`, 
+      vehicleRentRequest, 
+      { headers }
+    )
+  }
 
   logout() {
     this._isAuthenticated = false;
@@ -61,3 +81,12 @@ export interface loginModel
   email: string,
   password: string
 }
+
+export interface VehicleRentRequest {
+  vehicleVin: string;
+  rentalFirmId: string;
+  start: Date;
+  end: Date;
+  description: string;
+}
+
