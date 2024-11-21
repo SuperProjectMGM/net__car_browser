@@ -1,0 +1,54 @@
+<div class="container vh-100 d-flex justify-content-center align-items-center">
+    <div class="row w-100">
+      <div class="col-md-6 col-lg-4 mx-auto">
+        <div class="card shadow-lg rounded" style="background-color: rgba(255, 255, 255, 0.9);">
+          <div class="card-body p-5">
+            <h2 class="text-center mb-4" style="color: #0d47a1;">Login</h2>
+            <form (ngSubmit)="login()">
+              <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input 
+                  type="email" 
+                  id="email" 
+                  class="form-control" 
+                  [(ngModel)]="email" 
+                  name="email" 
+                  required 
+                  placeholder="Enter your email" 
+                />
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input 
+                  type="password" 
+                  id="password" 
+                  class="form-control" 
+                  [(ngModel)]="password" 
+                  name="password" 
+                  required 
+                  placeholder="Enter your password" 
+                />
+              </div>
+              <div *ngIf="errorMessage" class="alert alert-danger">
+                {{ errorMessage }}
+              </div>
+  
+               <div *ngIf="isLoading" class="d-flex justify-content-center mb-3">
+                <div class="spinner"></div>
+              </div>
+              
+              <button type="submit" class="btn btn-primary w-100">Login</button>
+            </form>
+
+            <!-- Registration section for users who don't have an account -->
+          <div class="register-section text-center mt-3">
+            <p>Don't have an account? <a href="javascript:void(0);" (click)="onSignUpClick()" class="btn btn-link">Sign up</a></p>
+
+          </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

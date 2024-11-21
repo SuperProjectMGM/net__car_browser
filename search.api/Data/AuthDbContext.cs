@@ -1,8 +1,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using search.api.Models;
 
-public class AuthDbContext: IdentityDbContext<IdentityUser>
+
+public class AuthDbContext: IdentityDbContext<UserDetails>
+
 {
     public AuthDbContext(DbContextOptions<AuthDbContext> options): base(options)
     {   

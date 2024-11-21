@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { VehicleDetail } from '../cars-list/cars-list.component';
+import { VehicleDetail } from '../models/VehicleDetail.model';
 
 @Injectable({
   providedIn: 'root',
@@ -10,9 +10,7 @@ import { VehicleDetail } from '../cars-list/cars-list.component';
 export class CarsService {
   private apiUrl = environment.apiBaseUrl;
 
-  constructor(private http: HttpClient) {
-    console.log('HttpClient is ready');
-  }
+  constructor(private http: HttpClient) {}
 
   searchCars(
     rentalFrom: Date,
@@ -25,14 +23,12 @@ export class CarsService {
       );
     }
 
-    // Konwersja dat na ISO stringi
     const params = {
       rentalFrom: rentalFrom.toISOString(),
       rentalTo: rentalTo.toISOString(),
       location: location,
     };
 
-    // Wysyłanie zapytania do API
     return this.http.get<VehicleDetail[]>(`${this.apiUrl}/Search`, { params });
   }
 }

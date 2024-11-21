@@ -7,10 +7,10 @@ public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
+        
     }
-
     
-    public DbSet<User> Users { get; set; }
+    //public DbSet<UserDetails> UserDetails { get; set; }
     
     public DbSet<Rental> Rentals { get; set; }
     
