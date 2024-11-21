@@ -22,6 +22,7 @@ public class RentalController : Controller
     }
 
     [Authorize]
+    [Authorize(Policy = "DrivingLicenseRequired")]
     [HttpPost("rent-car")]
     public async Task<IActionResult> RentCar([FromBody] VehicleRentRequest request)
     {
