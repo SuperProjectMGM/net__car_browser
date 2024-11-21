@@ -1,15 +1,16 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using search.api.Data;
 using search.api.DTOs;
 using search.api.Interfaces;
 using search.api.Mappers;
 using search.api.Models;
 using search.api.Services;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace search.api.Repositories;
 
@@ -19,13 +20,16 @@ public class RentalRepository : IRentalInterface
     private readonly IConfiguration _configuration;
     private readonly AppDbContext _context;
     private readonly RabbitMessageService _messageService;
+    private readonly AuthDbContext _authDbContext;
 
-    public RentalRepository(IEmailInterface emailService, IConfiguration configuration, AppDbContext context, RabbitMessageService messageService)
+    public RentalRepository(IEmailInterface emailService, IConfiguration configuration, AppDbContext context, RabbitMessageService messageService,
+        AuthDbContext authDbContext)
     {
         _emailService = emailService;
         _configuration = configuration;
         _context = context;
         _messageService = messageService;
+        _authDbContext = authDbContext;
     }
     
     // TODO: delete rental if link expired or token invalid???
@@ -127,6 +131,30 @@ public class RentalRepository : IRentalInterface
         if (!success)
             return (null, null);
         return (rental, rentalFirm);
+    }
+
+    public async Task RentalCompletion(string message)
+    {
+        var rental = JsonConvert.DeserializeObject<Rental>(message);
+        if (rental is null)
+            throw new Exception("Error deserializing message.");
+        var dbRental = await _context.Rentals.FirstOrDefaultAsync(x => x.VinId == rental.VinId);
+        if (dbRental is null)
+            throw new Exception("There is no such rental in DB");
+        dbRental.Status = rental.Status;
+        await _context.SaveChangesAsync();
+
+        var user = await _authDbContext.Users.FirstOrDefaultAsync(x => x.Id == dbRental.UserId);
+        if (user is null)
+            throw new Exception("User invalid.");
+        
+        // send message to user
+        await _emailService.SendRentalCompletionEmailAsync(
+            user.Email!,
+            "Rental is completed.",
+            user.UserName!,
+            dbRental.Id,
+            $"Your rental has been confirmed by employee. You are ready to go!");
     }
 
     public async Task<Rental> CreateRental(VehicleRentRequest request, string userId)
