@@ -40,6 +40,29 @@ public class EmailService : IEmailInterface
         var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
         var response = await client.SendEmailAsync(msg);
     }
+
+    public async Task SendRentalCompletionEmailAsync(string toUser, string subject, string username, string rentId, string message)
+    {
+        var apiKey = _apiKey;
+        var client = new SendGridClient(apiKey);
+        var from = new EmailAddress("mateusz.mm100@gmail.com", _searchName);
+        var to = new EmailAddress(toUser, username);
+        var plainTextContent = message;
+        var htmlContent = $@"
+        <html>
+            <body>
+                <h1>Rental Confirmation</h1>
+                <p>Dear {username},</p>
+                <p>{message}</p>               
+                <p>Thank you for using {_searchName}!</p>
+                <footer>
+                    <p>--<br/>{_searchName} Team</p>
+                </footer>
+            </body>
+        </html>";
+        var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+        var response = await client.SendEmailAsync(msg);
+    }
     
     public string GenerateConfirmationRentToken(string email, string username, string id, string rentId, IConfiguration configuration)
     {

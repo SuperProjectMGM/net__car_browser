@@ -3,11 +3,14 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using search.api.Data;
 using search.api.DTOs;
 using search.api.Interfaces;
 using search.api.Mappers;
 using search.api.Models;
+using search.api.Services;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace search.api.Repositories;
 
@@ -16,15 +19,20 @@ public class RentalRepository : IRentalInterface
     private readonly IEmailInterface _emailService;
     private readonly IConfiguration _configuration;
     private readonly AppDbContext _context;
+    private readonly RabbitMessageService _messageService;
+    private readonly AuthDbContext _authDbContext;
 
-    public RentalRepository(IEmailInterface emailService, IConfiguration configuration, AppDbContext context)
+    public RentalRepository(IEmailInterface emailService, IConfiguration configuration, AppDbContext context, RabbitMessageService messageService,
+        AuthDbContext authDbContext)
     {
         _emailService = emailService;
         _configuration = configuration;
         _context = context;
+        _messageService = messageService;
+        _authDbContext = authDbContext;
     }
     
-    // TODO: delete rental if link expired or token invalid
+    // TODO: delete rental if link expired or token invalid???
 
     public async Task<bool> SendConfirmationEmail(string userEmail, string userName, string userId, string scheme, string host,
                                             VehicleRentRequest request)
@@ -33,7 +41,12 @@ public class RentalRepository : IRentalInterface
         {
             return await Task.FromResult(false);
         }
-
+        
+        //
+        var rentalFirm = await _context.Firms.FirstOrDefaultAsync(x => x.Id == request.RentalFirmId);
+        if (rentalFirm is null)
+            return await Task.FromResult(false);
+        
         // Rental creation
         var rentalModel = await CreateRental(request, userId);
         
@@ -104,24 +117,78 @@ public class RentalRepository : IRentalInterface
         var rentalFirm = await _context.Firms.FirstOrDefaultAsync(x => x.Id == rental.RentalFirmId);
         if (rentalFirm is null)
             return (null, null);
+
+        var userDetails = await _context.UserDetails.FirstOrDefaultAsync(x => x.UserId == id);
+        if (userDetails is null)
+            return (null, null);
         
         rental.Status = RentalStatus.Confirmed;
         await _context.SaveChangesAsync();
         
         // TODO: send message to data provider api
-        
-        
+        var message = CreateRentMessage(rental, userDetails, email, username);
+        var success = await _messageService.SendRentalMessage(message);
+        if (!success)
+            return (null, null);
         return (rental, rentalFirm);
+    }
+
+    public async Task RentalCompletion(string message)
+    {
+        var rental = JsonConvert.DeserializeObject<Rental>(message);
+        if (rental is null)
+            throw new Exception("Error deserializing message.");
+        var dbRental = await _context.Rentals.FirstOrDefaultAsync(x => x.VinId == rental.VinId);
+        if (dbRental is null)
+            throw new Exception("There is no such rental in DB");
+        dbRental.Status = rental.Status;
+        await _context.SaveChangesAsync();
+
+        var user = await _authDbContext.Users.FirstOrDefaultAsync(x => x.Id == dbRental.UserId);
+        if (user is null)
+            throw new Exception("User invalid.");
+        
+        // send message to user
+        await _emailService.SendRentalCompletionEmailAsync(
+            user.Email!,
+            "Rental is completed.",
+            user.UserName!,
+            dbRental.Id,
+            $"Your rental has been confirmed by employee. You are ready to go!");
     }
 
     public async Task<Rental> CreateRental(VehicleRentRequest request, string userId)
     {
-        var rentalModel = request.ToRentalFromRequest(userId);
+        var rentalModel = request.ToRentalFromRequest(userId, request.Description);
         await _context.Rentals.AddAsync(rentalModel);
         await _context.SaveChangesAsync();
         return rentalModel;
     }
+    
+    public string CreateRentMessage(Rental rental, UserDetails userDetails, string email, string username)
+    {
+        RentalMessage message = new RentalMessage
+        {
+            Name = userDetails.Name,
+            Surname = userDetails.Surname,
+            BirthDate = userDetails.BirthDate,
+            DateOfReceiptOfDrivingLicense = userDetails.DateOfReceiptOfDrivingLicense,
+            PersonalNumber = userDetails.PersonalNumber,
+            LicenceNumber = userDetails.LicenceNumber,
+            Address = userDetails.Address,
+            PhoneNumber = userDetails.PhoneNumber,
+            VinId = rental.VinId,
+            Start = rental.Start,
+            End = rental.End,
+            Status = rental.Status,
+            Description = rental.Description
+        };
+        
+        string jsonString = JsonSerializer.Serialize(message);
 
+        return jsonString;
+    }
+    
     public enum RentalStatus
     {
         Pending = 1,    // Rental request is pending

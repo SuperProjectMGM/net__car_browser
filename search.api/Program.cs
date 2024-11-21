@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using search.api.Models;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authorization;
+using search.api.AppExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,6 +52,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddScoped<IEmailInterface, EmailService>();
 builder.Services.AddScoped<IRentalInterface, RentalRepository>();
 builder.Services.AddScoped<IAuthorizationHandler, DrivingLicenseRequirementHandler>();
+builder.Services.AddSingleton<RabbitMessageService>();
 
 builder.Services.AddDbContext<AppDbContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("Devconnection")));
@@ -127,5 +129,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseCors("AllowAll");
 app.MapControllers();
+app.UseRabbitMessageService();
 app.Run();
 

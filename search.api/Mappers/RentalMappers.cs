@@ -7,7 +7,7 @@ namespace search.api.Mappers;
 
 public static class RentalMappers
 {
-    public static Rental ToRentalFromRequest(this VehicleRentRequest vehicleRentRequest, string userId)
+    public static Rental ToRentalFromRequest(this VehicleRentRequest vehicleRentRequest, string userId, string desc)
     {
         return new Rental
         {
@@ -18,7 +18,7 @@ public static class RentalMappers
             Start = vehicleRentRequest.Start,
             End = vehicleRentRequest.End,
             Status = RentalRepository.RentalStatus.Pending,
-            Description = ""
+            Description = desc
         };
     }
 }

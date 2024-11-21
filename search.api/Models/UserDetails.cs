@@ -5,7 +5,6 @@ namespace search.api.Models;
 
 public class UserDetails : IdentityUser
 {
-    
     public string? Name { get; set; } 
     public string? Surname { get; set; } 
     public string? BirthDate { get; set; } 
