@@ -2,11 +2,15 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Azure;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using NanoidDotNet;
-
+using search.api.Models;
 
 
 namespace search.api.Controllers;
@@ -15,11 +19,12 @@ namespace search.api.Controllers;
 [ApiController]
 public class AuthenticateController: ControllerBase
 {
-    private readonly UserManager<IdentityUser> _userManager;
+
+    private readonly UserManager<UserDetails> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IConfiguration _configuration;
 
-    public AuthenticateController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+    public AuthenticateController(UserManager<UserDetails> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
     {
         _userManager = userManager;
         _roleManager = roleManager;
@@ -36,10 +41,23 @@ public class AuthenticateController: ControllerBase
         {
             return StatusCode(StatusCodes.Status400BadRequest, "User with this email already exists!");
         }
-        IdentityUser user = new () 
+        UserDetails user = new () 
         {
             Email = model.Email,
             UserName = model.UserName,
+            Name = model.FirstName,
+            Surname = model.SecondName,
+            BirthDate = model.DateOfBirth,
+            AddressStreet = model.AddressStreet,
+            PostalCode = model.PostalCode,
+            City = model.City,
+            DrivingLicenseNumber = model.DrivingLicenseNumber,
+            DrivingLicenseIssueDate = model.DrivingLicenseIssueDate,
+            DrivingLicenseExpirationDate = model.DrivingLicenseExpirationDate,
+            IdPersonalNumber = model.IdCardNumber,
+            IdCardIssuedBy = model.IdCardIssuedBy,
+            IdCardIssueDate = model.IdCardIssueDate,
+            IdCardExpirationDate = model.IdCardExpirationDate,
             // It should be changed whenever any cridential was changed???
             SecurityStamp = Guid.NewGuid().ToString()
         };
@@ -81,12 +99,52 @@ public class AuthenticateController: ControllerBase
         return Unauthorized();
     }
 
+    // I don't understand why get not post?
+    [HttpGet]
+    [Route("login/google-login")]
+    public IActionResult GoogleLogin()
+    {
+        var properties = new AuthenticationProperties
+        {
+            RedirectUri = _configuration["GOOGLE_AUTH_REDIRECT_URI"]
+        };
+        return Challenge(properties, GoogleDefaults.AuthenticationScheme);
+    }
+
+    [HttpGet]
+    [Route("login/google-callback")]
+    public async Task<IActionResult> GoogleCallback()
+    {
+        var authenticateResult = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
+        if (!authenticateResult.Succeeded)
+            return BadRequest();
+
+        var claims = authenticateResult.Principal?.Claims;
+        var email = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+
+        var user = await _userManager.FindByEmailAsync(email!);
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+        var authClaims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, user.UserName!),
+            new Claim(ClaimTypes.Email, user.Email!),
+            new Claim(ClaimTypes.NameIdentifier, user.Id!),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        };
+        var token = GetToken(authClaims);
+        return Ok(new {token = new JwtSecurityTokenHandler().WriteToken(token),
+                expiration = token.ValidTo} );
+    }
+    
     private JwtSecurityToken GetToken(List<Claim> authClaims)
     {
-        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]!));
+        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT_KEY"]!));
         var token = new JwtSecurityToken(
-            issuer: _configuration["JWT:ValidIssuer"],
-            audience: _configuration["JWT:ValidAudience"],
+            issuer: _configuration["JWT_ISSUER"],
+            audience: _configuration["JWT_AUDIENCE"],
             expires: DateTime.Now.AddMinutes(15),
             claims: authClaims,
             signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256));

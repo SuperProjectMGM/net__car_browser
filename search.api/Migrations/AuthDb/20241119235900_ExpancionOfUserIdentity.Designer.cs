@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace search.api.Migrations.AuthDb
 {
     [DbContext(typeof(AuthDbContext))]
-    partial class AuthDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241119235900_ExpancionOfUserIdentity")]
+    partial class ExpancionOfUserIdentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,7 +75,6 @@ namespace search.api.Migrations.AuthDb
 
                     b.ToTable("AspNetRoleClaims", (string)null);
                 });
-
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
@@ -163,27 +165,19 @@ namespace search.api.Migrations.AuthDb
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<string>("AddressStreet")
+                    b.Property<string>("Address")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("BirthDate")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("DrivingLicenseExpirationDate")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DrivingLicenseIssueDate")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DrivingLicenseNumber")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("DateOfReceiptOfDrivingLicense")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -192,17 +186,8 @@ namespace search.api.Migrations.AuthDb
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("IdCardExpirationDate")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IdCardIssueDate")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IdCardIssuedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IdPersonalNumber")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("LicenceNumber")
+                        .HasColumnType("int");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -211,6 +196,7 @@ namespace search.api.Migrations.AuthDb
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
@@ -224,19 +210,20 @@ namespace search.api.Migrations.AuthDb
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("PersonalNumber")
+                        .HasColumnType("int");
+
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("PostalCode")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Surname")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -258,6 +245,7 @@ namespace search.api.Migrations.AuthDb
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -292,6 +280,7 @@ namespace search.api.Migrations.AuthDb
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
                     b.HasOne("search.api.Models.UserDetails", null)
                         .WithMany()
                         .HasForeignKey("UserId")
