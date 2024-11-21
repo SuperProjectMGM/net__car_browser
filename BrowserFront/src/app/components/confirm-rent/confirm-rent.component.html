@@ -1,0 +1,9 @@
+<!-- confirm-rent.component.html -->
+<div class="modal-overlay" *ngIf="isVisible" (click)="close()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <h2>Confirmation</h2>
+      <p>Your reservation has been successfully submitted. A confirmation email has been sent to your email address.</p>
+      <button (click)="close()">Close</button>
+    </div>
+  </div>
+  

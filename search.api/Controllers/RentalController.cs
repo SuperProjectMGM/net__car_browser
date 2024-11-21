@@ -40,7 +40,8 @@ public class RentalController : Controller
         }
         else
         {
-            return View("RentalEmailSent", $"An email has been sent to {userEmail}");
+            //return View("RentalEmailSent", $"An email has been sent to {userEmail}");
+            return Ok();
         }
     }
     

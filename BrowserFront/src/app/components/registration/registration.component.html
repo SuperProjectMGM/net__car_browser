@@ -1,100 +1,110 @@
 <div class="container">
-    <div class="form-container">
-      <h1 class="form-header">Account Registration</h1>
-      <form class="registration-form">
-        
-        <!-- Basic Information -->
-        <div class="form-section">
-          <label class="form-section-title">Basic Information</label>
-          <div class="form-row">
-            <div class="form-group">
-              <label>First Name</label>
-              <input type="text" class="form-control" placeholder="Enter your first name" required>
-            </div>
-            <div class="form-group">
-              <label>Last Name</label>
-              <input type="text" class="form-control" placeholder="Enter your last name" required>
-            </div>
+  <div class="form-container">
+    <h1 class="form-header">Account Registration</h1>
+    <form class="registration-form">
+      
+      <!-- Basic Information -->
+      <div class="form-section">
+        <label class="form-section-title">Basic Information</label>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Email *</label>
+            <input type="email" class="form-control" placeholder="Enter your email" [(ngModel)]="registerModel.email" name="email" required />
           </div>
           <div class="form-group">
-            <label>Email</label>
-            <input type="email" class="form-control" placeholder="Enter your email address" required>
+            <label>Password *</label>
+            <input type="password" class="form-control" placeholder="Enter your password" [(ngModel)]="registerModel.password" name="password" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" class="form-control" placeholder="Enter your first name" [(ngModel)]="registerModel.firstName" name="firstName" />
           </div>
           <div class="form-group">
-            <label>Phone Number</label>
-            <input type="tel" class="form-control" placeholder="Enter your phone number" required>
+            <label>Last Name</label>
+            <input type="text" class="form-control" placeholder="Enter your last name" [(ngModel)]="registerModel.secondName" name="secondName" />
           </div>
         </div>
-        
-        <!-- Address Information -->
-        <div class="form-section">
-          <label class="form-section-title">Address Information</label>
-          <div class="form-row">
-            <div class="form-group">
-              <label>Street and Number</label>
-              <input type="text" class="form-control" placeholder="e.g., Flower St. 12/5" required>
-            </div>
-            <div class="form-group">
-              <label>Postal Code</label>
-              <input type="text" class="form-control" placeholder="e.g., 00-000" required>
-            </div>
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" class="form-control" placeholder="Enter your username" [(ngModel)]="registerModel.userName" name="userName" />
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" class="form-control" placeholder="Enter your phone number" [(ngModel)]="registerModel.phoneNumber" name="phoneNumber" />
+        </div>
+      </div>
+      
+      <!-- Address Information -->
+      <div class="form-section">
+        <label class="form-section-title">Address Information</label>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Street and Number</label>
+            <input type="text" class="form-control" placeholder="e.g., Flower St. 12/5" [(ngModel)]="registerModel.addressStreet" name="addressStreet" />
           </div>
           <div class="form-group">
-            <label>City</label>
-            <input type="text" class="form-control" placeholder="Enter your city" required>
+            <label>Postal Code</label>
+            <input type="text" class="form-control" placeholder="e.g., 00-000" [(ngModel)]="registerModel.postalCode" name="postalCode" />
           </div>
         </div>
-  
-        <!-- Personal Information -->
-        <div class="form-section">
-          <label class="form-section-title">Personal Information</label>
-          <div class="form-row">
-            <div class="form-group">
-              <label>Date of Birth</label>
-              <input type="date" class="form-control" required>
-            </div>
-            <div class="form-group">
-              <label>Driving License Number</label>
-              <input type="text" class="form-control" placeholder="Enter your driving license number" required>
-            </div>
+        <div class="form-group">
+          <label>City</label>
+          <input type="text" class="form-control" placeholder="Enter your city" [(ngModel)]="registerModel.city" name="city" />
+        </div>
+      </div>
+
+      <!-- Personal Information -->
+      <div class="form-section">
+        <label class="form-section-title">Personal Information</label>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date of Birth</label>
+            <input type="date" class="form-control" [(ngModel)]="registerModel.dateOfBirth" name="dateOfBirth" />
           </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>Driving License Issue Date</label>
-              <input type="date" class="form-control" required>
-            </div>
-            <div class="form-group">
-              <label>Driving License Expiration Date</label>
-              <input type="date" class="form-control" required>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>ID Card Number</label>
-              <input type="text" class="form-control" placeholder="Enter your ID card number" required>
-            </div>
-            <div class="form-group">
-              <label>Issued By</label>
-              <input type="text" class="form-control" placeholder="Enter issuing authority" required>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>ID Card Issue Date</label>
-              <input type="date" class="form-control" required>
-            </div>
-            <div class="form-group">
-              <label>ID Card Expiration Date</label>
-              <input type="date" class="form-control" required>
-            </div>
+          <div class="form-group">
+            <label>Driving License Number</label>
+            <input type="text" class="form-control" placeholder="Enter your driving license number" [(ngModel)]="registerModel.drivingLicenseNumber" name="drivingLicenseNumber" />
           </div>
         </div>
-  
-        <!-- Buttons -->
-        <div class="submit-section">
-          <button type="button" class="btn btn-secondary" (click)="gotoLogin()">Cancel</button>
-          <button type="submit" class="btn btn-primary">Register</button>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Driving License Issue Date</label>
+            <input type="date" class="form-control" [(ngModel)]="registerModel.drivingLicenseIssueDate" name="drivingLicenseIssueDate" />
+          </div>
+          <div class="form-group">
+            <label>Driving License Expiration Date</label>
+            <input type="date" class="form-control" [(ngModel)]="registerModel.drivingLicenseExpirationDate" name="drivingLicenseExpirationDate" />
+          </div>
         </div>
-      </form>
-    </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>ID Card Number</label>
+            <input type="text" class="form-control" placeholder="Enter your ID card number" [(ngModel)]="registerModel.idCardNumber" name="idCardNumber" />
+          </div>
+          <div class="form-group">
+            <label>Issued By</label>
+            <input type="text" class="form-control" placeholder="Enter issuing authority" [(ngModel)]="registerModel.idCardIssuedBy" name="idCardIssuedBy" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>ID Card Issue Date</label>
+            <input type="date" class="form-control" [(ngModel)]="registerModel.idCardIssueDate" name="idCardIssueDate" />
+          </div>
+          <div class="form-group">
+            <label>ID Card Expiration Date</label>
+            <input type="date" class="form-control" [(ngModel)]="registerModel.idCardExpirationDate" name="idCardExpirationDate" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="submit-section">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+        <button type="submit" class="btn btn-primary" (click)="onRegister()">Register</button>
+      </div>
+    </form>
   </div>
+</div>

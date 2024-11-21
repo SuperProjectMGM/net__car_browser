@@ -5,20 +5,22 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ProfileService } from '../../services/profile.service';
 import { VehicleDetail } from '../../models/VehicleDetail.model';
+import { ConfirmRentComponent } from '../confirm-rent/confirm-rent.component';
 
 @Component({
   selector: 'app-cars-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ConfirmRentComponent],
   templateUrl: './cars-list.component.html',
-  styleUrl: './cars-list.component.css',
+  styleUrls: ['./cars-list.component.css'],
 })
 export class CarsListComponent {
   ApiUrl = environment.apiBaseUrl;
   @Input() cars: VehicleDetail[] = [];
   @Input() pickupDateTime: Date | null = null;
   @Input() returnDateTime: Date | null = null;
-
+  modalVisible = false; 
+  
   constructor(
     private profileSerive: ProfileService,
     private authService: AuthService,
@@ -35,23 +37,15 @@ export class CarsListComponent {
     if (this.authService.isLoggedIn()) {
       this.profileSerive.isUserProfileComplete().subscribe((isComplete) => {
         if (isComplete) {
-          console.log(
-            'Chęć wynajęcia fury:',
-            car.model,
-            'w okresie:',
-            this.pickupDateTime,
-            ' - ',
-            this.returnDateTime
-          );
           this.authService.wantRentVehicle(car, this.pickupDateTime, this.returnDateTime).subscribe(
             (response) => {
               // Obsługuje udaną odpowiedź
-              console.log('Rent request successful', response);// TODO: co na frocie po wysłaniu
+              console.log('Rent request successful', response); // TODO: co na froncie po wysłaniu
+              this.openConfirmationModal();
             },
             (error) => {
               // Obsługuje błąd
-              console.error('Error during vehicle rent request', error);// TODO: co dalej?
-              
+              console.error('Error during vehicle rent request', error); // TODO: co dalej?
             }
           );
         } else {
@@ -63,5 +57,15 @@ export class CarsListComponent {
       console.log('Użytkownik nie jest zalogowany.');
       this.router.navigate(['/login']);
     }
+  }
+
+  // Funkcja otwierająca modal
+  openConfirmationModal(): void {
+    this.modalVisible = true;
+  }
+
+  // Funkcja zamykająca modal
+  closeModal(): void {
+    this.modalVisible = false;
   }
 }

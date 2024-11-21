@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { tap, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { Route, Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { VehicleDetail } from '../models/VehicleDetail.model';
+import { RegisterModel } from '../models/RegisterModel.model';
 
 @Injectable({
   providedIn: 'root',
@@ -74,19 +74,22 @@ export class AuthService {
   isLoggedIn(): boolean {
     return this._isAuthenticated;
   }
+
+  takeRegister(registerModel: RegisterModel): Observable<any> {
+    return this.http
+    .post<RegisterModel>(
+      `${this.apiUrl}/Authenticate/register`,
+      registerModel,
+    )
+    .pipe(
+      tap((response) => {
+        if (response) {
+          alert("Pomyślnie zarejestrowane!");
+        }
+      })
+    );
+  }
 }
 
-export interface loginModel 
-{
-  email: string,
-  password: string
-}
 
-export interface VehicleRentRequest {
-  vehicleVin: string;
-  rentalFirmId: string;
-  start: Date;
-  end: Date;
-  description: string;
-}
 

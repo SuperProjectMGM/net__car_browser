@@ -12,8 +12,8 @@
             <input
               type="text"
               class="form-control"
-              [(ngModel)]="user.name"
-              name="name"
+              [(ngModel)]="user.firstName"
+              name="firstName"
               required
             />
           </div>
@@ -22,21 +22,11 @@
             <input
               type="text"
               class="form-control"
-              [(ngModel)]="user.surname"
-              name="surname"
+              [(ngModel)]="user.secondName"
+              name="secondName"
               required
             />
           </div>
-        </div>
-        <div class="form-group">
-          <label>Email</label>
-          <input
-            type="email"
-            class="form-control"
-            [(ngModel)]="user.email"
-            name="email"
-            required
-          />
         </div>
         <div class="form-group">
           <label>Phone Number</label>
@@ -92,8 +82,8 @@
             <input
               type="date"
               class="form-control"
-              [(ngModel)]="user.birthDate"
-              name="birthDate"
+              [(ngModel)]="user.dateOfBirth"
+              name="dateOfBirth"
             />
           </div>
           <div class="form-group">

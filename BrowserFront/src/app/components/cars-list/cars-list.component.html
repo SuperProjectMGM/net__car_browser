@@ -53,3 +53,6 @@
     </li>
   </ul>
 </div>
+
+<!-- Modal do potwierdzenia -->
+<app-confirm-rent *ngIf="modalVisible" (closeModalEvent)="closeModal()"></app-confirm-rent>
