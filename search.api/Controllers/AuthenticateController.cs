@@ -47,6 +47,7 @@ public class AuthenticateController: ControllerBase
             UserName = model.UserName,
             Name = model.FirstName,
             Surname = model.SecondName,
+            PhoneNumber = model.PhoneNumber,
             BirthDate = model.DateOfBirth,
             AddressStreet = model.AddressStreet,
             PostalCode = model.PostalCode,

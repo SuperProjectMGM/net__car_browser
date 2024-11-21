@@ -72,7 +72,7 @@ public class RentalRepository : IRentalInterface
         try
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]);
+            var key = Encoding.UTF8.GetBytes(_configuration["JWT_KEY"]);
             var claimsPrincipal = tokenHandler.ValidateToken(token, new TokenValidationParameters
             {
                 ValidateIssuer = true,
@@ -80,8 +80,8 @@ public class RentalRepository : IRentalInterface
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(key),
-                ValidIssuer = _configuration["JWT:ValidIssuer"],
-                ValidAudience = _configuration["JWT:ValidAudience"]
+                ValidIssuer = _configuration["JWT_ISSUER"],
+                ValidAudience = _configuration["JWT_AUDIENCE"]
             }, out SecurityToken validatedToken);
     
             var email = claimsPrincipal.FindFirst(ClaimTypes.Email)?.Value;
@@ -118,7 +118,7 @@ public class RentalRepository : IRentalInterface
         if (rentalFirm is null)
             return (null, null);
 
-        var userDetails = await _context.UserDetails.FirstOrDefaultAsync(x => x.UserId == id);
+        var userDetails = await _authDbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
         if (userDetails is null)
             return (null, null);
         
@@ -169,14 +169,14 @@ public class RentalRepository : IRentalInterface
     {
         RentalMessage message = new RentalMessage
         {
-            Name = userDetails.Name,
-            Surname = userDetails.Surname,
-            BirthDate = userDetails.BirthDate,
-            DateOfReceiptOfDrivingLicense = userDetails.DateOfReceiptOfDrivingLicense,
-            PersonalNumber = userDetails.PersonalNumber,
-            LicenceNumber = userDetails.LicenceNumber,
-            Address = userDetails.Address,
-            PhoneNumber = userDetails.PhoneNumber,
+            Name = userDetails.Name!,
+            Surname = userDetails.Surname!,
+            BirthDate = userDetails.BirthDate!,
+            DateOfReceiptOfDrivingLicense = userDetails.DrivingLicenseIssueDate!,
+            PersonalNumber = userDetails.IdPersonalNumber!,
+            LicenceNumber = userDetails.DrivingLicenseNumber!,
+            Address = $"{userDetails.City} {userDetails.AddressStreet} {userDetails.PostalCode}",
+            PhoneNumber = userDetails.PhoneNumber!,
             VinId = rental.VinId,
             Start = rental.Start,
             End = rental.End,

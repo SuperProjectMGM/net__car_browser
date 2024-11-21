@@ -8,13 +8,13 @@ public class RentalMessage
 
     public string Surname { get; set; } = string.Empty;
     
-    public DateTime BirthDate { get; set; }
+    public string BirthDate { get; set; } = string.Empty;
     
-    public DateTime DateOfReceiptOfDrivingLicense { get; set; }
+    public string DateOfReceiptOfDrivingLicense { get; set; } = string.Empty;
     
-    public int PersonalNumber { get; set; }
+    public string PersonalNumber { get; set; } = string.Empty;
     
-    public int LicenceNumber { get; set; }
+    public string LicenceNumber { get; set; } = string.Empty;
     
     public string Address { get; set; } = string.Empty;
 

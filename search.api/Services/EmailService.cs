@@ -74,12 +74,12 @@ public class EmailService : IEmailInterface
             new Claim("RentalId", rentId)
         };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]!));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT_KEY"]!));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
-            issuer: configuration["JWT:ValidIssuer"],
-            audience: configuration["JWT:ValidAudience"],
+            issuer: configuration["JWT_ISSUER"],
+            audience: configuration["JWT_AUDIENCE"],
             claims: claims,
             expires: DateTime.UtcNow.AddMinutes(10),
             signingCredentials: creds
