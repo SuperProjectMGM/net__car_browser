@@ -5,7 +5,8 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ProfileService } from '../../services/profile.service';
 import { VehicleDetail } from '../../models/VehicleDetail.model';
-import { CarService } from '../../services/car.service';
+import { VehicleRentRequest } from '../../models/VehicleRentRequest.model';
+import { VehicleToRentService } from '../../services/VehicleToRent.service';
 
 @Component({
   selector: 'app-cars-list',
@@ -25,7 +26,7 @@ export class CarsListComponent {
     private profileSerive: ProfileService,
     private authService: AuthService,
     private router: Router,
-    private carService: CarService // Dodaj CarService
+    private vehicleToRentService: VehicleToRentService // Dodaj CarService
   ) {}
 
   ngOnChanges(changes: SimpleChanges) {
@@ -35,7 +36,15 @@ export class CarsListComponent {
   }
 
   viewDeal(car: VehicleDetail): void {
-    this.carService.setCar(car);
+    this.vehicleToRentService.setCar(car);
+    if (this.pickupDateTime && this.returnDateTime) {
+      this.vehicleToRentService.setDate(
+        this.pickupDateTime,
+        this.returnDateTime
+      );
+    } else {
+      console.log('nie ma daty');
+    }
     this.router.navigate(['/view-deals']);
   }
 }

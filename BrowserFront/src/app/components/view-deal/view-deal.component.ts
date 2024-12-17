@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { VehicleDetail } from '../../models/VehicleDetail.model';
-import { CarService } from '../../services/car.service';
 import { CommonModule } from '@angular/common';
+import { VehicleToRentService } from '../../services/VehicleToRent.service';
 
 @Component({
   selector: 'app-view-deal',
@@ -13,12 +13,19 @@ import { CommonModule } from '@angular/common';
 })
 export class ViewDealComponent {
   car: VehicleDetail | null = null;
+  pickupDateTime: Date | null = null;
+  returnDateTime: Date | null = null;
 
-  constructor(private carService: CarService, private router: Router) {}
+  constructor(
+    private vehicleToRentService: VehicleToRentService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    this.car = this.carService.getCar(); // Pobierz dane z serwisu
-    if (!this.car) {
+    this.car = this.vehicleToRentService.getCar();
+    [this.pickupDateTime, this.returnDateTime] =
+      this.vehicleToRentService.getDate();
+    if (!this.car || !this.pickupDateTime || !this.returnDateTime) {
       console.error('No car data found');
       // Opcjonalnie: przekierowanie w razie braku danych
       this.router.navigateByUrl('/cars-list');

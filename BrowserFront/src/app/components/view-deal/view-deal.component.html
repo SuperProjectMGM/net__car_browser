@@ -1,8 +1,8 @@
 <div *ngIf="car; else noCarData">
     <h1>Vehicle Details</h1>
     <p><strong>Name:</strong> {{ car.brand }}</p>
-    <p><strong>Start Date:</strong> {{ car.model }}</p>
-    <p><strong>End Date:</strong> {{ car.description }}</p>
+    <p><strong>Start Date:</strong> {{ pickupDateTime }}</p>
+    <p><strong>End Date:</strong> {{ returnDateTime }}</p>
     <p><strong>Status:</strong> {{ car.localization }}</p>
   </div>
   
