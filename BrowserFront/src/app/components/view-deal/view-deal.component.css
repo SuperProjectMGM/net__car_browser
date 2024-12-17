@@ -1,0 +1,131 @@
+.deal-container {
+    max-width: 900px;
+    min-height: 1000px; /* Utrzymanie minimalnej wysokości */
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column; /* Układ pionowy */
+    justify-content: space-between; /* Równomierne rozłożenie elementów */
+  }
+  
+  h1, h2, h3 {
+    color: #333;
+  }
+  
+  .free-cancellation, .price-highlight {
+    background: #e7f5e3;
+    color: #1f7a1f;
+    border: 1px solid #c3e6cb;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
+    text-align: center;
+  }
+  
+  .main-section {
+    display: flex;
+    flex-wrap: wrap; /* Elementy zawijają się na mniejsze ekrany */
+    gap: 20px;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .car-summary, .rental-summary {
+    flex: 1; /* Równy podział przestrzeni */
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #f9f9f9;
+  }
+  
+  .car-summary img {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .car-summary ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .car-summary li {
+    margin: 5px 0;
+  }
+  
+  .rental-summary {
+    max-width: 300px;
+    margin-left: auto;
+  }
+  
+  .extras-section {
+    margin-top: 30px;
+  }
+  
+  .extras {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .extra-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .extra-item input {
+    width: 50px;
+    margin-top: 5px;
+  }
+  
+  .checklist {
+    margin-top: 20px;
+  }
+  
+  .checklist ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .checklist li {
+    margin: 5px 0;
+  }
+  
+  .btn-rent {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 18px;
+    color: #fff;
+    background-color: #28a745;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .btn-rent:hover {
+    background-color: #218838;
+  }
+  
+  .no-data {
+    text-align: center;
+    font-size: 18px;
+    color: #d9534f;
+    margin-top: 20px;
+  }
+  
+  .deal-header {
+    text-align: center;
+    font-size: 32px;
+    font-weight: bold;
+    color: #2c3e50; 
+    margin-bottom: 20px;
+    text-transform: uppercase; 
+    letter-spacing: 1px; 
+  }
+  
