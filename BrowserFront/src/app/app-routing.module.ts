@@ -5,6 +5,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
+import { MyRentalsComponent } from './components/my-rentals/my-rentals.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -13,6 +14,7 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   { path: 'edit-profile', component: EditProfileComponent },
   { path: 'profile', component: ProfileComponent },
+  { path: 'my-rentals', component: MyRentalsComponent },
   { path: '**', redirectTo: 'dashboard' },
 ];
 
