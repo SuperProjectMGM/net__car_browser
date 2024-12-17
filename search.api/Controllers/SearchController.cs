@@ -40,7 +40,7 @@ namespace search.api.Controllers
             // Pobieranie danych pojazdów
             SearchInfo info = await _service.Search();
             var cars = info.Vehicles;
-
+            // TODO: DO NAPRAWY CALA LOGIKA!!!!
             // Filtracja dostępnych samochodów na podstawie dat i lokalizacji
             var availableCars = cars.Where(veh =>
                 (parsedRentalFrom >= veh.RentalTo || parsedRentalTo <= veh.RentalFrom) &&

@@ -43,6 +43,7 @@ public class AuthenticateController: ControllerBase
         }
         UserDetails user = new () 
         {
+            // TODO: mapper tu musi być
             Email = model.Email,
             UserName = model.UserName,
             Name = model.FirstName,

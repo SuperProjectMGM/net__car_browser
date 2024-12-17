@@ -17,6 +17,7 @@ namespace search.api.Services
             _client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
+        // TODO: tu musimy daty przekazywac i pobierac juz samochody dla danego zakresu
         public async Task<SearchInfo> Search()
         {
             var response = await _client.GetAsync(BasePath);
