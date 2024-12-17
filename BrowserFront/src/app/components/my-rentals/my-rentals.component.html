@@ -18,15 +18,47 @@
             <p><strong>Data Zwrotu:</strong> {{ rental.endDate }}</p>
             <p><strong>Status:</strong> {{ rental.status }}</p>
           </div>
-  
-          <!-- Przyciski warunkowe -->
           <div class="rental-actions">
-            <button class="btn btn-return" *ngIf="rental.status === 'W trakcie'" (click)="returnCar(rental)">
-              Zwróć
+            <button class="btn btn-return" *ngIf="rental.status === 'W trakcie'" (click)="openReturnModal(rental)">
+              Return Car
             </button>
-            <button class="btn btn-cancel" *ngIf="rental.status === 'Nadchodzące'" (click)="cancelReservation(rental)">
-              Anuluj Rezerwację
+            <button class="btn btn-cancel" *ngIf="rental.status === 'Nadchodzące'" (click)="openCancelModal(rental)">
+              Cancel Reservation
             </button>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Modal Zwrotu Samochodu -->
+      <div class="modal-backdrop" *ngIf="isReturnModalVisible">
+        <div class="modal-content">
+          <h3>Return Confirmation</h3>
+          <div class="modal-form">
+            <label>Latitude:</label>
+            <input type="text" [(ngModel)]="returnData.latitude" placeholder="Enter car latitude" />
+            <label>Longitude:</label>
+            <input type="text" [(ngModel)]="returnData.longitude" placeholder="Enter car longitude" />
+            <label>Feedback:</label>
+            <textarea [(ngModel)]="returnData.feedback" placeholder="Your opinion"></textarea>
+          </div>
+          <div class="modal-actions">
+            <button class="btn btn-confirm" (click)="confirmReturn()">Confirm Return</button>
+            <button class="btn btn-cancel" (click)="closeModal()">Cancel</button>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Modal Anulowania Rezerwacji -->
+      <div class="modal-backdrop" *ngIf="isCancelModalVisible">
+        <div class="modal-content">
+          <h3>Cancel Reservation</h3>
+          <div class="modal-form">
+            <label>Reason for Cancellation:</label>
+            <textarea [(ngModel)]="cancelReason" placeholder="Enter cancellation reason"></textarea>
+          </div>
+          <div class="modal-actions">
+            <button class="btn btn-confirm" (click)="confirmCancel()">Confirm Cancellation</button>
+            <button class="btn btn-cancel" (click)="closeModal()">Cancel</button>
           </div>
         </div>
       </div>

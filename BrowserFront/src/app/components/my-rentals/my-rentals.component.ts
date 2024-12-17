@@ -2,16 +2,28 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Rental } from '../../models/RentalModel.model';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-my-rentals',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './my-rentals.component.html',
   styleUrls: ['./my-rentals.component.css'],
 })
 export class MyRentalsComponent implements OnInit {
-  rentals: Rental[] = []; // Deklaracja z użyciem zaimportowanego interfejsu
+  rentals: Rental[] = [];
+
+  isReturnModalVisible = false;
+  isCancelModalVisible = false;
+  selectedRental!: Rental;
+
+  returnData = {
+    latitude: '',
+    longitude: '',
+    feedback: '',
+  };
+  cancelReason = '';
 
   constructor(private router: Router) {}
 
@@ -20,7 +32,7 @@ export class MyRentalsComponent implements OnInit {
   }
 
   fetchRentals(): void {
-    // TODO: call na backend o wypozyczenia
+    // TODO: zrobic impelemetacje pobrania rezerwacji
     this.rentals = [
       {
         car: 'Toyota Corolla',
@@ -51,13 +63,35 @@ export class MyRentalsComponent implements OnInit {
     console.log('Już znajdujesz się na zakładce Moje Rezerwacje');
   }
 
-  returnCar(rental: Rental): void {
-    console.log(`Samochód ${rental.car} został zwrócony.`);
-    // Dodaj logikę zwrotu samochodu (np. zmiana statusu lub wywołanie API)
+  openReturnModal(rental: Rental): void {
+    this.selectedRental = rental;
+    this.isReturnModalVisible = true;
   }
 
-  cancelReservation(rental: Rental): void {
-    console.log(`Rezerwacja samochodu ${rental.car} została anulowana.`);
-    // Dodaj logikę anulowania rezerwacji (np. usunięcie lub aktualizacja rezerwacji)
+  openCancelModal(rental: Rental): void {
+    this.selectedRental = rental;
+    this.cancelReason = '';
+    this.isCancelModalVisible = true;
+  }
+
+  closeModal(): void {
+    this.isReturnModalVisible = false;
+    this.isCancelModalVisible = false;
+  }
+
+  confirmReturn(): void {
+    // TODO: wyslac zwrot
+    console.log('Dane zwrotu:', this.returnData);
+    console.log(`Samochód ${this.selectedRental.car} został zwrócony.`);
+    this.closeModal();
+  }
+
+  confirmCancel(): void {
+    // TODO: wyslac anulowanie rezerwacji
+    console.log(
+      `Rezerwacja samochodu ${this.selectedRental.car} została anulowana.`
+    );
+    console.log('Przyczyna rezygnacji:', this.cancelReason);
+    this.closeModal();
   }
 }
