@@ -28,8 +28,8 @@
       <p>📅 <strong>Pick-up:</strong> {{ pickupDateTime | date: 'EEE, dd MMM yyyy, HH:mm' }}</p>
       <p>📅 <strong>Drop-off:</strong> {{ returnDateTime | date: 'EEE, dd MMM yyyy, HH:mm' }}</p>
 
-      <h3>Car price breakdown</h3>
-      <p>Car hire charge: <strong>{{ car.prize }} zł</strong></p>
+      <h3>Car price</h3>
+      <p>Car hire charge: <strong>{{ totalPrice }} zł</strong></p>
       <p><strong>Price for 1 day:</strong> {{ car.prize }} zł</p>
     </div>
   </div>
@@ -55,7 +55,8 @@
 
   <!-- Przycisk wynajmu -->
   <div class="action-buttons">
-    <button class="btn-rent" (click)="rentCar(car)">Rent Now</button>
+    <button class="btn btn-rent" (click)="rentCar(car)">Rent Now</button>
+    <button class="btn btn-back" (click)="goToDashboard()">Go Back</button>
   </div>
 </div>
 

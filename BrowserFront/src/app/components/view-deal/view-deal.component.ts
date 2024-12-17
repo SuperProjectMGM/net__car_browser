@@ -72,8 +72,12 @@ export class ViewDealComponent {
         new Date(this.returnDateTime).getTime() -
           new Date(this.pickupDateTime).getTime()
       );
-      const days = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // Liczba dni
-      this.totalPrice = days * this.car.prize; // Cena całkowita
+      const days = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+      this.totalPrice = days * this.car.prize;
     }
+  }
+
+  goToDashboard(): void {
+    this.router.navigate(['/dashboard']);
   }
 }

@@ -1,6 +1,6 @@
 .deal-container {
     max-width: 900px;
-    min-height: 1000px; /* Utrzymanie minimalnej wysokości */
+    min-height: 1000px; 
     margin: 20px auto;
     padding: 20px;
     background: #fff;
@@ -9,8 +9,8 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
     display: flex;
-    flex-direction: column; /* Układ pionowy */
-    justify-content: space-between; /* Równomierne rozłożenie elementów */
+    flex-direction: column; 
+    justify-content: space-between; 
   }
   
   h1, h2, h3 {
@@ -29,14 +29,14 @@
   
   .main-section {
     display: flex;
-    flex-wrap: wrap; /* Elementy zawijają się na mniejsze ekrany */
+    flex-wrap: wrap;
     gap: 20px;
     justify-content: space-between;
     margin-top: 20px;
   }
   
   .car-summary, .rental-summary {
-    flex: 1; /* Równy podział przestrzeni */
+    flex: 1; 
     padding: 15px;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -63,26 +63,6 @@
     margin-left: auto;
   }
   
-  .extras-section {
-    margin-top: 30px;
-  }
-  
-  .extras {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .extra-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .extra-item input {
-    width: 50px;
-    margin-top: 5px;
-  }
-  
   .checklist {
     margin-top: 20px;
   }
@@ -96,36 +76,87 @@
     margin: 5px 0;
   }
   
-  .btn-rent {
-    display: block;
-    margin: 20px auto;
-    padding: 10px 20px;
-    font-size: 18px;
+.deal-header {
+    text-align: center;
+    font-size: 36px;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    text-transform: capitalize;
+    letter-spacing: 1px;
+    font-family: 'Poppins', Arial, sans-serif;
+  }
+  
+  .action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+  }
+  
+  .btn {
+    padding: 12px 25px;
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
     color: #fff;
-    background-color: #28a745;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
+    transition: all 0.3s ease;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  }
+  
+  .btn-rent {
+    background-color: #28a745; 
+    box-shadow: 0 4px 6px rgba(40, 167, 69, 0.2);
   }
   
   .btn-rent:hover {
-    background-color: #218838;
+    background-color: #218838; 
+    box-shadow: 0 6px 8px rgba(40, 167, 69, 0.3);
+    transform: translateY(-2px);
   }
   
-  .no-data {
-    text-align: center;
-    font-size: 18px;
-    color: #d9534f;
-    margin-top: 20px;
+  .btn-back {
+    background-color: #6c757d; 
+    box-shadow: 0 4px 6px rgba(108, 117, 125, 0.2);
   }
   
-  .deal-header {
+  .btn-back:hover {
+    background-color: #5a6268; 
+    box-shadow: 0 6px 8px rgba(108, 117, 125, 0.3);
+    transform: translateY(-2px);
+  }
+  
+  .free-cancellation, .price-highlight {
+    background: #e8f5e9;
+    color: #388e3c;
+    border: 1px solid #c8e6c9;
+    padding: 12px;
+    border-radius: 8px;
+    margin: 15px 0;
+    font-size: 16px;
+    font-weight: 500;
     text-align: center;
-    font-size: 32px;
-    font-weight: bold;
-    color: #2c3e50; 
-    margin-bottom: 20px;
-    text-transform: uppercase; 
-    letter-spacing: 1px; 
+  }
+  
+  .rental-summary, .car-summary {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #f9f9f9;
+    padding: 20px;
+  }
+  
+  .checklist ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .checklist li {
+    font-size: 16px;
+    margin: 8px 0;
+    color: #333;
   }
   
