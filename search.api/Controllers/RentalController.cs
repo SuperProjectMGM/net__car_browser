@@ -22,13 +22,12 @@ public class RentalController : Controller
     }
 
     [Authorize]
-    // Moje pomysly to syf, nie udalo mi sie. Trza poprawic
     //[Authorize(Policy = "DrivingLicenseRequired")]
     [HttpPost("rent-car")]
     public async Task<IActionResult> RentCar([FromBody] VehicleRentRequest request)
     {
         var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
-        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value; 
+        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!); 
         var userName = User.FindFirst(ClaimTypes.Name)?.Value;
 
         var success = await _rentalRepo.SendConfirmationEmail(userEmail, userName, userId,
@@ -50,13 +49,16 @@ public class RentalController : Controller
     public async Task<IActionResult> ConfirmRental([FromQuery] string token)
     {
         var succeed = _rentalRepo.ValidateRentalConfirmationToken(token);
+
+        int item3 = int.Parse(succeed.Item3);
+        int item5 = int.Parse(succeed.Item5);
         
         if (!succeed.Item1)
         {
             return BadRequest("Invalid or expired token.");
         }
 
-        var tuple = await _rentalRepo.CompleteRentalAndSend(succeed.Item2, succeed.Item3, succeed.Item4, succeed.Item5);
+        var tuple = await _rentalRepo.CompleteRentalAndSend(succeed.Item2, item3, succeed.Item4, item5);
 
         if (tuple.Item1 is null || tuple.Item2 is null)
         {

@@ -44,7 +44,7 @@ public class UserInfoController: ControllerBase
             ValidIssuer = _configuration["JWT_ISSUER"],
             ValidAudience = _configuration["JWT_AUDIENCE"]
         }, out SecurityToken validatedToken);
-        var id = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var id = int.Parse(claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
         var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
         if (user is null)
         {
@@ -70,7 +70,7 @@ public class UserInfoController: ControllerBase
             ValidIssuer = _configuration["JWT_ISSUER"],
             ValidAudience = _configuration["JWT_AUDIENCE"]
         }, out SecurityToken validatedToken);
-        var id = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var id = int.Parse(claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
         var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
         if (user is null)
         {

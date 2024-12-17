@@ -42,10 +42,10 @@ namespace search.api.Controllers
             var cars = info.Vehicles;
             // TODO: DO NAPRAWY CALA LOGIKA!!!!
             // Filtracja dostępnych samochodów na podstawie dat i lokalizacji
-            var availableCars = cars.Where(veh =>
-                (parsedRentalFrom >= veh.RentalTo || parsedRentalTo <= veh.RentalFrom) &&
-                string.Equals(veh.Localization, location, StringComparison.OrdinalIgnoreCase))
-                .Select(veh => veh.VehicleToVehicleOurDto());
+            //var availableCars = cars.Where(veh =>
+            //    (parsedRentalFrom >= veh.RentalTo || parsedRentalTo <= veh.RentalFrom) &&
+            //    string.Equals(veh.Localization, location, StringComparison.OrdinalIgnoreCase))
+            //    .Select(veh => veh.VehicleToVehicleOurDto());
 
             // Sprawdzamy, czy są dostępne samochody
             //if (!availableCars.Any())
@@ -53,7 +53,7 @@ namespace search.api.Controllers
             //    return NotFound(new { message = "Brak dostępnych samochodów w podanym okresie i lokalizacji" });
             //}
 
-            return Ok(availableCars);
+            return Ok();
         }
 
 

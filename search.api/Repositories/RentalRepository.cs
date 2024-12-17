@@ -34,10 +34,10 @@ public class RentalRepository : IRentalInterface
     
     // TODO: delete rental if link expired or token invalid???
 
-    public async Task<bool> SendConfirmationEmail(string userEmail, string userName, string userId, string scheme, string host,
+    public async Task<bool> SendConfirmationEmail(string userEmail, string userName, int userId, string scheme, string host,
                                             VehicleRentRequest request)
     {
-        if (string.IsNullOrEmpty(userEmail) || string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(userName))
+        if (string.IsNullOrEmpty(userEmail)  || string.IsNullOrEmpty(userName))
         {
             return await Task.FromResult(false);
         }
@@ -108,7 +108,7 @@ public class RentalRepository : IRentalInterface
         }
     }
 
-    public async Task<(Rental?, RentalFirm?)> CompleteRentalAndSend(string email, string id, string username, string rentId)
+    public async Task<(Rental?, RentalFirm?)> CompleteRentalAndSend(string email, int id, string username, int rentId)
     {
         var rental = await _context.Rentals.FirstOrDefaultAsync(x => x.Id == rentId);
         if (rental is null)
@@ -138,7 +138,7 @@ public class RentalRepository : IRentalInterface
         var rental = JsonConvert.DeserializeObject<Rental>(message);
         if (rental is null)
             throw new Exception("Error deserializing message.");
-        var dbRental = await _context.Rentals.FirstOrDefaultAsync(x => x.VinId == rental.VinId);
+        var dbRental = await _context.Rentals.FirstOrDefaultAsync(x => x.Vin == rental.Vin);
         if (dbRental is null)
             throw new Exception("There is no such rental in DB");
         dbRental.Status = rental.Status;
@@ -157,7 +157,7 @@ public class RentalRepository : IRentalInterface
             $"Your rental has been confirmed by employee. You are ready to go!");
     }
 
-    public async Task<Rental> CreateRental(VehicleRentRequest request, string userId)
+    public async Task<Rental> CreateRental(VehicleRentRequest request, int userId)
     {
         var rentalModel = request.ToRentalFromRequest(userId, request.Description);
         await _context.Rentals.AddAsync(rentalModel);
@@ -171,13 +171,15 @@ public class RentalRepository : IRentalInterface
         {
             Name = userDetails.Name!,
             Surname = userDetails.Surname!,
-            BirthDate = userDetails.BirthDate!,
-            DateOfReceiptOfDrivingLicense = userDetails.DrivingLicenseIssueDate!,
-            PersonalNumber = userDetails.IdPersonalNumber!,
-            LicenceNumber = userDetails.DrivingLicenseNumber!,
-            Address = $"{userDetails.City} {userDetails.AddressStreet} {userDetails.PostalCode}",
+            BirthDate = userDetails.BirthDate,
+            DrivingLicenseIssueDate = userDetails.DrivingLicenseIssueDate!,
+            PersonalNumber = userDetails.PersonalNumber!,
+            LicenseNumber = userDetails.DrivingLicenseNumber!,
+            City = userDetails.City,
+            StreetAndNumber = userDetails.StreetAndNumber,
+            PostalCode = userDetails.PostalCode,
             PhoneNumber = userDetails.PhoneNumber!,
-            VinId = rental.VinId,
+            Vin = rental.Vin,
             Start = rental.Start,
             End = rental.End,
             Status = rental.Status,

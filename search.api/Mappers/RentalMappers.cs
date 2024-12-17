@@ -7,17 +7,17 @@ namespace search.api.Mappers;
 
 public static class RentalMappers
 {
-    public static Rental ToRentalFromRequest(this VehicleRentRequest vehicleRentRequest, string userId, string desc)
+    public static Rental ToRentalFromRequest(this VehicleRentRequest vehicleRentRequest, int userId, string desc)
     {
         return new Rental
         {
-            Id = Nanoid.Generate(Nanoid.Alphabets.LowercaseLettersAndDigits, 10),
+            Slug = Nanoid.Generate(Nanoid.Alphabets.LowercaseLettersAndDigits, 10),
             UserId = userId,
             RentalFirmId = vehicleRentRequest.RentalFirmId,
-            VinId = vehicleRentRequest.VehicleVin,
+            Vin = vehicleRentRequest.VehicleVin,
             Start = vehicleRentRequest.Start,
             End = vehicleRentRequest.End,
-            Status = RentalRepository.RentalStatus.Pending,
+            Status = RentalStatus.Pending,
             Description = desc
         };
     }

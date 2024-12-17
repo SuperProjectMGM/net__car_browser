@@ -16,7 +16,7 @@ public class EmailService : IEmailInterface
     private readonly string _searchName = "SuperSamochodziki";
     
     public async Task SendRentalConfirmationEmailAsync(string toUser, string subject, string message, 
-                                                       string username, string rentId, string confirmationLink)
+                                                       string username, int rentId, string confirmationLink)
     {
         var apiKey = _apiKey;
         var client = new SendGridClient(apiKey);
@@ -41,7 +41,7 @@ public class EmailService : IEmailInterface
         var response = await client.SendEmailAsync(msg);
     }
 
-    public async Task SendRentalCompletionEmailAsync(string toUser, string subject, string username, string rentId, string message)
+    public async Task SendRentalCompletionEmailAsync(string toUser, string subject, string username, int rentId, string message)
     {
         var apiKey = _apiKey;
         var client = new SendGridClient(apiKey);
@@ -64,14 +64,14 @@ public class EmailService : IEmailInterface
         var response = await client.SendEmailAsync(msg);
     }
     
-    public string GenerateConfirmationRentToken(string email, string username, string id, string rentId, IConfiguration configuration)
+    public string GenerateConfirmationRentToken(string email, string username, int id, int rentId, IConfiguration configuration)
     {
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Email, email),
             new Claim(ClaimTypes.Name, username),
-            new Claim(ClaimTypes.NameIdentifier, id),
-            new Claim("RentalId", rentId)
+            new Claim(ClaimTypes.NameIdentifier, id.ToString()),
+            new Claim("RentalId", rentId.ToString())
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT_KEY"]!));

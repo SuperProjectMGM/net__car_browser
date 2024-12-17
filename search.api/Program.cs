@@ -61,7 +61,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddDbContext<AuthDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Devconnection")));
 
-builder.Services.AddIdentity<UserDetails, IdentityRole>().AddEntityFrameworkStores<AuthDbContext>().AddDefaultTokenProviders();
+builder.Services.AddIdentity<UserDetails, IdentityRole<int>>().AddEntityFrameworkStores<AuthDbContext>().AddDefaultTokenProviders();
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
