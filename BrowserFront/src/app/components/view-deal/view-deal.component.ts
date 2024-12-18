@@ -18,6 +18,7 @@ export class ViewDealComponent {
   pickupDateTime: Date | null = null;
   returnDateTime: Date | null = null;
   totalPrice: number = 0;
+  isModalVisible: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -39,12 +40,43 @@ export class ViewDealComponent {
     }
   }
 
-  rentCar(car: VehicleDetail): void {
+  calculateTotalPrice(): void {
+    if (this.pickupDateTime && this.returnDateTime && this.car) {
+      const timeDiff = Math.abs(
+        new Date(this.returnDateTime).getTime() -
+          new Date(this.pickupDateTime).getTime()
+      );
+      const days = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+      this.totalPrice = days * this.car.prize;
+    }
+  }
+
+  goToDashboard(): void {
+    this.router.navigate(['/dashboard']);
+  }
+
+  closeModal(): void {
+    this.isModalVisible = false;
+  }
+
+  rentCar(): void {
+    this.isModalVisible = true; // Pokazanie modalu
+  }
+
+  confirmRentCar(): void {
+    this.isModalVisible = false; // Ukrycie modalu
+    console.log('Potwierdzono rezerwację pojazdu');
     if (this.authService.isLoggedIn()) {
       this.profileService.isUserProfileComplete().subscribe((isComplete) => {
-        if (isComplete) {
+        if (isComplete && this.car) {
+          console.log(
+            'chce wynajac fure w datach',
+            this.car.model,
+            this.pickupDateTime,
+            this.returnDateTime
+          );
           this.authService
-            .wantRentVehicle(car, this.pickupDateTime, this.returnDateTime)
+            .wantRentVehicle(this.car, this.pickupDateTime, this.returnDateTime)
             .subscribe(
               (response) => {
                 // Obsługuje udaną odpowiedź
@@ -64,20 +96,5 @@ export class ViewDealComponent {
       console.log('Użytkownik nie jest zalogowany.');
       this.router.navigate(['/login']);
     }
-  }
-
-  calculateTotalPrice(): void {
-    if (this.pickupDateTime && this.returnDateTime && this.car) {
-      const timeDiff = Math.abs(
-        new Date(this.returnDateTime).getTime() -
-          new Date(this.pickupDateTime).getTime()
-      );
-      const days = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-      this.totalPrice = days * this.car.prize;
-    }
-  }
-
-  goToDashboard(): void {
-    this.router.navigate(['/dashboard']);
   }
 }

@@ -55,8 +55,21 @@
 
   <!-- Przycisk wynajmu -->
   <div class="action-buttons">
-    <button class="btn btn-rent" (click)="rentCar(car)">Rent Now</button>
+    <button class="btn btn-rent" (click)="rentCar()">Rent Now</button>
     <button class="btn btn-back" (click)="goToDashboard()">Go Back</button>
+  </div>
+</div>
+
+<!-- Modal okienko -->
+<div class="modal-backdrop" *ngIf="isModalVisible">
+  <div class="modal-content">
+    <h3>Confirm Reservation</h3>
+    <p>Are you sure you want to reserve this car?</p>
+    <p>We will send a confirmation email after your reservation.</p>
+    <div class="modal-actions">
+      <button class="btn btn-confirm" (click)="confirmRentCar()">Confirm</button>
+      <button class="btn btn-cancel" (click)="closeModal()">Cancel</button>
+    </div>
   </div>
 </div>
 
