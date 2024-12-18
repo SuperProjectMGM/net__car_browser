@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { VehicleToRentService } from '../../services/VehicleToRent.service';
 import { AuthService } from '../../services/auth.service';
 import { ProfileService } from '../../services/profile.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-view-deal',
@@ -24,7 +25,8 @@ export class ViewDealComponent {
     private authService: AuthService,
     private vehicleToRentService: VehicleToRentService,
     private router: Router,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private toastr: ToastrService // Dodano ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -33,7 +35,7 @@ export class ViewDealComponent {
       this.vehicleToRentService.getDate();
     if (!this.car || !this.pickupDateTime || !this.returnDateTime) {
       console.error('No car data found');
-      // Opcjonalnie: przekierowanie w razie braku danych
+      this.toastr.error('No vehicle data available.', 'Error');
       this.router.navigateByUrl('/cars-list');
     } else {
       this.calculateTotalPrice();
@@ -60,35 +62,46 @@ export class ViewDealComponent {
   }
 
   rentCar(): void {
-    // Sprawdzenie czy użytkownik jest zalogowany
     if (!this.authService.isLoggedIn()) {
-      console.log('Użytkownik nie jest zalogowany.');
+      this.toastr.warning(
+        'You must log in to rent a vehicle.',
+        'You are not logged in'
+      );
       this.router.navigate(['/login']);
       return;
     }
 
-    // Sprawdzenie czy profil użytkownika jest kompletny
     this.profileService.isUserProfileComplete().subscribe((isComplete) => {
       if (isComplete) {
-        this.isModalVisible = true; // Pokazanie okna modalu
+        this.isModalVisible = true; // Pokaż modal
       } else {
-        console.log('Nie ma wypełnionych danych profilu.');
+        this.toastr.info(
+          'Complete your profile details to rent a vehicle.',
+          'Incomplete profile'
+        );
         this.router.navigate(['/edit-profile']);
       }
     });
   }
 
   confirmRentCar(): void {
-    this.isModalVisible = false; // Zamknięcie modalu
-    console.log('Potwierdzono rezerwację pojazdu');
+    this.isModalVisible = false; // Zamknij modal
     if (this.car) {
       this.authService
         .wantRentVehicle(this.car, this.pickupDateTime, this.returnDateTime)
         .subscribe(
           (response) => {
+            this.toastr.success(
+              'Please check your email to confirm the reservation.',
+              'We have received your request.'
+            );
             console.log('Rent request successful', response);
           },
           (error) => {
+            this.toastr.error(
+              'An error occurred while booking the vehicle.',
+              'Error'
+            );
             console.error('Error during vehicle rent request', error);
           }
         );
