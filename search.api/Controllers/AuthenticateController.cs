@@ -21,13 +21,11 @@ namespace search.api.Controllers;
 public class AuthenticateController: ControllerBase
 {
     private readonly UserManager<UserDetails> _userManager;
-    private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IConfiguration _configuration;
 
-    public AuthenticateController(UserManager<UserDetails> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+    public AuthenticateController(UserManager<UserDetails> userManager, IConfiguration configuration)
     {
         _userManager = userManager;
-        _roleManager = roleManager;
         _configuration = configuration;
     }
 

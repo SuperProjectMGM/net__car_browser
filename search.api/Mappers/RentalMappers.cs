@@ -13,7 +13,7 @@ public static class RentalMappers
         {
             Slug = Nanoid.Generate(Nanoid.Alphabets.LowercaseLettersAndDigits, 10),
             UserId = userId,
-            RentalFirmId = vehicleRentRequest.RentalFirmId,
+            //RentalFirmId = vehicleRentRequest.RentalFirmId,
             Vin = vehicleRentRequest.VehicleVin,
             Start = vehicleRentRequest.Start,
             End = vehicleRentRequest.End,

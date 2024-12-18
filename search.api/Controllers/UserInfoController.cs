@@ -14,15 +14,11 @@ namespace search.api.Controllers;
 [ApiController]
 public class UserInfoController: ControllerBase
 {
-    // WAZNE TODO: Przerobic na Repositories for interface i injektowaC. Tak samo w authentykacji
+    // TODO: Przerobic na Repositories for interface i injektowaC. Tak samo w authentykacji
     private readonly AuthDbContext _context;
-    private readonly UserManager<UserDetails> _userManager;
-    private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IConfiguration _configuration;
-    public UserInfoController(UserManager<UserDetails> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, AuthDbContext context)
+    public UserInfoController(IConfiguration configuration, AuthDbContext context)
     {
-        _userManager = userManager;
-        _roleManager = roleManager;
         _configuration = configuration;
         _context = context;
     }

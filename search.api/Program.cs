@@ -55,7 +55,6 @@ builder.Services.AddScoped<IRentalInterface, RentalRepository>();
 builder.Services.AddScoped<IAuthorizationHandler, DrivingLicenseRequirementHandler>();
 builder.Services.AddSingleton<RabbitMessageService>();
 
-
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Devconnection")));
 builder.Services.AddDbContext<AuthDbContext>(options =>
@@ -80,13 +79,13 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = builder.Configuration["JWT_ISSUER"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT_KEY"]))
     };
-}).AddCookie()
-    .AddGoogle(googleOptions =>
-    {
-        googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
-        googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
-        //googleOptions.CallbackPath = "/search.api/Authenticate/login/google-callback";
-    });
+}).AddCookie();
+    // .AddGoogle(googleOptions =>
+    // {
+    //     googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
+    //     googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
+    //     //googleOptions.CallbackPath = "/search.api/Authenticate/login/google-callback";
+    // });
 
 builder.Services.AddAuthorization(options =>
 {

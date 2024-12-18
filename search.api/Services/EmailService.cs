@@ -11,25 +11,30 @@ namespace search.api.Services;
 
 public class EmailService : IEmailInterface
 {
-    private readonly string _apiKey = "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";
-
     private readonly string _searchName = "SuperSamochodziki";
-    
-    public async Task SendRentalConfirmationEmailAsync(string toUser, string subject, string message, 
-                                                       string username, int rentId, string confirmationLink)
+
+    private readonly IConfiguration _configuration;
+
+    public EmailService(IConfiguration configuration)
     {
-        var apiKey = _apiKey;
+        _configuration = configuration;
+    }
+    
+    public async Task SendRentalConfirmationEmailAsync(string toUser, string username, string slug, string confirmationLink)
+    {
+        var apiKey = _configuration["SEND_GRID_API_KEY"];
         var client = new SendGridClient(apiKey);
-        var from = new EmailAddress("mateusz.mm100@gmail.com", _searchName);
+        var from = new EmailAddress(_configuration["MAIL_SENDER"], _searchName);
         var to = new EmailAddress(toUser, username);
-        var plainTextContent = message;
+        var plainTextContent = "";
+        string subject = "Rental confirmation";
         var htmlContent = $@"
         <html>
             <body>
                 <h1>Rental Confirmation</h1>
                 <p>Dear {username},</p>
-                <p>{message}</p>
-                <p>Your rental {rentId} is waiting for your confirmation!</p>
+                <p>{plainTextContent}</p>
+                <p>Your rental {slug} is waiting for your confirmation!</p>
                 <p>To validate your rental please click in <a href={confirmationLink}>this link.</a><br /><br /></p>               
                 <p>Thank you for using {_searchName}!</p>
                 <footer>
@@ -41,25 +46,28 @@ public class EmailService : IEmailInterface
         var response = await client.SendEmailAsync(msg);
     }
 
-    public async Task SendRentalCompletionEmailAsync(string toUser, string subject, string username, int rentId, string message)
+    public async Task SendRentalCompletionEmailAsync(string toUser, string username, string rentSlug)
     {
-        var apiKey = _apiKey;
+        var apiKey = _configuration["SEND_GRID_API_KEY"];
         var client = new SendGridClient(apiKey);
-        var from = new EmailAddress("mateusz.mm100@gmail.com", _searchName);
+        var from = new EmailAddress(_configuration["MAIL_SENDER"], _searchName);
         var to = new EmailAddress(toUser, username);
-        var plainTextContent = message;
+        var plainTextContent = "Your rental has been completed successfully!";
+        string subject = "Rental completion!";
+        
         var htmlContent = $@"
         <html>
             <body>
                 <h1>Rental Confirmation</h1>
                 <p>Dear {username},</p>
-                <p>{message}</p>               
+                <p>{plainTextContent}</p>               
                 <p>Thank you for using {_searchName}!</p>
                 <footer>
                     <p>--<br/>{_searchName} Team</p>
                 </footer>
             </body>
         </html>";
+        
         var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
         var response = await client.SendEmailAsync(msg);
     }

@@ -1,4 +1,4 @@
-@model Tuple<search.api.Models.Rental, string, string, search.api.Models.RentalFirm>
+@model Tuple<search.api.Models.Rental, string, string>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -77,11 +77,6 @@
         <label>Description:</label>
         <span>@Model.Item1.Description</span>
     </div>
-    <div class="detail">
-        <label>Rental Firm:</label>
-        <span>@Model.Item4.Name</span>
-    </div>
-
 </div>
 
 </body>

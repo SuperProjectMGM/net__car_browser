@@ -30,6 +30,9 @@ public class RentalController : Controller
         var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!); 
         var userName = User.FindFirst(ClaimTypes.Name)?.Value;
 
+        if (userEmail == null || userName == null)
+            return BadRequest("Invalid user credentials");
+
         var success = await _rentalRepo.SendConfirmationEmail(userEmail, userName, userId,
             Request.Scheme, Request.Host.ToString(), request);
         
@@ -37,11 +40,7 @@ public class RentalController : Controller
         {
             return Unauthorized($"Something went wrong. {userEmail}, {userName}, {userId}");
         }
-        else
-        {
-            //return View("RentalEmailSent", $"An email has been sent to {userEmail}");
-            return Ok();
-        }
+        return Ok();
     }
     
     [AllowAnonymous]
@@ -58,13 +57,13 @@ public class RentalController : Controller
             return BadRequest("Invalid or expired token.");
         }
 
-        var tuple = await _rentalRepo.CompleteRentalAndSend(succeed.Item2, item3, succeed.Item4, item5);
+        var rental = await _rentalRepo.CompleteRentalAndSend(succeed.Item2, item3, succeed.Item4, item5);
 
-        if (tuple.Item1 is null || tuple.Item2 is null)
+        if (rental is null )
         {
-            return NotFound($"{tuple.Item1}, {tuple.Item2}");
+            return NotFound("Something went wrong :(");
         }
 
-        return View("RentalConfirm", new Tuple<Rental, string, string, RentalFirm>(tuple.Item1, succeed.Item2, succeed.Item4, tuple.Item2));
+        return View("RentalConfirm", new Tuple<Rental, string, string>(rental, succeed.Item2, succeed.Item4));
     }
 }

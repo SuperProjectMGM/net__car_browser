@@ -10,7 +10,7 @@ public interface IRentalInterface
 
     public (bool, string, string, string, string) ValidateRentalConfirmationToken(string token);
 
-    public Task<(Rental?, RentalFirm?)> CompleteRentalAndSend(string email, int id, string username, int rentId);
+    public Task<Rental?> CompleteRentalAndSend(string email, int id, string username, int rentId);
 
     //public Task<Rental> CreateRental(VehicleRentRequest request, string userId);
 
