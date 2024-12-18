@@ -60,41 +60,38 @@ export class ViewDealComponent {
   }
 
   rentCar(): void {
-    this.isModalVisible = true; // Pokazanie modalu
+    // Sprawdzenie czy użytkownik jest zalogowany
+    if (!this.authService.isLoggedIn()) {
+      console.log('Użytkownik nie jest zalogowany.');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    // Sprawdzenie czy profil użytkownika jest kompletny
+    this.profileService.isUserProfileComplete().subscribe((isComplete) => {
+      if (isComplete) {
+        this.isModalVisible = true; // Pokazanie okna modalu
+      } else {
+        console.log('Nie ma wypełnionych danych profilu.');
+        this.router.navigate(['/edit-profile']);
+      }
+    });
   }
 
   confirmRentCar(): void {
-    this.isModalVisible = false; // Ukrycie modalu
+    this.isModalVisible = false; // Zamknięcie modalu
     console.log('Potwierdzono rezerwację pojazdu');
-    if (this.authService.isLoggedIn()) {
-      this.profileService.isUserProfileComplete().subscribe((isComplete) => {
-        if (isComplete && this.car) {
-          console.log(
-            'chce wynajac fure w datach',
-            this.car.model,
-            this.pickupDateTime,
-            this.returnDateTime
-          );
-          this.authService
-            .wantRentVehicle(this.car, this.pickupDateTime, this.returnDateTime)
-            .subscribe(
-              (response) => {
-                // Obsługuje udaną odpowiedź
-                console.log('Rent request successful', response); // TODO: co na froncie po wysłanius
-              },
-              (error) => {
-                // Obsługuje błąd
-                console.error('Error during vehicle rent request', error); // TODO: co dalej?
-              }
-            );
-        } else {
-          console.log('Nie ma wypełnionych danych profilu.');
-          this.router.navigate(['/edit-profile']);
-        }
-      });
-    } else {
-      console.log('Użytkownik nie jest zalogowany.');
-      this.router.navigate(['/login']);
+    if (this.car) {
+      this.authService
+        .wantRentVehicle(this.car, this.pickupDateTime, this.returnDateTime)
+        .subscribe(
+          (response) => {
+            console.log('Rent request successful', response);
+          },
+          (error) => {
+            console.error('Error during vehicle rent request', error);
+          }
+        );
     }
   }
 }
