@@ -22,6 +22,9 @@ public class MessageHandler
             case MessageType.RentalMessageCompletion:
                 await _rentalRepo.RentalCompletion(mess);
                 break;
+            case MessageType.RentalAcceptedToReturn:
+                await _rentalRepo.RentalReturnAccepted(mess);
+                break;
         }
     }
 }

@@ -149,7 +149,21 @@ public class RentalRepository : IRentalInterface
         var success = await _messageService.SendMessage(jsonStr);
         return success;
     }
-    
+
+    public async Task RentalReturnAccepted(RentalMessage mess)
+    {
+        var dbRental = await _context.Rentals.FirstOrDefaultAsync(x => x.Vin == mess.Vin);
+        if (dbRental is null)
+            throw new Exception("There is no such rental in DB");
+
+        var user = await _authDbContext.Users.FirstOrDefaultAsync(x => x.Id == dbRental.UserId);
+        if (user is null)
+            throw new Exception("User invalid.");
+        
+        dbRental.Status = RentalStatus.Returned;
+        await _context.SaveChangesAsync();
+    }
+
     private RentalMessage CreateRentMessage(Rental rental, UserDetails userDetails)
     {
         RentalMessage message = new RentalMessage
