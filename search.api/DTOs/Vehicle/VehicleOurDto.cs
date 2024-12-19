@@ -30,7 +30,7 @@ namespace search.api.DTOs
         public string Description { get; set; } = string.Empty; 
 
         [JsonPropertyName("rate")]
-        public decimal Rate { get; set; }
+        public float Rate { get; set; }
 
         [JsonPropertyName("localization")]
         public string Localization { get; set; } = string.Empty;

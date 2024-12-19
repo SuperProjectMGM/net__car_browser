@@ -5,7 +5,6 @@ namespace search.api.Models;
 public class RentalMessage
 {
     public MessageType MessageType { get; set; }
-    
     public string Slug { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public string Surname { get; set; } = string.Empty;

@@ -67,8 +67,8 @@ public class RabbitMessageService
             var body = eventArgs.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
             using var scope = _serviceProvider.CreateScope();
-            var rentalService = scope.ServiceProvider.GetRequiredService<IRentalInterface>();
-            await rentalService.RentalCompletion(message);
+            var messageHandler = scope.ServiceProvider.GetRequiredService<IMessageHandler>();
+            await messageHandler.ProcessMessage(message);
         }
         catch (Exception ex)
         {

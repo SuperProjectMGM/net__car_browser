@@ -14,5 +14,5 @@ public interface IRentalInterface
 
     //public Task<Rental> CreateRental(VehicleRentRequest request, string userId);
 
-    public Task RentalCompletion(string message);
+    public Task RentalCompletion(RentalMessage mess);
 }

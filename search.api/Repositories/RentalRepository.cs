@@ -106,13 +106,9 @@ public class RentalRepository : IRentalInterface
     }
 
     // TODO: we do this now!!!
-    public async Task RentalCompletion(string message)
+    public async Task RentalCompletion(RentalMessage mess)
     {
-        var rental = JsonConvert.DeserializeObject<Rental>(message);
-        if (rental is null)
-            throw new Exception("Error deserializing message.");
-
-        var dbRental = await _context.Rentals.FirstOrDefaultAsync(x => x.Vin == rental.Vin);
+        var dbRental = await _context.Rentals.FirstOrDefaultAsync(x => x.Vin == mess.Vin);
         if (dbRental is null)
             throw new Exception("There is no such rental in DB");
 

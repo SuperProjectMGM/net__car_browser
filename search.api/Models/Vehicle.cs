@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.InteropServices.JavaScript;
 using search.api.Models;
 
@@ -14,7 +15,9 @@ public class Vehicle
     public string Transmission { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public string Type { get; set; } = string.Empty;
-    public decimal Rate { get; set; }
+    
+    [Column(TypeName = "money")]
+    public float Rate { get; set; }
     public string Localization { get; set; } = string.Empty;
     public int RentalFirmId { get; set; } 
 }
