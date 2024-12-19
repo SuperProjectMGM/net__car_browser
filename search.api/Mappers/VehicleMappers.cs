@@ -23,29 +23,32 @@ namespace search.api.Mappers
                 Type = dto.Type,
                 Rate = dto.Rate,
                 Localization = dto.Localization,
-                RentalFirmId = 0 // TODO: Uzupełnij dane RentalFirm, jeśli są dostępne !!! Musimy sięgnąć w database sprawdzić adres i dopasować
+                RentalFirmId = 0,
+                PhotoUrl = dto.PhotoUrl
+                // TODO: Uzupełnij dane RentalFirm, jeśli są dostępne !!! Musimy sięgnąć w database sprawdzić adres i dopasować
                 // TODO: !!! BARDZO WAzNE
             };
         }
 
-        //public static VehicleOurDto VehicleToVehicleOurDto(this Vehicle veh)
-        //{
-        //    return new VehicleOurDto
-        //    {
-        //        Brand = veh.Brand,
-        //        Model = veh.Model,
-        //        SerialNo = veh.SerialNo,
-        //        Vin = veh.Vin,
-        //        RegistryNo = veh.RegistryNo,
-        //        YearOfProduction = veh.YearOfProduction,
-        //        Price = veh.Price, 
-        //        DriveType = veh.DriveType,
-        //        Transmission = veh.Transmission,
-        //        Description = veh.Description,
-        //        Type = veh.Type,
-        //        Rate = veh.Rate,  
-        //        Localization = veh.Localization
-        //    };
-        //}
+        public static VehicleOurDto VehicleToVehicleOurDto(this Vehicle veh)
+        {
+            return new VehicleOurDto
+            {
+                Brand = veh.Brand,
+                Model = veh.Model,
+                SerialNo = veh.SerialNo,
+                Vin = veh.Vin,
+                RegistryNo = veh.RegistryNo,
+                YearOfProduction = veh.YearOfProduction,
+                Price = veh.Price, 
+                DriveType = veh.DriveType,
+                Transmission = veh.Transmission,
+                Description = veh.Description,
+                Type = veh.Type,
+                Rate = veh.Rate,  
+                Localization = veh.Localization,
+                PhotoUrl = veh.PhotoUrl
+            };
+        }
     }
 }
