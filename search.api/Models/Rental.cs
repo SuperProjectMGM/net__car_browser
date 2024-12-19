@@ -16,3 +16,10 @@ public class Rental
     public RentalStatus Status { get; set; }
     public string Description { get; set; } = string.Empty;
 }
+
+public enum RentalStatus
+{
+    Pending = 1,    // Rental request is pending
+    Confirmed = 2,  // Rental has been confirmed
+    Completed = 3,  // Rental has been completed
+}

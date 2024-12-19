@@ -4,10 +4,11 @@ namespace search.api.Models;
 
 public class RentalMessage
 {
+    public MessageType MessageType { get; set; }
+    
     public string Slug { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public string Surname { get; set; } = string.Empty;
-
     public string Email { get; set; } = string.Empty;
     public DateTime BirthDate { get; set; }
     public DateTime DrivingLicenseIssueDate { get; set; }
@@ -25,10 +26,9 @@ public class RentalMessage
 }
 
 
-public enum RentalStatus
+public enum MessageType
 {
-    Pending = 1,    // Rental request is pending
-    Confirmed = 2,  // Rental has been confirmed
-    Completed = 3,  // Rental has been completed
+    RentalMessageConfirmation = 0,
+    RentalMessageCompletion = 1,
+    ReceivedCancellationMessage = 2
 }
-    

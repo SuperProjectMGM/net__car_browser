@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using NanoidDotNet;
 using Newtonsoft.Json;
 using search.api.Data;
 using search.api.DTOs;
@@ -89,10 +90,10 @@ public class RentalRepository : IRentalInterface
     public async Task<Rental?> CompleteRentalAndSend(string email, int id, string username, int rentId)
     {
         var rental = await _context.Rentals.FirstOrDefaultAsync(x => x.Id == rentId);
-        if (rental is null)
+        if (rental == null)
             return null;
         var userDetails = await _authDbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
-        if (userDetails is null)
+        if (userDetails == null)
             return null;
 
         rental.Status = RentalStatus.Confirmed;
@@ -104,6 +105,7 @@ public class RentalRepository : IRentalInterface
         return rental;
     }
 
+    // TODO: we do this now!!!
     public async Task RentalCompletion(string message)
     {
         var rental = JsonConvert.DeserializeObject<Rental>(message);
@@ -118,7 +120,7 @@ public class RentalRepository : IRentalInterface
         if (user is null)
             throw new Exception("User invalid.");
 
-        dbRental.Status = rental.Status;
+        dbRental.Status = RentalStatus.Completed;
         await _context.SaveChangesAsync();
         await _emailService.SendRentalCompletionEmailAsync(user.Email!, user.UserName!, dbRental.Slug);
     }
@@ -135,6 +137,8 @@ public class RentalRepository : IRentalInterface
     {
         RentalMessage message = new RentalMessage
         {
+            MessageType = MessageType.RentalMessageConfirmation,
+            Slug = rental.Slug,
             Name = userDetails.Name!,
             Surname = userDetails.Surname!,
             BirthDate = userDetails.BirthDate,
