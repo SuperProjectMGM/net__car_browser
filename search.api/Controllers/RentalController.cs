@@ -81,9 +81,9 @@ public class RentalController : Controller
     }
 
     // TODO: zrobić to
-    [HttpGet("get-my-rentals")]
-    public async Task<IActionResult> MyRentals([FromQuery] int userId)
-    {
-        
-    }
+    // [HttpGet("get-my-rentals")]
+    // public async Task<IActionResult> MyRentals([FromQuery] int userId)
+    // {
+    //     
+    // }
 }
