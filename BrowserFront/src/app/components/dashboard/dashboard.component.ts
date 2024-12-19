@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CarsService } from '../../services/cars.service';
+import { CarsService } from '../../services/VehicleDetail.service';
 import { CarsListComponent } from '../cars-list/cars-list.component';
 import { CommonModule, Time } from '@angular/common';
 import { Router } from '@angular/router';

@@ -1,0 +1,193 @@
+.container {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .side-nav {
+    position: absolute;
+    left: 5px; /* Przesunięcie bliżej białego kontenera */
+    top: 130px; /* Przesunięcie w dół względem góry kontenera */
+    display: flex;
+    flex-direction: column;
+    gap: 85px;
+    z-index: 1;
+  
+    .side-button {
+      width: 120px;
+      height: 40px;
+      border: none;
+      background-color: #6c757d; /* Stonowany szary zamiast jaskrawego */
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      text-align: center;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtelny cień */
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  
+      /* Obrót o 90 stopni w lewo */
+      transform: rotate(-90deg);
+      transform-origin: left center;
+  
+      &:hover {
+        background-color: #5a6268; /* Ciemniejszy szary przy hover */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Delikatne powiększenie cienia */
+      }
+  
+      &.active {
+        background-color: #17a2b8; /* Aktywny przycisk – subtelny niebiesko-zielony */
+        color: #fff;
+      }
+    }
+  }
+  
+  
+  .form-container {
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    min-height: 800px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 10;
+  }
+  
+  .form-header {
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  .rentals-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 10px;
+  }
+  
+  .rental-item {
+    background: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+    .rental-details {
+      color: #333;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+  }
+  
+  .no-rentals {
+    text-align: center;
+    font-size: 16px;
+    color: #777;
+    margin-top: 20px;
+  }
+
+  .rental-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+  
+  .btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-return {
+    background-color: #466bba; /* Zielony dla zwrotu */
+    color: #fff;
+    margin-right: 10px;
+  }
+  
+  .btn-return:hover {
+    background-color: #3f5a94;
+  }
+  
+  .btn-cancel {
+    background-color: #dc3545; /* Czerwony dla anulowania */
+    color: #fff;
+  }
+  
+  .btn-cancel:hover {
+    background-color: #c82333;
+  }
+  
+
+  .modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Przyciemnienie tła */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background: #fff;
+    border-radius: 8px;
+    width: 400px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .modal-form label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+  }
+  
+  .modal-form input,
+  .modal-form textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .modal-actions {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .btn-confirm {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .btn-cancel {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .btn:hover {
+    opacity: 0.9;
+  }
+ 
+

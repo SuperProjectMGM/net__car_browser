@@ -5,6 +5,8 @@ import { UserProfile } from '../../models/UserProfile.model';
 
 @Component({
   selector: 'app-profile',
+  standalone: true,
+  imports: [],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
 })
@@ -44,5 +46,13 @@ export class ProfileComponent implements OnInit {
 
   GotoDashborad() {
     this.router.navigate(['/dashborad']);
+  }
+
+  goToProfile(): void {
+    console.log('znajdujesz sie na tej zakładce');
+  }
+
+  goToMyRentals(): void {
+    this.router.navigate(['/my-rentals']);
   }
 }

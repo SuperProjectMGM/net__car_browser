@@ -1,8 +1,49 @@
 .container {
+    position: relative;
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
   }
+
+  .side-nav {
+    position: absolute;
+    left: 5px; /* Przesunięcie bliżej białego kontenera */
+    top: 130px; /* Przesunięcie w dół względem góry kontenera */
+    display: flex;
+    flex-direction: column;
+    gap: 85px;
+    z-index: 1;
+  
+    .side-button {
+      width: 120px;
+      height: 40px;
+      border: none;
+      background-color: #6c757d; /* Stonowany szary zamiast jaskrawego */
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      text-align: center;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtelny cień */
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  
+      /* Obrót o 90 stopni w lewo */
+      transform: rotate(-90deg);
+      transform-origin: left center;
+  
+      &:hover {
+        background-color: #5a6268; /* Ciemniejszy szary przy hover */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Delikatne powiększenie cienia */
+      }
+  
+      &.active {
+        background-color: #17a2b8; /* Aktywny przycisk – subtelny niebiesko-zielony */
+        color: #fff;
+      }
+    }
+  }
+  
   
   .form-container {
     background: #fff;
@@ -10,6 +51,8 @@
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 10;
   }
   
   .form-header {
@@ -90,4 +133,5 @@
 .btn-third:hover {
     background: #218838; 
 }
-  
+ 
+
