@@ -132,14 +132,13 @@ public class RentalRepository : IRentalInterface
         return rentalModel;
     }
 
-    public async Task<bool> ReturnRental(int userId, int rentalId)
+    public async Task<bool> ReturnRental(string slug)
     {
-        var userDetails = await _authDbContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
-        if (userDetails == null)
-            return false;
-
-        var rental = await _context.Rentals.FirstOrDefaultAsync(x => x.Id == rentalId);
+        var rental = await _context.Rentals.FirstOrDefaultAsync((rental) => rental.Slug == slug);
         if (rental == null)
+            return false;
+        var userDetails = await _authDbContext.Users.FirstOrDefaultAsync(x => x.Id == rental!.UserId);
+        if (userDetails == null)
             return false;
 
         rental.Status = RentalStatus.WaitingForReturnAcceptance;

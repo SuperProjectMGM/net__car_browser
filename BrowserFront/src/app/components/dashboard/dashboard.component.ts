@@ -98,7 +98,7 @@ export class DashboardComponent {
       return (
         (!filters.price.length ||
           filters.price.some((p: string) =>
-            this.isPriceInRange(car.prize, p)
+            this.isPriceInRange(car.price, p)
           )) &&
         (!filters.driveType.length ||
           filters.driveType.includes(car.driveType)) &&

@@ -49,7 +49,7 @@ export class ViewDealComponent {
           new Date(this.pickupDateTime).getTime()
       );
       const days = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-      this.totalPrice = days * this.car.prize;
+      this.totalPrice = days * this.car.price;
     }
   }
 
@@ -87,6 +87,7 @@ export class ViewDealComponent {
   confirmRentCar(): void {
     this.isModalVisible = false; // Zamknij modal
     if (this.car) {
+      console.log(this.car.vin)
       this.authService
         .wantRentVehicle(this.car, this.pickupDateTime, this.returnDateTime)
         .subscribe(

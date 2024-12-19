@@ -3,6 +3,10 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Rental } from '../../models/RentalModel.model';
 import { FormsModule } from '@angular/forms';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+import { ProfileService } from '../../services/profile.service';
+import { isEmpty } from 'rxjs';
 
 @Component({
   selector: 'app-my-rentals',
@@ -13,6 +17,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class MyRentalsComponent implements OnInit {
   rentals: Rental[] = [];
+  baseUrl: string = environment.apiBaseUrl;
 
   isReturnModalVisible = false;
   isCancelModalVisible = false;
@@ -25,34 +30,37 @@ export class MyRentalsComponent implements OnInit {
   };
   cancelReason = '';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private client: HttpClient, private profile: ProfileService) {}
 
   ngOnInit(): void {
     this.fetchRentals();
   }
 
-  fetchRentals(): void {
-    // TODO: zrobic impelemetacje pobrania rezerwacji
-    this.rentals = [
-      {
-        car: 'Toyota Corolla',
-        startDate: '2024-04-01',
-        endDate: '2024-04-10',
-        status: 'W trakcie',
+  fetchRentals() {
+    this.profile.getUserProfile().subscribe({
+      next: (userProfile) => {
+        if (!userProfile.personalNumber) {
+          console.error('Personal number is missing from user profile!');
+          return;
+        }
+  
+        const params = new HttpParams().set('personalNumber', userProfile.personalNumber);
+        this.client.get<Rental[]>(`${this.baseUrl}/Rental/get-my-rentals`, { params })
+          .subscribe({
+            next: (rentals) => {
+              console.log('Fetched rentals:', rentals);
+              this.rentals = rentals;
+              console.log(rentals[0].status, typeof rentals[0].status )
+            },
+            error: (err) => {
+              console.error('Error fetching rentals:', err);
+            },
+          });
       },
-      {
-        car: 'Ford Focus',
-        startDate: '2024-03-20',
-        endDate: '2024-03-25',
-        status: 'Zakończone',
+      error: (err) => {
+        console.error('Error fetching user profile:', err);
       },
-      {
-        car: 'BMW 3 Series',
-        startDate: '2024-04-15',
-        endDate: '2024-04-20',
-        status: 'Nadchodzące',
-      },
-    ];
+    });
   }
 
   goToProfile(): void {
@@ -80,16 +88,26 @@ export class MyRentalsComponent implements OnInit {
   }
 
   confirmReturn(): void {
-    // TODO: wyslac zwrot
-    console.log('Dane zwrotu:', this.returnData);
-    console.log(`Samochód ${this.selectedRental.car} został zwrócony.`);
+    const params = new HttpParams().set('slug', this.selectedRental.slug);
+  
+    this.client.put(`${this.baseUrl}/Rental/return-rental`, null, { params })
+      .subscribe({
+        next: () => {
+          console.log('Dane zwrotu:', this.returnData);
+          console.log(`Samochód ${this.selectedRental.vin} został zwrócony.`);
+        },
+        error: (err) => {
+          console.error('Error return:', err);
+        },
+      });
     this.closeModal();
   }
 
+  
   confirmCancel(): void {
     // TODO: wyslac anulowanie rezerwacji
     console.log(
-      `Rezerwacja samochodu ${this.selectedRental.car} została anulowana.`
+      `Rezerwacja samochodu ${this.selectedRental.vin} została anulowana.`
     );
     console.log('Przyczyna rezygnacji:', this.cancelReason);
     this.closeModal();

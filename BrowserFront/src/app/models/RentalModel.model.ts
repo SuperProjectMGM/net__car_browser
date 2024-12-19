@@ -1,8 +1,10 @@
 export interface Rental {
-  car: string;
-  startDate: string;
-  endDate: string;
+  slug: string;
+  vin: string;
+  start: string;
+  end: string;
   status: string;
+  description: string;
 }
 
 //TODO: dodac logie interface-u

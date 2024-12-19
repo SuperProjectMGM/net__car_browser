@@ -13,16 +13,17 @@
       <div class="rentals-list" *ngIf="rentals.length > 0; else noRentals">
         <div class="rental-item" *ngFor="let rental of rentals">
           <div class="rental-details">
-            <p><strong>Samochód:</strong> {{ rental.car }}</p>
-            <p><strong>Data Wypożyczenia:</strong> {{ rental.startDate }}</p>
-            <p><strong>Data Zwrotu:</strong> {{ rental.endDate }}</p>
-            <p><strong>Status:</strong> {{ rental.status }}</p>
+            <p><strong>ID:</strong> {{ rental.slug }}</p>
+            <p><strong>Car vin:</strong> {{ rental.vin }}</p>
+            <p><strong>Start date:</strong> {{ rental.start }}</p>
+            <p><strong>End date:</strong> {{ rental.end }}</p>
+            <p><strong>Description:</strong> {{ rental.description}}</p>
           </div>
           <div class="rental-actions">
-            <button class="btn btn-return" *ngIf="rental.status === 'W trakcie'" (click)="openReturnModal(rental)">
+            <button class="btn btn-return" *ngIf="rental.status === 'Completed'" (click)="openReturnModal(rental)">
               Return Car
             </button>
-            <button class="btn btn-cancel" *ngIf="rental.status === 'Nadchodzące'" (click)="openCancelModal(rental)">
+            <button class="btn btn-cancel" *ngIf="rental.status === 'Confirmed'" (click)="openCancelModal(rental)">
               Cancel Reservation
             </button>
           </div>

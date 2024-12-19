@@ -16,7 +16,7 @@ public interface IRentalInterface
 
     public Task RentalCompletion(RentalMessage mess);
 
-    public Task<bool> ReturnRental(int userId, int rentalId);
+    public Task<bool> ReturnRental(string slug);
 
     public Task RentalReturnAccepted(RentalMessage mess);
     public Task<List<Rental>> ReturnUsersRentals(string personalNumber);

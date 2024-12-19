@@ -13,39 +13,37 @@ export class ProfileService {
 
   constructor(private http: HttpClient) {}
 
-  // TODO: endpoint Pobieranie danych użytkownika
-
+  
   getUserProfile(): Observable<UserProfile> {
     const token = localStorage.getItem('token');
-    if (token === null)
-    {
+    if (token === null) {
       return throwError(() => new Error('Error with jwt token'));
     }
+  
     const params = new HttpParams().set('token', token);
-    return this.http.get<UserProfile>(`${this.apiUrl}/UserInfo/user-info`, { params } ).pipe(
+    return this.http.get<UserProfile>(`${this.apiUrl}/UserInfo/user-info`, { params }).pipe(
       catchError((error) => {
         console.error('Error fetching user profile:', error);
         return of({
-          userName: '',
           email: '',
           phoneNumber: '',
           name: '',
           surname: '',
           birthDate: '',
           drivingLicenseNumber: '',
-          drivingLicenseIssueDate: '',
+          drivingLicenseIssueDate:'',
           drivingLicenseExpirationDate: '',
-          addressStreet: '',
           postalCode: '',
           city: '',
-          idPersonalNumber: '',
+          personalNumber: '',
           idCardIssuedBy: '',
           idCardIssueDate: '',
-          idCardExpirationDate: '',
+          idCardExpirationDate:'',
         } as UserProfile);
       })
     );
   }
+  
   
 
   updateUserProfile(user: UserProfile): Observable<any> {
@@ -88,47 +86,48 @@ export class ProfileService {
           phoneNumber: '',
           name: '',
           surname: '',
-          birthDate: '',
+          birthDate:'', 
           drivingLicenseNumber: '',
-          drivingLicenseIssueDate: '',
-          drivingLicenseExpirationDate: '',
-          addressStreet: '',
+          drivingLicenseIssueDate:'',
+          drivingLicenseExpirationDate:'',
+          streetAndNumber: '',
           postalCode: '',
           city: '',
-          idPersonalNumber: '',
+          personalNumber: '',
           idCardIssuedBy: '',
-          idCardIssueDate: '',
-          idCardExpirationDate: '',
+          idCardIssueDate:'',
+          idCardExpirationDate:'',
         } as UserProfile);
       }),
       map((profile: UserProfile) => {
+        // Lista wymaganych pól
         const requiredFields = [
           profile.name,
           profile.surname,
           profile.email,
           profile.phoneNumber,
-          profile.addressStreet,
+          profile.streetAndNumber,
           profile.postalCode,
           profile.city,
           profile.birthDate,
           profile.drivingLicenseNumber,
           profile.drivingLicenseIssueDate,
           profile.drivingLicenseExpirationDate,
-          profile.idPersonalNumber,
           profile.idCardIssuedBy,
           profile.idCardIssueDate,
           profile.idCardExpirationDate,
         ];
-  
         const isComplete = requiredFields.every((field) => {
           if (typeof field === 'string') {
             return field.trim() !== '';
           }
           return field !== null && field !== undefined;
         });
-  
+        
+        console.log(isComplete);
         return isComplete;
       })
     );
   }
+  
 }

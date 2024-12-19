@@ -1,17 +1,16 @@
-export class UserProfile {
-  userName?: string;
-  email?: string;
-  phoneNumber?: string; 
-  name?: string;
-  surname?: string;
+export interface UserProfile {
+  email: string;
+  phoneNumber: string;
+  name: string;
+  surname: string;
   birthDate?: string;
-  drivingLicenseNumber?: string;
+  drivingLicenseNumber: string;
   drivingLicenseIssueDate?: string;
   drivingLicenseExpirationDate?: string;
-  addressStreet?: string;
+  streetAndNumber?: string;
   postalCode?: string;
   city?: string;
-  idPersonalNumber?: string;
+  personalNumber?: string;
   idCardIssuedBy?: string;
   idCardIssueDate?: string;
   idCardExpirationDate?: string;
