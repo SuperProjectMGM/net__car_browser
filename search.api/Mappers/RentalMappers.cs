@@ -21,4 +21,17 @@ public static class RentalMappers
             Description = desc
         };
     }
+
+    public static RentalDTO ToRentalDTO(this Rental rental)
+    {
+        return new RentalDTO
+        {
+            Slug = rental.Slug,
+            Vin = rental.Vin,
+            Start = rental.Start,
+            End = rental.End,
+            Description = rental.Description,
+            Status = rental.Status.ToString()
+        };
+    }
 }

@@ -20,7 +20,7 @@ namespace search.api.Services
         // TODO: tu musimy daty przekazywac i pobierac juz samochody dla danego zakresu
         public async Task<SearchInfo> Search(DateTime start, DateTime end)
         {
-            var queryString = $"?start={start:yyyy-MM-dd}&end={end:yyyy-MM-dd}";
+            var queryString = $"?start={start:O}&end={end:O}";
             var response = await _client.GetAsync($"{BasePath}{queryString}");
             var listOfVehiclesDto = await response.ReadContentAsync<List<VehicleOurDto>>();
             // I don't know now how to manage Id from logged or authenticated user

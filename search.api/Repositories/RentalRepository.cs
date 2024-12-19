@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -34,14 +35,14 @@ public class RentalRepository : IRentalInterface
         _authDbContext = authDbContext;
     }
 
-    // TODO: delete rental if link expired or token invalid
-
+    
+    
+    // TODO: delete rental if link expired or token invalid!!!
     public async Task<bool> SendConfirmationEmail(string userEmail, string userName, int userId, string scheme,
         string host,
         VehicleRentRequest request)
     {
         // TODO: We have got do add some logic handling different vehicle providers
-
         var rentalModel = await CreateRental(request, userId);
         var token = _emailService.GenerateConfirmationRentToken(userEmail, userName, userId, rentalModel.Id,
             _configuration);
@@ -191,4 +192,10 @@ public class RentalRepository : IRentalInterface
         return message;
     }
 
+    public async Task<List<Rental>> ReturnUsersRentals(string personalNumber)
+    {
+        var user = await _authDbContext.Users.FirstOrDefaultAsync((user) => user.PersonalNumber == personalNumber);
+        int id = user!.Id;
+        return await _context.Rentals.Where((rent) => rent.UserId == id).ToListAsync();
+    }
 }

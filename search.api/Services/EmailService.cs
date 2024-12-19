@@ -89,7 +89,7 @@ public class EmailService : IEmailInterface
             issuer: configuration["JWT_ISSUER"],
             audience: configuration["JWT_AUDIENCE"],
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(10),
+            expires: DateTime.UtcNow.AddMinutes(30),
             signingCredentials: creds
         );
 

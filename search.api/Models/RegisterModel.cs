@@ -8,8 +8,8 @@ public class RegisterModel
     
     [Required(ErrorMessage = "Password is required!")]
     public string Password { get; set; } = string.Empty;
-    public string FirstName { get; set; } = string.Empty;
-    public string SecondName { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public string Surname { get; set; } = string.Empty;
     public string UserName { get; set; } = string.Empty;
     public string PhoneNumber { get; set; } = string.Empty;
     public string StreetAndNumber {get; set; } = string.Empty;

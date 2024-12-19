@@ -44,8 +44,8 @@ public class AuthenticateController: ControllerBase
             // TODO: mapper tu musi być
             Email = model.Email,
             UserName = model.UserName,
-            Name = model.FirstName,
-            Surname = model.SecondName,
+            Name = model.Name,
+            Surname = model.Surname,
             PhoneNumber = model.PhoneNumber,
             BirthDate = model.DateOfBirth,
             StreetAndNumber = model.StreetAndNumber,

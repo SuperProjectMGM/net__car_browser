@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using search.api.DTOs;
 using search.api.Interfaces;
+using search.api.Mappers;
 using search.api.Models;
 using search.api.Repositories;
 
@@ -80,10 +81,14 @@ public class RentalController : Controller
         return Ok();
     }
 
-    // TODO: zrobić to
-    // [HttpGet("get-my-rentals")]
-    // public async Task<IActionResult> MyRentals([FromQuery] int userId)
-    // {
-    //     
-    // }
+    [HttpGet("get-my-rentals")]
+    public async Task<IActionResult> MyRentals([FromQuery] string personalNumber)
+    {
+        var list = await _rentalRepo.ReturnUsersRentals(personalNumber);
+        if (list == null)
+        {
+            return NotFound("Error while finding rentals for user!");
+        }
+        return Ok(list.Select(element => element.ToRentalDTO()));
+    }
 }
