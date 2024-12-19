@@ -87,19 +87,21 @@ public class RentalRepository : IRentalInterface
         return (true, email, id, username, rentId);
     }
 
-    public async Task<Rental?> CompleteRentalAndSend(string email, int id, string username, int rentId)
+    public async Task<Rental?> CompleteRentalAndSend(int userId, int rentId)
     {
         var rental = await _context.Rentals.FirstOrDefaultAsync(x => x.Id == rentId);
         if (rental == null)
             return null;
-        var userDetails = await _authDbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+        var userDetails = await _authDbContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
         if (userDetails == null)
             return null;
 
         rental.Status = RentalStatus.Confirmed;
         await _context.SaveChangesAsync();
-        var message = CreateRentMessage(rental, userDetails, email);
-        var success = await _messageService.SendRentalMessage(message);
+        var message = CreateRentMessage(rental, userDetails);
+        message.MessageType = MessageType.RentalMessageConfirmation;
+        string jsonString = JsonSerializer.Serialize(message);
+        var success = await _messageService.SendMessage(jsonString);
         if (!success)
             return null;
         return rental;
@@ -129,11 +131,30 @@ public class RentalRepository : IRentalInterface
         return rentalModel;
     }
 
-    private string CreateRentMessage(Rental rental, UserDetails userDetails, string email)
+    public async Task<bool> ReturnRental(int userId, int rentalId)
+    {
+        var userDetails = await _authDbContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
+        if (userDetails == null)
+            return false;
+
+        var rental = await _context.Rentals.FirstOrDefaultAsync(x => x.Id == rentalId);
+        if (rental == null)
+            return false;
+
+        rental.Status = RentalStatus.WaitingForReturnAcceptance;
+        await _context.SaveChangesAsync();
+        var mess = CreateRentMessage(rental, userDetails);
+        mess.MessageType = MessageType.RentalToReturn;
+        var jsonStr = JsonSerializer.Serialize(mess);
+        var success = await _messageService.SendMessage(jsonStr);
+        return success;
+    }
+    
+    private RentalMessage CreateRentMessage(Rental rental, UserDetails userDetails)
     {
         RentalMessage message = new RentalMessage
         {
-            MessageType = MessageType.RentalMessageConfirmation,
+            //MessageType = MessageType.RentalMessageConfirmation,
             Slug = rental.Slug,
             Name = userDetails.Name!,
             Surname = userDetails.Surname!,
@@ -141,7 +162,7 @@ public class RentalRepository : IRentalInterface
             DrivingLicenseIssueDate = userDetails.DrivingLicenseIssueDate!,
             PersonalNumber = userDetails.PersonalNumber!,
             LicenseNumber = userDetails.DrivingLicenseNumber!,
-            Email = email,
+            Email = userDetails.Email!,
             City = userDetails.City,
             StreetAndNumber = userDetails.StreetAndNumber,
             PostalCode = userDetails.PostalCode,
@@ -153,9 +174,7 @@ public class RentalRepository : IRentalInterface
             Description = rental.Description
         };
 
-        string jsonString = JsonSerializer.Serialize(message);
-
-        return jsonString;
+        return message;
     }
 
 }

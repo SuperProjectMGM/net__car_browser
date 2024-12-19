@@ -19,7 +19,9 @@ public class Rental
 
 public enum RentalStatus
 {
-    Pending = 1,    // Rental request is pending
-    Confirmed = 2,  // Rental has been confirmed
-    Completed = 3,  // Rental has been completed
+    Pending = 1,  
+    Confirmed = 2, 
+    Completed = 3,
+    WaitingForReturnAcceptance = 4,
+    Returned = 5
 }

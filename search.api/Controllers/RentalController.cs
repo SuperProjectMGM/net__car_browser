@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Forms.Mapping;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using search.api.DTOs;
@@ -57,7 +58,7 @@ public class RentalController : Controller
             return BadRequest("Invalid or expired token.");
         }
 
-        var rental = await _rentalRepo.CompleteRentalAndSend(succeed.Item2, item3, succeed.Item4, item5);
+        var rental = await _rentalRepo.CompleteRentalAndSend(item3, item5);
 
         if (rental is null )
         {
@@ -65,5 +66,15 @@ public class RentalController : Controller
         }
 
         return View("RentalConfirm", new Tuple<Rental, string, string>(rental, succeed.Item2, succeed.Item4));
+    }
+
+    [HttpPut("return-rental")]
+    public async Task<IActionResult> ReturnRental([FromQuery] int userId, int rentId)
+    {
+        var success =  await _rentalRepo.ReturnRental(userId, rentId);
+        if (!success)
+            return NotFound("Something went wrong. :((");
+        
+        return Ok();
     }
 }

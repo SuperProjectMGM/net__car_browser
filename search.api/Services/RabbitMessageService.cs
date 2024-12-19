@@ -76,7 +76,7 @@ public class RabbitMessageService
         }
     }
 
-    public async Task<bool> SendRentalMessage(string message)
+    public async Task<bool> SendMessage(string message)
     {
         var encodedMes = Encoding.UTF8.GetBytes(message);
         var memoryBody = new ReadOnlyMemory<byte>(encodedMes);
