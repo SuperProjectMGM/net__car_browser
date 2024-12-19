@@ -17,5 +17,5 @@ public class UserDetails : IdentityUser<int>
     public string PersonalNumber { get; set; } = string.Empty;
     public string IdCardIssuedBy { get; set; } = string.Empty;
     public DateTime IdCardIssueDate { get; set; } 
-    public DateTime IdCardExpirationDate { get; set; } 
+    public DateTime IdCardExpirationDate { get; set; }
 }

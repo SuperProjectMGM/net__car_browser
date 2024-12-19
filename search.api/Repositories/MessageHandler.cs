@@ -3,7 +3,7 @@ using search.api.Interfaces;
 using search.api.Models;
 namespace search.api.Repositories;
 
-public class MessageHandler
+public class MessageHandler : IMessageHandler
 {
     private IRentalInterface _rentalRepo;
     
@@ -21,6 +21,9 @@ public class MessageHandler
         {
             case MessageType.RentalMessageCompletion:
                 await _rentalRepo.RentalCompletion(mess);
+                break;
+            case MessageType.RentalAcceptedToReturn:
+                await _rentalRepo.RentalReturnAccepted(mess);
                 break;
         }
     }

@@ -17,6 +17,7 @@ namespace search.api.Controllers;
 public class RentalController : Controller
 {
     private readonly IRentalInterface _rentalRepo;
+
     public RentalController(IRentalInterface rentalRepo)
     {
         _rentalRepo = rentalRepo;
@@ -28,7 +29,7 @@ public class RentalController : Controller
     public async Task<IActionResult> RentCar([FromBody] VehicleRentRequest request)
     {
         var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
-        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!); 
+        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
         var userName = User.FindFirst(ClaimTypes.Name)?.Value;
 
         if (userEmail == null || userName == null)
@@ -36,14 +37,15 @@ public class RentalController : Controller
 
         var success = await _rentalRepo.SendConfirmationEmail(userEmail, userName, userId,
             Request.Scheme, Request.Host.ToString(), request);
-        
+
         if (!success)
         {
             return Unauthorized($"Something went wrong. {userEmail}, {userName}, {userId}");
         }
+
         return Ok();
     }
-    
+
     [AllowAnonymous]
     [HttpGet("confirm-rental")]
     public async Task<IActionResult> ConfirmRental([FromQuery] string token)
@@ -52,7 +54,7 @@ public class RentalController : Controller
 
         int item3 = int.Parse(succeed.Item3);
         int item5 = int.Parse(succeed.Item5);
-        
+
         if (!succeed.Item1)
         {
             return BadRequest("Invalid or expired token.");
@@ -60,7 +62,7 @@ public class RentalController : Controller
 
         var rental = await _rentalRepo.CompleteRentalAndSend(item3, item5);
 
-        if (rental is null )
+        if (rental is null)
         {
             return NotFound("Something went wrong :(");
         }
@@ -71,10 +73,17 @@ public class RentalController : Controller
     [HttpPut("return-rental")]
     public async Task<IActionResult> ReturnRental([FromQuery] int userId, int rentId)
     {
-        var success =  await _rentalRepo.ReturnRental(userId, rentId);
+        var success = await _rentalRepo.ReturnRental(userId, rentId);
         if (!success)
             return NotFound("Something went wrong. :((");
-        
+
         return Ok();
     }
+
+    // TODO: zrobić to
+    // [HttpGet("get-my-rentals")]
+    // public async Task<IActionResult> MyRentals([FromQuery] int userId)
+    // {
+    //     
+    // }
 }
