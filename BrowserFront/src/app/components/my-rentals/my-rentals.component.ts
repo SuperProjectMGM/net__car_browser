@@ -30,7 +30,11 @@ export class MyRentalsComponent implements OnInit {
   };
   cancelReason = '';
 
-  constructor(private router: Router, private client: HttpClient, private profile: ProfileService) {}
+  constructor(
+    private router: Router,
+    private client: HttpClient,
+    private profile: ProfileService
+  ) {}
 
   ngOnInit(): void {
     this.fetchRentals();
@@ -43,14 +47,18 @@ export class MyRentalsComponent implements OnInit {
           console.error('Personal number is missing from user profile!');
           return;
         }
-  
-        const params = new HttpParams().set('personalNumber', userProfile.personalNumber);
-        this.client.get<Rental[]>(`${this.baseUrl}/Rental/get-my-rentals`, { params })
+
+        const params = new HttpParams().set(
+          'personalNumber',
+          userProfile.personalNumber
+        );
+        this.client
+          .get<Rental[]>(`${this.baseUrl}/Rental/get-my-rentals`, { params })
           .subscribe({
             next: (rentals) => {
               console.log('Fetched rentals:', rentals);
               this.rentals = rentals;
-              console.log(rentals[0].status, typeof rentals[0].status )
+              console.log(rentals[0].status, typeof rentals[0].status);
             },
             error: (err) => {
               console.error('Error fetching rentals:', err);
@@ -89,8 +97,9 @@ export class MyRentalsComponent implements OnInit {
 
   confirmReturn(): void {
     const params = new HttpParams().set('slug', this.selectedRental.slug);
-  
-    this.client.put(`${this.baseUrl}/Rental/return-rental`, null, { params })
+
+    this.client
+      .put(`${this.baseUrl}/Rental/return-rental`, null, { params })
       .subscribe({
         next: () => {
           console.log('Dane zwrotu:', this.returnData);
@@ -103,7 +112,6 @@ export class MyRentalsComponent implements OnInit {
     this.closeModal();
   }
 
-  
   confirmCancel(): void {
     // TODO: wyslac anulowanie rezerwacji
     console.log(
@@ -111,5 +119,39 @@ export class MyRentalsComponent implements OnInit {
     );
     console.log('Przyczyna rezygnacji:', this.cancelReason);
     this.closeModal();
+  }
+
+  getStatusText(status: string): string {
+    switch (status) {
+      case 'Pending':
+        return 'Pending Approval';
+      case 'Confirmed':
+        return 'Confirmed';
+      case 'Completed':
+        return 'Completed';
+      case 'WaitingForReturnAcceptance':
+        return 'Waiting for Return Acceptance';
+      case 'Returned':
+        return 'Returned';
+      default:
+        return 'Unknown';
+    }
+  }
+
+  getStatusClass(status: string): string {
+    switch (status) {
+      case 'Pending':
+        return 'status-pending';
+      case 'Confirmed':
+        return 'status-confirmed';
+      case 'Completed':
+        return 'status-completed';
+      case 'WaitingForReturnAcceptance':
+        return 'status-waiting';
+      case 'Returned':
+        return 'status-returned';
+      default:
+        return 'status-unknown';
+    }
   }
 }
