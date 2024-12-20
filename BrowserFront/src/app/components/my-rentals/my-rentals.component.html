@@ -1,73 +1,93 @@
 <div class="container">
-    <!-- Przyciski Zakładek -->
-    <div class="side-nav">
-      <button class="side-button" (click)="goToProfile()">Profile</button>
-      <button class="side-button active" (click)="goToMyRentals()">My Rentals</button>
-    </div>
-  
-    <!-- Główna Treść Strony -->
-    <div class="form-container">
-      <h1 class="form-header">My Rentals</h1>
-  
-      <!-- Lista Rezerwacji -->
-      <div class="rentals-list" *ngIf="rentals.length > 0; else noRentals">
-        <div class="rental-item" *ngFor="let rental of rentals">
-          <div class="rental-details">
-            <p><strong>ID:</strong> {{ rental.slug }}</p>
-            <p><strong>Car vin:</strong> {{ rental.vin }}</p>
-            <p><strong>Start date:</strong> {{ rental.start }}</p>
-            <p><strong>End date:</strong> {{ rental.end }}</p>
-            <p><strong>Description:</strong> {{ rental.description}}</p>
+  <!-- Przyciski Zakładek -->
+  <div class="side-nav">
+    <button class="side-button" (click)="goToProfile()">Profile</button>
+    <button class="side-button active" (click)="goToMyRentals()">My Rentals</button>
+  </div>
+
+  <!-- Główna Treść Strony -->
+  <div class="form-container">
+    <h1 class="form-header">My Rentals</h1>
+
+    <!-- Lista Rezerwacji -->
+    <div class="rentals-list" *ngIf="rentals.length > 0; else noRentalsTemplate">
+      <div class="rental-item" *ngFor="let rental of rentals">
+        <div class="rental-card">
+          <div class="rental-header">
+            <h3 class="rental-id">Rental ID: {{ rental.slug }}</h3>
+            <span class="status-label" [ngClass]="getStatusClass(rental.status)">
+              {{ getStatusText(rental.status) }}
+            </span>
+          </div>
+          <div class="rental-body">
+            <div class="info-row">
+              <span><strong>Car VIN:</strong></span> {{ rental.vin }}
+            </div>
+            <div class="info-row">
+              <span><strong>Start Date:</strong></span> {{ rental.start | date: 'dd/MM/yyyy' }}
+            </div>
+            <div class="info-row">
+              <span><strong>End Date:</strong></span> {{ rental.end | date: 'dd/MM/yyyy' }}
+            </div>
+            <div class="info-row">
+              <span><strong>Description:</strong></span> {{ rental.description }}
+            </div>
           </div>
           <div class="rental-actions">
-            <button class="btn btn-return" *ngIf="rental.status === 'Completed'" (click)="openReturnModal(rental)">
+            <!-- Wyświetlanie przycisków w zależności od statusu -->
+            <button
+              class="btn btn-return"
+              *ngIf="rental.status === 'Completed'"
+              (click)="openReturnModal(rental)">
               Return Car
             </button>
-            <button class="btn btn-cancel" *ngIf="rental.status === 'Confirmed'" (click)="openCancelModal(rental)">
+            <button
+              class="btn btn-cancel"
+              *ngIf="rental.status === 'Pending' || rental.status === 'Confirmed'"
+              (click)="openCancelModal(rental)">
               Cancel Reservation
             </button>
           </div>
         </div>
       </div>
-  
-      <!-- Modal Zwrotu Samochodu -->
-      <div class="modal-backdrop" *ngIf="isReturnModalVisible">
-        <div class="modal-content">
-          <h3>Return Confirmation</h3>
-          <div class="modal-form">
-            <label>Latitude:</label>
-            <input type="text" [(ngModel)]="returnData.latitude" placeholder="Enter car latitude" />
-            <label>Longitude:</label>
-            <input type="text" [(ngModel)]="returnData.longitude" placeholder="Enter car longitude" />
-            <label>Feedback:</label>
-            <textarea [(ngModel)]="returnData.feedback" placeholder="Your opinion"></textarea>
-          </div>
-          <div class="modal-actions">
-            <button class="btn btn-confirm" (click)="confirmReturn()">Confirm Return</button>
-            <button class="btn btn-cancel" (click)="closeModal()">Cancel</button>
-          </div>
-        </div>
-      </div>
-  
-      <!-- Modal Anulowania Rezerwacji -->
-      <div class="modal-backdrop" *ngIf="isCancelModalVisible">
-        <div class="modal-content">
-          <h3>Cancel Reservation</h3>
-          <div class="modal-form">
-            <label>Reason for Cancellation:</label>
-            <textarea [(ngModel)]="cancelReason" placeholder="Enter cancellation reason"></textarea>
-          </div>
-          <div class="modal-actions">
-            <button class="btn btn-confirm" (click)="confirmCancel()">Confirm Cancellation</button>
-            <button class="btn btn-cancel" (click)="closeModal()">Cancel</button>
-          </div>
-        </div>
-      </div>
-  
-      <!-- Brak Rezerwacji -->
-      <ng-template #noRentals>
-        <p class="no-rentals">Brak rezerwacji.</p>
-      </ng-template>
     </div>
+
+    <!-- Modals -->
+    <div class="modal-backdrop" *ngIf="isReturnModalVisible">
+      <div class="modal-content">
+        <h3>Return Confirmation</h3>
+        <div class="modal-form">
+          <label>Latitude:</label>
+          <input type="text" [(ngModel)]="returnData.latitude" placeholder="Enter car latitude" />
+          <label>Longitude:</label>
+          <input type="text" [(ngModel)]="returnData.longitude" placeholder="Enter car longitude" />
+          <label>Feedback:</label>
+          <textarea [(ngModel)]="returnData.feedback" placeholder="Your opinion"></textarea>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-confirm" (click)="confirmReturn()">Confirm Return</button>
+          <button class="btn btn-cancel" (click)="closeModal()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" *ngIf="isCancelModalVisible">
+      <div class="modal-content">
+        <h3>Cancel Reservation</h3>
+        <div class="modal-form">
+          <label>Reason for Cancellation:</label>
+          <textarea [(ngModel)]="cancelReason" placeholder="Enter cancellation reason"></textarea>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-confirm" (click)="confirmCancel()">Confirm Cancellation</button>
+          <button class="btn btn-cancel" (click)="closeModal()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Rentals -->
+    <ng-template #noRentalsTemplate>
+      <p class="no-rentals">No rentals found.</p>
+    </ng-template>
   </div>
-  
+</div>
