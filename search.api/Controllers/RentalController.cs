@@ -2,10 +2,12 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Forms.Mapping;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using search.api.DTOs;
 using search.api.Interfaces;
+using search.api.Mappers;
 using search.api.Models;
 using search.api.Repositories;
 
@@ -16,53 +18,77 @@ namespace search.api.Controllers;
 public class RentalController : Controller
 {
     private readonly IRentalInterface _rentalRepo;
+
     public RentalController(IRentalInterface rentalRepo)
     {
         _rentalRepo = rentalRepo;
     }
 
     [Authorize]
-    // Moje pomysly to syf, nie udalo mi sie. Trza poprawic
     //[Authorize(Policy = "DrivingLicenseRequired")]
     [HttpPost("rent-car")]
     public async Task<IActionResult> RentCar([FromBody] VehicleRentRequest request)
     {
         var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
-        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value; 
+        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
         var userName = User.FindFirst(ClaimTypes.Name)?.Value;
+
+        if (userEmail == null || userName == null)
+            return BadRequest("Invalid user credentials");
 
         var success = await _rentalRepo.SendConfirmationEmail(userEmail, userName, userId,
             Request.Scheme, Request.Host.ToString(), request);
-        
+
         if (!success)
         {
             return Unauthorized($"Something went wrong. {userEmail}, {userName}, {userId}");
         }
-        else
-        {
-            //return View("RentalEmailSent", $"An email has been sent to {userEmail}");
-            return Ok();
-        }
+
+        return Ok();
     }
-    
+
     [AllowAnonymous]
     [HttpGet("confirm-rental")]
     public async Task<IActionResult> ConfirmRental([FromQuery] string token)
     {
         var succeed = _rentalRepo.ValidateRentalConfirmationToken(token);
-        
+
+        int item3 = int.Parse(succeed.Item3);
+        int item5 = int.Parse(succeed.Item5);
+
         if (!succeed.Item1)
         {
             return BadRequest("Invalid or expired token.");
         }
 
-        var tuple = await _rentalRepo.CompleteRentalAndSend(succeed.Item2, succeed.Item3, succeed.Item4, succeed.Item5);
+        var rental = await _rentalRepo.CompleteRentalAndSend(item3, item5);
 
-        if (tuple.Item1 is null || tuple.Item2 is null)
+        if (rental is null)
         {
-            return NotFound($"{tuple.Item1}, {tuple.Item2}");
+            return NotFound("Something went wrong :(");
         }
 
-        return View("RentalConfirm", new Tuple<Rental, string, string, RentalFirm>(tuple.Item1, succeed.Item2, succeed.Item4, tuple.Item2));
+        return View("RentalConfirm", new Tuple<Rental, string, string>(rental, succeed.Item2, succeed.Item4));
+    }
+
+    [HttpPut("return-rental")]
+    public async Task<IActionResult> ReturnRental([FromQuery] string slug)
+    {
+        var success = await _rentalRepo.ReturnRental(slug);
+        if (!success)
+            return NotFound("Something went wrong. :((");
+
+        return Ok();
+    }
+
+    [HttpGet("get-my-rentals")]
+    public async Task<IActionResult> MyRentals([FromQuery] string personalNumber)
+    {
+        var list = await _rentalRepo.ReturnUsersRentals(personalNumber);
+        if (list == null)
+        {
+            return NotFound("Error while finding rentals for user!");
+        }
+        return Ok(list.Select(element => element.ToRentalDTO()));
     }
 }

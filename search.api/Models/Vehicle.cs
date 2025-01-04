@@ -1,24 +1,24 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.InteropServices.JavaScript;
 using search.api.Models;
 
 public class Vehicle
 {
-    public string CarId { get; set; } = "";
-    public string Brand { get; set; } = "";
-    public string Model { get; set; } = "";
-    public string SerialNo { get; set; } = "";
-    public string VinId { get; set; } = "";
-    public string RegistryNo { get; set; } = "";
+    public string Brand { get; set; } = string.Empty;
+    public string Model { get; set; } = string.Empty;
+    public string SerialNo { get; set; } = string.Empty;
+    public string Vin { get; set; } = string.Empty;
+    public string RegistryNo { get; set; } = string.Empty;
     public int YearOfProduction { get; set; }
-    public DateTime RentalFrom { get; set; }
-    public DateTime RentalTo { get; set; }
-    public decimal Prize { get; set; }
-    public string DriveType { get; set; } = "";
-    public string Transmission { get; set; } = "";
-    public string Description { get; set; } = "";
-    public string Type { get; set; } = "";
-    public decimal Rate { get; set; }
-    public string Localization { get; set; } = "";
+    public decimal Price { get; set; }
+    public string DriveType { get; set; } = string.Empty;
+    public string Transmission { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
+    public string Type { get; set; } = string.Empty;
     
-    public string RentalFirmId { get; set; } = string.Empty;
+    [Column(TypeName = "money")]
+    public float Rate { get; set; }
+    public string Localization { get; set; } = string.Empty;
+    public int RentalFirmId { get; set; } 
+    public string PhotoUrl { get; set; } = string.Empty;
 }

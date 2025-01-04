@@ -21,13 +21,11 @@ namespace search.api.Controllers;
 public class AuthenticateController: ControllerBase
 {
     private readonly UserManager<UserDetails> _userManager;
-    private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IConfiguration _configuration;
 
-    public AuthenticateController(UserManager<UserDetails> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+    public AuthenticateController(UserManager<UserDetails> userManager, IConfiguration configuration)
     {
         _userManager = userManager;
-        _roleManager = roleManager;
         _configuration = configuration;
     }
 
@@ -43,19 +41,20 @@ public class AuthenticateController: ControllerBase
         }
         UserDetails user = new () 
         {
+            // TODO: mapper tu musi być
             Email = model.Email,
             UserName = model.UserName,
-            Name = model.FirstName,
-            Surname = model.SecondName,
+            Name = model.Name,
+            Surname = model.Surname,
             PhoneNumber = model.PhoneNumber,
             BirthDate = model.DateOfBirth,
-            AddressStreet = model.AddressStreet,
+            StreetAndNumber = model.StreetAndNumber,
             PostalCode = model.PostalCode,
             City = model.City,
             DrivingLicenseNumber = model.DrivingLicenseNumber,
             DrivingLicenseIssueDate = model.DrivingLicenseIssueDate,
             DrivingLicenseExpirationDate = model.DrivingLicenseExpirationDate,
-            IdPersonalNumber = model.IdCardNumber,
+            PersonalNumber = model.PersonalNumber,
             IdCardIssuedBy = model.IdCardIssuedBy,
             IdCardIssueDate = model.IdCardIssueDate,
             IdCardExpirationDate = model.IdCardExpirationDate,
@@ -83,7 +82,7 @@ public class AuthenticateController: ControllerBase
             {
                 new Claim(ClaimTypes.Name, user.UserName!),
                 new Claim(ClaimTypes.Email, user.Email!),
-                new Claim(ClaimTypes.NameIdentifier, user.Id!),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()!),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
             foreach (var userRole in userRoles)
@@ -132,7 +131,7 @@ public class AuthenticateController: ControllerBase
         {
             new Claim(ClaimTypes.Name, user.UserName!),
             new Claim(ClaimTypes.Email, user.Email!),
-            new Claim(ClaimTypes.NameIdentifier, user.Id!),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()!),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
         var token = GetToken(authClaims);

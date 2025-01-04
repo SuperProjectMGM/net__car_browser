@@ -3,15 +3,14 @@ export class VehicleDetail {
   brand: string = '';
   model: string = '';
   serialNo: string = '';
-  vinId: string = '';
+  vin: string = '';
   yearOfProduction: number = 0;
-  rentalFrom: Date = new Date();
-  rentalTo: Date = new Date();
-  prize: number = 0.0;
+  price: number = 0.0;
   driveType: string = '';
   transmission: string = '';
   description: string = '';
   type: string = '';
   rate: number = 0.0;
   localization: string = '';
+  photoUrl: string = '';
 }
