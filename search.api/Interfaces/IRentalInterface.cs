@@ -5,14 +5,19 @@ namespace search.api.Interfaces;
 
 public interface IRentalInterface
 {
-    public Task<bool> SendConfirmationEmail(string userEmail, string userName, string userId, string scheme, string host,
+    public Task<bool> SendConfirmationEmail(string userEmail, string userName, int userId, string scheme, string host,
                                             VehicleRentRequest request);
 
     public (bool, string, string, string, string) ValidateRentalConfirmationToken(string token);
 
-    public Task<(Rental?, RentalFirm?)> CompleteRentalAndSend(string email, string id, string username, string rentId);
+    public Task<Rental?> CompleteRentalAndSend(int userId, int rentId);
 
     //public Task<Rental> CreateRental(VehicleRentRequest request, string userId);
 
-    public Task RentalCompletion(string message);
+    public Task RentalCompletion(RentalMessage mess);
+
+    public Task<bool> ReturnRental(string slug);
+
+    public Task RentalReturnAccepted(RentalMessage mess);
+    public Task<List<Rental>> ReturnUsersRentals(string personalNumber);
 }

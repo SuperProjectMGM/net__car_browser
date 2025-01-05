@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
@@ -7,10 +6,10 @@ name: Build and deploy ASP.Net Core app to Azure Web App - BrowserAPI
 on:
   push:
     branches:
-      - main
+      - deployment
   pull_request:
     branches:
-      - main
+      - deployment
   workflow_dispatch:
 
 jobs:
@@ -52,12 +51,12 @@ jobs:
       - name: Install Entity Framework Core Tools
         run: dotnet tool install --global dotnet-ef
 
-      - name: Run EF Core Migrations Classes
+      - name: Run EF Core Migrations AppDbContext
         env:
           ConnectionStrings__DefaultConnection: ${{ secrets.AZURE_SQL_CONNECTION_STRING }}
         run: dotnet ef database update --project search.api --connection ${{ secrets.AZURE_SQL_CONNECTION_STRING }} --context AppDbContext
       
-      - name: Run EF Core Migrations For identity
+      - name: Run EF Core Migrations AuthDbContext
         env:
           ConnectionStrings__DefaultConnection: ${{ secrets.AZURE_SQL_CONNECTION_STRING }}
         run: dotnet ef database update --project search.api --connection ${{ secrets.AZURE_SQL_CONNECTION_STRING }} --context AuthDbContext
@@ -93,100 +92,3 @@ jobs:
           app-name: 'BrowserAPI'
           slot-name: 'Production'
           package: .
-=======
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
-name: Build and deploy ASP.Net Core app to Azure Web App - BrowserAPI
-
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-  workflow_dispatch:
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.x'
-
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
-
-      - name: dotnet publish
-        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/BrowserApi"
-
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v4
-        with:
-          name: .net-app
-          path: "${{env.DOTNET_ROOT}}/BrowserApi"
-          
-  migrate-database:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:    
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v2
-        with:
-          dotnet-version: '8.x'
-
-      - name: Install Entity Framework Core Tools
-        run: dotnet tool install --global dotnet-ef
-
-      - name: Run EF Core Migrations Classes
-        env:
-          ConnectionStrings__DefaultConnection: ${{ secrets.AZURE_SQL_CONNECTION_STRING }}
-        run: dotnet ef database update --project search.api --connection ${{ secrets.AZURE_SQL_CONNECTION_STRING }} --context AppDbContext
-      
-      - name: Run EF Core Migrations For identity
-        env:
-          ConnectionStrings__DefaultConnection: ${{ secrets.AZURE_SQL_CONNECTION_STRING }}
-        run: dotnet ef database update --project search.api --connection ${{ secrets.AZURE_SQL_CONNECTION_STRING }} --context AuthDbContext
-
-          
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: [build, migrate-database]
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    permissions:
-      id-token: write #This is required for requesting the JWT
-
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v4
-        with:
-          name: .net-app
-      
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_EF368EBAE41442A9A0E4463DA3ECD76E }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_71BFD7E6354143448AEDD49D7B6543CC }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_250E71FD19F5425AB31A8D344EED4C5E }}
-
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: 'BrowserAPI'
-          slot-name: 'Production'
-          package: .
-          
->>>>>>> 5fc086e23be154686c308ce06bac4d41af9d4d24

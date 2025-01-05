@@ -53,7 +53,7 @@ export class AuthService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
     const vehicleRentRequest = {
-      vehicleVin: car.vinId,        
+      vehicleVin: car.vin,        
       rentalFirmId: '1',  // TODO: zrobić wybieranie firmy          
       start: pickupDateTime,        
       end: returnDateTime,          

@@ -6,19 +6,19 @@ public static class UserMappers
     {
         return new UserDto
         {
-            UserName = userDetails.UserName,
-            Email = userDetails.Email,
-            PhoneNumber = userDetails.PhoneNumber,
+            UserName = userDetails.UserName!,
+            Email = userDetails.Email!,
+            PhoneNumber = userDetails.PhoneNumber!,
             Name = userDetails.Name,
             Surname = userDetails.Surname,
             BirthDate = userDetails.BirthDate,
             DrivingLicenseNumber = userDetails.DrivingLicenseNumber,
             DrivingLicenseIssueDate = userDetails.DrivingLicenseIssueDate,
             DrivingLicenseExpirationDate = userDetails.DrivingLicenseExpirationDate,
-            AddressStreet = userDetails.AddressStreet,
+            StreetAndNumber = userDetails.StreetAndNumber,
             PostalCode = userDetails.PostalCode,
             City = userDetails.City,
-            IdPersonalNumber = userDetails.IdPersonalNumber,
+            PersonalNumber = userDetails.PersonalNumber,
             IdCardIssuedBy = userDetails.IdCardIssuedBy,
             IdCardIssueDate = userDetails.IdCardIssueDate,
             IdCardExpirationDate = userDetails.IdCardExpirationDate
@@ -39,10 +39,10 @@ public static class UserMappers
             DrivingLicenseNumber = userDto.DrivingLicenseNumber,
             DrivingLicenseIssueDate = userDto.DrivingLicenseIssueDate,
             DrivingLicenseExpirationDate = userDto.DrivingLicenseExpirationDate,
-            AddressStreet = userDto.AddressStreet,
+            StreetAndNumber = userDto.StreetAndNumber,
             PostalCode = userDto.PostalCode,
             City = userDto.City,
-            IdPersonalNumber = userDto.IdPersonalNumber,
+            PersonalNumber = userDto.PersonalNumber,
             IdCardIssuedBy = userDto.IdCardIssuedBy,
             IdCardIssueDate = userDto.IdCardIssueDate,
             IdCardExpirationDate = userDto.IdCardExpirationDate
@@ -60,10 +60,10 @@ public static class UserMappers
         user.DrivingLicenseNumber = userDto.DrivingLicenseNumber;
         user.DrivingLicenseIssueDate = userDto.DrivingLicenseIssueDate;
         user.DrivingLicenseExpirationDate = userDto.DrivingLicenseExpirationDate;
-        user.AddressStreet = userDto.AddressStreet;
+        user.StreetAndNumber = userDto.StreetAndNumber;
         user.PostalCode = userDto.PostalCode;
         user.City = userDto.City;
-        user.IdPersonalNumber = userDto.IdPersonalNumber;
+        user.PersonalNumber = userDto.PersonalNumber;
         user.IdCardIssuedBy = userDto.IdCardIssuedBy;
         user.IdCardIssueDate = userDto.IdCardIssueDate;
         user.IdCardExpirationDate = userDto.IdCardExpirationDate;

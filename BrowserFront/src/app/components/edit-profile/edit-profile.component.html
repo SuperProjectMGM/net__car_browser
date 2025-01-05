@@ -1,6 +1,7 @@
 <div class="container">
   <div class="form-container">
     <h1 class="form-header">Edit Profile</h1>
+    <div *ngIf="user">
     <form class="profile-form" (ngSubmit)="onSubmit()" #editProfileForm="ngForm">
 
       <!-- Basic Information -->
@@ -12,7 +13,7 @@
             <input
               type="text"
               class="form-control"
-              [(ngModel)]="user.firstName"
+              [(ngModel)]="user.name"
               name="firstName"
               required
             />
@@ -22,7 +23,7 @@
             <input
               type="text"
               class="form-control"
-              [(ngModel)]="user.secondName"
+              [(ngModel)]="user.surname"
               name="secondName"
               required
             />
@@ -48,8 +49,8 @@
             <input
               type="text"
               class="form-control"
-              [(ngModel)]="user.addressStreet"
-              name="addressStreet"
+              [(ngModel)]="user.streetAndNumber"
+              name="streetAndNumber"
             />
           </div>
           <div class="form-group">
@@ -82,7 +83,7 @@
             <input
               type="date"
               class="form-control"
-              [(ngModel)]="user.dateOfBirth"
+              [(ngModel)]="user.birthDate"
               name="dateOfBirth"
             />
           </div>
@@ -148,7 +149,7 @@
           </div>
         </div>
       </div>
-
+    
       <!-- Buttons -->
       <div class="submit-section">
         <button class="btn btn-primary" type="submit" (click)="onSubmit()">Save Changes</button>
@@ -156,4 +157,5 @@
       </div>
     </form>
   </div>
+</div>
 </div>

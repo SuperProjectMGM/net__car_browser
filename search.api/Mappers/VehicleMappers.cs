@@ -10,23 +10,22 @@ namespace search.api.Mappers
         {
             return new Vehicle
             {
-                CarId = dto.CarId,
                 Brand = dto.Brand,
                 Model = dto.Model,
                 SerialNo = dto.SerialNo,
-                VinId = dto.VinId,
+                Vin = dto.Vin,
                 RegistryNo = dto.RegistryNo,
-                YearOfProduction = dto.YearOfProduction,  // Zmienna jest już typu int
-                RentalFrom = dto.RentalFrom,  // Zmienna jest już typu DateTime
-                RentalTo = dto.RentalTo,  // Zmienna jest już typu DateTime
-                Prize = dto.Prize,  // Zmienna jest już typu decimal
+                YearOfProduction = dto.YearOfProduction, 
+                Price = dto.Price,
                 DriveType = dto.DriveType,
                 Transmission = dto.Transmission,
                 Description = dto.Description,
                 Type = dto.Type,
-                Rate = dto.Rate,  // Zmienna jest już typu decimal
+                Rate = dto.Rate,
                 Localization = dto.Localization,
-                RentalFirmId = "" // TODO: Uzupełnij dane RentalFirm, jeśli są dostępne !!! Musimy sięgnąć w database sprawdzić adres i dopasować
+                RentalFirmId = 0,
+                PhotoUrl = dto.PhotoUrl
+                // TODO: Uzupełnij dane RentalFirm, jeśli są dostępne !!! Musimy sięgnąć w database sprawdzić adres i dopasować
                 // TODO: !!! BARDZO WAzNE
             };
         }
@@ -35,22 +34,20 @@ namespace search.api.Mappers
         {
             return new VehicleOurDto
             {
-                CarId = veh.CarId,
                 Brand = veh.Brand,
                 Model = veh.Model,
                 SerialNo = veh.SerialNo,
-                VinId = veh.VinId,
+                Vin = veh.Vin,
                 RegistryNo = veh.RegistryNo,
-                YearOfProduction = veh.YearOfProduction,  // Zmienna jest już typu int
-                RentalFrom = veh.RentalFrom,  // Zmienna jest już typu DateTime
-                RentalTo = veh.RentalTo,  // Zmienna jest już typu DateTime
-                Prize = veh.Prize,  // Zmienna jest już typu decimal
+                YearOfProduction = veh.YearOfProduction,
+                Price = veh.Price, 
                 DriveType = veh.DriveType,
                 Transmission = veh.Transmission,
                 Description = veh.Description,
                 Type = veh.Type,
-                Rate = veh.Rate,  // Zmienna jest już typu decimal
-                Localization = veh.Localization
+                Rate = veh.Rate,  
+                Localization = veh.Localization,
+                PhotoUrl = veh.PhotoUrl
             };
         }
     }
