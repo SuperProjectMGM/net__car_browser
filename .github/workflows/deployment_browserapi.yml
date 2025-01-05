@@ -6,10 +6,10 @@ name: Build and deploy ASP.Net Core app to Azure Web App - BrowserAPI
 on:
   push:
     branches:
-      - deployment
+      - main
   pull_request:
     branches:
-      - deployment
+      - main
   workflow_dispatch:
 
 jobs:
