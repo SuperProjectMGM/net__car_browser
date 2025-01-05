@@ -5,30 +5,25 @@
 namespace search.api.Migrations
 {
     /// <inheritdoc />
-    public partial class NewDB3test : Migration
+    public partial class SmallTemporaryChangeForRental : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<string>(
-                name: "VinId",
-                table: "Rentals",
-                type: "nvarchar(max)",
-                nullable: false,
-                oldClrType: typeof(int),
-                oldType: "int");
+            migrationBuilder.DropColumn(
+                name: "RentalFirmId",
+                table: "Rentals");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<int>(
-                name: "VinId",
+            migrationBuilder.AddColumn<int>(
+                name: "RentalFirmId",
                 table: "Rentals",
                 type: "int",
                 nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
+                defaultValue: 0);
         }
     }
 }

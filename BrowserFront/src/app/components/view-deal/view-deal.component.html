@@ -1,0 +1,79 @@
+<div class="deal-container" *ngIf="car">
+  <!-- Nagłówek -->
+  <h1 class="deal-header">Your deal</h1>
+
+  <!-- Zielony komunikat -->
+  <div class="free-cancellation">
+    <p>✅ Free cancellation up to 48 hours before pick-up</p>
+  </div>
+
+  <!-- Szczegóły główne -->
+  <div class="main-section">
+    <!-- Lewa sekcja: Szczegóły samochodu -->
+    <div class="car-summary">
+      <h2 class="top-pick">🚘{{ car.brand }} {{ car.model }}</h2>
+      <img src="assets/car-placeholder.png" alt="{{ car.brand }} {{ car.model }}" />
+      <ul>
+        <li>🚗 {{ car.type || 'N/A' }}</li>
+        <li>🛠 Transmission: {{ car.transmission }}</li>
+        <li>🛣 Drive Type: {{ car.driveType }}</li>
+        <li>📍 Location: {{ car.localization }}</li>
+        <li>✅ Guaranteed {{ car.yearOfProduction }} registered car model</li>
+      </ul>
+    </div>
+
+    <!-- Prawa sekcja: Szczegóły wynajmu -->
+    <div class="rental-summary">
+      <h3>Pick-up and drop-off</h3>
+      <p>📅 <strong>Pick-up:</strong> {{ pickupDateTime | date: 'EEE, dd MMM yyyy, HH:mm' }}</p>
+      <p>📅 <strong>Drop-off:</strong> {{ returnDateTime | date: 'EEE, dd MMM yyyy, HH:mm' }}</p>
+
+      <h3>Car price</h3>
+      <p>Car hire charge: <strong>{{ totalPrice }} zł</strong></p>
+      <p><strong>Price for 1 day:</strong> {{ car.price }} zł</p>
+    </div>
+  </div>
+
+  <!-- Zielony komunikat o cenie -->
+  <div class="price-highlight">
+    <p>
+      This car is costing you just <strong>{{ car.price }} zł</strong> – a real bargain... <br />
+      At that time of year, the average small car at {{ car.localization }} costs more.
+    </p>
+  </div>
+
+
+  <div class="checklist">
+    <h3>Your pick-up checklist</h3>
+    <ul>
+      <li>✅ Arrive on time</li>
+      <li>🛠 What to bring</li>
+      <li>💰 All costs is: <strong>{{ totalPrice }} zł</strong></li>
+      <li>Your pick-up time is <strong>{{ pickupDateTime | date: 'HH:mm' }}</strong></li>
+    </ul>
+  </div>
+
+  <!-- Przycisk wynajmu -->
+  <div class="action-buttons">
+    <button class="btn btn-rent" (click)="rentCar()">Rent Now</button>
+    <button class="btn btn-back" (click)="goToDashboard()">Go Back</button>
+  </div>
+</div>
+
+<!-- Modal okienko -->
+<div class="modal-backdrop" *ngIf="isModalVisible">
+  <div class="modal-content">
+    <h3>Confirm Reservation</h3>
+    <p>Are you sure you want to reserve this car?</p>
+    <p>We will send a confirmation email after your reservation.</p>
+    <div class="modal-actions">
+      <button class="btn btn-confirm" (click)="confirmRentCar()">Confirm</button>
+      <button class="btn btn-cancel" (click)="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Brak danych pojazdu -->
+<div class="no-data" *ngIf="!car">
+  <p>Sorry, no car details found. Please try again.</p>
+</div>

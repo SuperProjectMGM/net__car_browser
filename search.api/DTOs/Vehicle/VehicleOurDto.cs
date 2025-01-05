@@ -5,53 +5,46 @@ namespace search.api.DTOs
 {
     public class VehicleOurDto
     {
-        [JsonPropertyName("carId")]
-        public string CarId { get; set; } = ""; // Integer ID, żeby jednoznacznie reprezentować identyfikator pojazdu
-
         [JsonPropertyName("brand")]
-        public string Brand { get; set; } = ""; // Marka jako string, bo jest to tekstowa właściwość
+        public string Brand { get; set; } = string.Empty; 
 
         [JsonPropertyName("model")]
-        public string Model { get; set; } = ""; // Model również tekstowy
+        public string Model { get; set; } = string.Empty; 
 
         [JsonPropertyName("yearOfProduction")]
-        public int YearOfProduction { get; set; } // Rok produkcji to liczba całkowita, więc używamy int
+        public int YearOfProduction { get; set; } 
 
         [JsonPropertyName("type")]
-        public string Type { get; set; } = ""; // Typ pojazdu jako string (np. "sedan", "SUV")
+        public string Type { get; set; } = string.Empty;
 
-        [JsonPropertyName("rentalFrom")]
-        public DateTime RentalFrom { get; set; } // Data początkowa wynajmu, reprezentowana jako DateTime
-
-        [JsonPropertyName("rentalTo")]
-        public DateTime RentalTo { get; set; } // Data końcowa wynajmu, również jako DateTime
-
-        [JsonPropertyName("prize")]
-        public decimal Prize { get; set; } // Cena wynajmu jako decimal (lepsze do przechowywania wartości finansowych)
+        [JsonPropertyName("price")]
+        public decimal Price { get; set; } 
 
         [JsonPropertyName("driveType")]
-        public string DriveType { get; set; } = ""; // Typ napędu (np. "AWD", "FWD", "RWD")
+        public string DriveType { get; set; } = string.Empty;
 
         [JsonPropertyName("transmission")]
-        public string Transmission { get; set; } = ""; // Typ skrzyni biegów (np. "manual", "automatic")
+        public string Transmission { get; set; } = string.Empty;
 
         [JsonPropertyName("description")]
-        public string Description { get; set; } = ""; // Opis pojazdu jako string
+        public string Description { get; set; } = string.Empty; 
 
         [JsonPropertyName("rate")]
-        public decimal Rate { get; set; } // Stawka wynajmu, również jako decimal
+        public float Rate { get; set; }
 
         [JsonPropertyName("localization")]
-        public string Localization { get; set; } = ""; // Lokalizacja pojazdu (np. "Warszawa", "Kraków")
+        public string Localization { get; set; } = string.Empty;
 
         [JsonPropertyName("serialNo")]
-        public string SerialNo { get; set; } = ""; // Numer seryjny pojazdu
+        public string SerialNo { get; set; } = string.Empty;
 
-        [JsonPropertyName("vinId")]
-        public string VinId { get; set; } = ""; // Numer VIN pojazdu, jako string
+        [JsonPropertyName("vin")]
+        public string Vin { get; set; } = string.Empty;
 
         [JsonPropertyName("registryNo")]
-        public string RegistryNo { get; set; } = ""; // Numer rejestracyjny pojazdu, jako string
+        public string RegistryNo { get; set; } = string.Empty; 
+
+        public string PhotoUrl { get; set; } = string.Empty;
     }
 }
 

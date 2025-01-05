@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using search.api.Models;
 
 
-public class AuthDbContext: IdentityDbContext<UserDetails>
+public class AuthDbContext: IdentityDbContext<UserDetails, IdentityRole<int>, int>
 
 {
     public AuthDbContext(DbContextOptions<AuthDbContext> options): base(options)

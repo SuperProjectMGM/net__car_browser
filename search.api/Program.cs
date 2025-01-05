@@ -53,15 +53,15 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddScoped<IEmailInterface, EmailService>();
 builder.Services.AddScoped<IRentalInterface, RentalRepository>();
 builder.Services.AddScoped<IAuthorizationHandler, DrivingLicenseRequirementHandler>();
+builder.Services.AddScoped<IMessageHandler, MessageHandler>();
 builder.Services.AddSingleton<RabbitMessageService>();
-
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Devconnection")));
 builder.Services.AddDbContext<AuthDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Devconnection")));
 
-builder.Services.AddIdentity<UserDetails, IdentityRole>().AddEntityFrameworkStores<AuthDbContext>().AddDefaultTokenProviders();
+builder.Services.AddIdentity<UserDetails, IdentityRole<int>>().AddEntityFrameworkStores<AuthDbContext>().AddDefaultTokenProviders();
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -81,12 +81,14 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT_KEY"]))
     };
 }).AddCookie()
-    .AddGoogle(googleOptions =>
-    {
-        googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
-        googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
-        //googleOptions.CallbackPath = "/search.api/Authenticate/login/google-callback";
-    });
+    // TODO: naprawic google autotcation cos nie tak...
+    // .AddGoogle(googleOptions =>
+    // {
+    //     googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
+    //     googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
+    //     //googleOptions.CallbackPath = "/search.api/Authenticate/login/google-callback";
+    // })
+    ;
 
 builder.Services.AddAuthorization(options =>
 {
@@ -108,7 +110,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", builder =>
     {
-        builder.WithOrigins("http://localhost:4199", "https://nice-tree-06b2b2403.5.azurestaticapps.net", "http://localhost:4199/dashboard")
+        builder.WithOrigins("http://localhost:4199", "https://nice-tree-06b2b2403.5.azurestaticapps.net", "http://localhost:4199/dashboard", "https://localhost:4199")
                .AllowAnyMethod()
                .AllowAnyHeader()
                 .AllowCredentials();
@@ -116,7 +118,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddHttpClient<ISearchInterface, SearchMainService>(c =>
-c.BaseAddress = new Uri(builder.Configuration["HttpClientSettings:BaseUrl"]!));
+c.BaseAddress = new Uri(builder.Configuration["HttpClientSettingsBaseUrl"]!));
 
 var app = builder.Build();
 
@@ -126,10 +128,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseCors("AllowAll");
 app.MapControllers();
 app.UseRabbitMessageService();
 app.Run();

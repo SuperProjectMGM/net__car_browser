@@ -1,18 +1,18 @@
 export interface RegisterModel {
     email: string; // Required
     password: string; // Required
-    firstName?: string;
-    secondName?: string;
+    name?: string;
+    surname?: string;
     userName?: string;
     phoneNumber?: string;
-    addressStreet?: string;
+    streetAndNumber?: string;
     postalCode?: string;
     city?: string;
-    dateOfBirth?: string;
+    birthDate?: string;
     drivingLicenseNumber?: string;
     drivingLicenseIssueDate?: string;
     drivingLicenseExpirationDate?: string;
-    idCardNumber?: string;
+    personalNumber?: string;
     idCardIssuedBy?: string;
     idCardIssueDate?: string;
     idCardExpirationDate?: string;
