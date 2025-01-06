@@ -43,6 +43,7 @@ export class ViewDealComponent {
   }
 
   calculateTotalPrice(): void {
+    console.log(this.returnDateTime);
     if (this.pickupDateTime && this.returnDateTime && this.car) {
       const timeDiff = Math.abs(
         new Date(this.returnDateTime).getTime() -
@@ -87,7 +88,7 @@ export class ViewDealComponent {
   confirmRentCar(): void {
     this.isModalVisible = false; // Zamknij modal
     if (this.car) {
-      console.log(this.car.vin)
+      console.log(this.car.vin);
       this.authService
         .wantRentVehicle(this.car, this.pickupDateTime, this.returnDateTime)
         .subscribe(

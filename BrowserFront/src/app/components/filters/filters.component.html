@@ -149,4 +149,25 @@
       <label for="rateGood">Good: 7+</label>
     </div>
   </div>
+  <!-- Brand filter -->
+<div class="filter-group">
+  <label class="filter-title">Brand:</label>
+  <div class="spec-option" *ngFor="let brand of brands">
+    <input 
+      type="checkbox" 
+      [id]="'brand-' + brand" 
+      (change)="toggleArrayFilter('brand', brand)" 
+    />
+    <label [for]="'brand-' + brand">{{ brand }}</label>
+  </div>
+</div>
+
+<!-- Model filter -->
+<div class="filter-group" *ngIf="models.length > 0">
+  <label class="filter-title">Model:</label>
+  <select class="form-control" (change)="onModelChange($event)">
+    <option value="">Select Model</option>
+    <option *ngFor="let model of models" [value]="model">{{ model }}</option>
+  </select>
+</div>
 </div>

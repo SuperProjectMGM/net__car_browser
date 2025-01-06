@@ -6,8 +6,9 @@ import { VehicleDetail } from '../models/VehicleDetail.model';
 })
 export class VehicleToRentService {
   private selectedCar: VehicleDetail | null = null;
-  private pickupDateTime: Date | null = null;
-  private returnDateTime: Date | null = null;
+  public pickupDateTime: Date | null = null;
+  public returnDateTime: Date | null = null;
+  public pickupLocation: string = '';
 
   setCar(car: VehicleDetail): void {
     this.selectedCar = car;

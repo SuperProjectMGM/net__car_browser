@@ -168,3 +168,37 @@
   padding: 0;
   margin: 0;
 }
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+
+  button {
+    padding: 8px 16px;
+    border: none;
+    background: #f0f0f0;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+
+    &.active {
+      background: #007bff;
+      color: white;
+    }
+
+    &:hover:not(.active) {
+      background: #ddd;
+    }
+  }
+}
+
+.loading-spinner {
+  text-align: center;
+  font-size: 18px;
+  color: #555;
+  margin-top: 20px;
+}
+
