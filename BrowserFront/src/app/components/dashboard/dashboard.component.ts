@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { CarsService } from '../../services/VehicleDetail.service';
 import { CarsListComponent } from '../cars-list/cars-list.component';
 import { CommonModule, Time } from '@angular/common';
 import { Router } from '@angular/router';
@@ -8,6 +7,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 import { VehicleDetail } from '../../models/VehicleDetail.model';
+import { CarsService } from '../../services/cars.service';
+import { VehicleToRentService } from '../../services/VehicleToRent.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -23,25 +24,30 @@ import { VehicleDetail } from '../../models/VehicleDetail.model';
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent {
-  pickupLocation: string = '';
   isLoading: boolean = false;
-  pickupDateTime: Date | null = null;
-  returnDateTime: Date | null = null;
-  availableCars: VehicleDetail[] = [];
-  filteredCars: VehicleDetail[] = [];
   pickupDateTimeToreserve: Date | null = null;
   returnDateTimeToreserve: Date | null = null;
   constructor(
     private carsService: CarsService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    public vehicleToRentService: VehicleToRentService
   ) {}
 
   onSearch() {
-    this.availableCars = [];
-    if (this.pickupDateTime && this.returnDateTime && this.pickupLocation) {
-      const pickupDate = new Date(this.pickupDateTime); // Konwersja string -> Date
-      const returnDate = new Date(this.returnDateTime);
+    this.carsService.clearAvailableCars();
+    this.carsService.clearFilteredCars();
+    if (
+      this.vehicleToRentService.pickupDateTime &&
+      this.vehicleToRentService.returnDateTime &&
+      this.vehicleToRentService.pickupLocation
+    ) {
+      const pickupDate = new Date(this.vehicleToRentService.pickupDateTime); // Konwersja string -> Date
+      const returnDate = new Date(this.vehicleToRentService.returnDateTime);
+      this.vehicleToRentService.setDate(
+        this.vehicleToRentService.pickupDateTime,
+        this.vehicleToRentService.returnDateTime
+      );
 
       if (isNaN(pickupDate.getTime()) || isNaN(returnDate.getTime())) {
         console.error('Invalid date format');
@@ -51,12 +57,16 @@ export class DashboardComponent {
       this.isLoading = true;
 
       this.carsService
-        .searchCars(pickupDate, returnDate, this.pickupLocation)
+        .searchCars(
+          pickupDate,
+          returnDate,
+          this.vehicleToRentService.pickupLocation
+        )
         .subscribe(
           (cars) => {
             this.isLoading = false;
-            this.availableCars = cars; // Przechowujemy dostępne samochody
-            this.filteredCars = cars;
+            this.carsService.setAvailableCars(cars);
+            this.carsService.setFilteredCars(cars);
           },
           (error) => {
             this.isLoading = false;
@@ -66,11 +76,6 @@ export class DashboardComponent {
     } else {
       console.error('Both pickup and return dates must be set.');
     }
-    this.pickupDateTimeToreserve = this.pickupDateTime;
-    this.returnDateTimeToreserve = this.returnDateTime;
-    this.pickupLocation = '';
-    this.pickupDateTime = null;
-    this.returnDateTime = null;
   }
 
   goToProfile() {
@@ -93,20 +98,42 @@ export class DashboardComponent {
     );
     return combinedDate;
   }
-  onFiltersChanged(filters: any) {
-    this.filteredCars = this.availableCars.filter((car) => {
-      return (
-        (!filters.price.length ||
-          filters.price.some((p: string) =>
-            this.isPriceInRange(car.price, p)
-          )) &&
-        (!filters.driveType.length ||
-          filters.driveType.includes(car.driveType)) &&
-        (!filters.transmission.length ||
-          filters.transmission.includes(car.transmission)) &&
-        (!filters.rate.length ||
-          filters.rate.some((r: string) => this.isRateInRange(car.rate, r)))
-      );
+  onFiltersChanged(filters: any): void {
+    this.carsService.getAvailableCars().subscribe((availableCars) => {
+      if (!availableCars || availableCars.length === 0) {
+        console.warn('No available cars to filter.');
+        this.carsService.setFilteredCars([]);
+        return;
+      }
+
+      const filteredCars = availableCars.filter((car) => {
+        return (
+          (!filters.price ||
+            !filters.price.length ||
+            filters.price.some((p: string) =>
+              this.isPriceInRange(car.price, p)
+            )) &&
+          (!filters.driveType ||
+            !filters.driveType.length ||
+            filters.driveType.includes(car.driveType)) &&
+          (!filters.transmission ||
+            !filters.transmission.length ||
+            filters.transmission.includes(car.transmission)) &&
+          (!filters.rate ||
+            !filters.rate.length ||
+            filters.rate.some((r: string) =>
+              this.isRateInRange(car.rate, r)
+            )) &&
+          (!filters.brand ||
+            !filters.brand.length ||
+            filters.brand.includes(car.brand)) &&
+          (!filters.model ||
+            !filters.model.length ||
+            filters.model.includes(car.model))
+        );
+      });
+
+      this.carsService.setFilteredCars(filteredCars);
     });
   }
 

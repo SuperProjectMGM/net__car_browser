@@ -1,6 +1,6 @@
-<div class="cars-list">
+<div class="cars-list" *ngIf="paginatedCars.length > 0; else noCars">
   <ul>
-    <li *ngFor="let car of cars" class="car-item">
+    <li *ngFor="let car of paginatedCars" class="car-item">
       <div class="car-item__container">
         <div class="car-item__image-wrapper">
           <img 
@@ -16,9 +16,7 @@
               <p class="car-item__subtitle">{{ car.type }}</p>
             </div>
             <div class="car-item__price-group">
-              <p class="car-item__price">{{ car.price }} zł</p>
-
-              <p class="car-item__price-period">Price per day</p>
+              <p class="car-item__price">{{ car.price | currency:'PLN ':'symbol' }} / day</p>
             </div>
           </div>
           <div class="car-item__features">
@@ -30,9 +28,6 @@
             </div>
             <div class="car-item__feature">
               <span class="feature-icon"></span> {{ car.yearOfProduction }} Model Year
-            </div>
-            <div class="car-item__feature">
-              <span class="feature-icon"></span> Premium Interior (or any feature you want)
             </div>
           </div>
           <div class="car-item__location">
@@ -52,5 +47,18 @@
       </div>
     </li>
   </ul>
+  <div class="pagination">
+    <button
+      *ngFor="let page of [].constructor(Math.ceil((allCars.length || 1) / carsPerPage)); let i = index"
+      [class.active]="i + 1 === currentPage"
+      (click)="goToPage(i + 1)">
+      {{ i + 1 }}
+    </button>
+  </div>
+  
 </div>
-
+<ng-template #noCars>
+  <div class="no-cars">
+    <p>No cars available for the selected criteria.</p>
+  </div>
+</ng-template>

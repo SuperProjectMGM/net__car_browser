@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { VehicleDetail } from '../models/VehicleDetail.model';
 
@@ -9,6 +9,8 @@ import { VehicleDetail } from '../models/VehicleDetail.model';
 })
 export class CarsService {
   private apiUrl = environment.apiBaseUrl;
+  private availableCarsSubject = new BehaviorSubject<VehicleDetail[]>([]);
+  private filteredCarsSubject = new BehaviorSubject<VehicleDetail[]>([]);
 
   constructor(private http: HttpClient) {}
 
@@ -30,5 +32,29 @@ export class CarsService {
     };
 
     return this.http.get<VehicleDetail[]>(`${this.apiUrl}/Search`, { params });
+  }
+
+  setAvailableCars(cars: VehicleDetail[]): void {
+    this.availableCarsSubject.next(cars);
+  }
+
+  setFilteredCars(cars: VehicleDetail[]): void {
+    this.filteredCarsSubject.next(cars);
+  }
+
+  getAvailableCars(): Observable<VehicleDetail[]> {
+    return this.availableCarsSubject.asObservable();
+  }
+
+  getFilteredCars(): Observable<VehicleDetail[]> {
+    return this.filteredCarsSubject.asObservable();
+  }
+
+  clearAvailableCars(): void {
+    this.availableCarsSubject.next([]);
+  }
+
+  clearFilteredCars(): void {
+    this.filteredCarsSubject.next([]);
   }
 }

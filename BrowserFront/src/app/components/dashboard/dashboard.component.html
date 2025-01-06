@@ -8,12 +8,12 @@
     
     
     <div class="input-with-icon">
-      <i *ngIf="!pickupLocation" class="fa fa-search search-icon"></i>
+      <i *ngIf="!vehicleToRentService.pickupLocation" class="fa fa-search search-icon"></i>
       <input 
         type="text" 
         placeholder="      Pick-up Location" 
         class="search-input" 
-        [(ngModel)]="pickupLocation" 
+        [(ngModel)]="vehicleToRentService.pickupLocation" 
       />
     </div>
     
@@ -21,13 +21,13 @@
     <!-- Formularz z polami daty -->
     <input
       type="datetime-local"
-      [(ngModel)]="pickupDateTime"
+      [(ngModel)]="vehicleToRentService.pickupDateTime"
       class="search-input date-input pickup-date"
       placeholder="Pick-up Date and Time"
     />
     <input
       type="datetime-local"
-      [(ngModel)]="returnDateTime"
+      [(ngModel)]="vehicleToRentService.returnDateTime"
       class="search-input date-input return-date"
       placeholder="Return Date and Time"
     />
@@ -39,13 +39,12 @@
   
   <div class="dashboard">
     <div class="filters-container">
-      <app-filters (filtersChanged)="onFiltersChanged($event)"></app-filters>
+      <app-filters 
+        (filtersChanged)="onFiltersChanged($event)">
+      </app-filters>
     </div>
     <div class="cars-list-container">
-      <app-cars-list 
-        [cars]="filteredCars"
-        [pickupDateTime]="pickupDateTimeToreserve"
-        [returnDateTime]="returnDateTimeToreserve">
+      <app-cars-list>
       </app-cars-list>
     </div>
   </div>
