@@ -152,7 +152,7 @@ public class RentalRepository : IRentalInterface
 
     public async Task RentalReturnAccepted(RentalMessage mess)
     {
-        var dbRental = await _context.Rentals.FirstOrDefaultAsync(x => x.Vin == mess.Vin);
+        var dbRental = await _context.Rentals.FirstOrDefaultAsync(x => x.Slug == mess.Slug);
         if (dbRental is null)
             throw new Exception("There is no such rental in DB");
 
