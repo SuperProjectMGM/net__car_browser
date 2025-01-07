@@ -49,23 +49,26 @@ public static class UserMappers
         };
     }
 
-    public static void ToUserDetails(this UserDto userDto, UserDetails user)
+    public static UserDetails ToUserDetails(this RegisterModel registerModel)
     {
-        user.UserName = userDto.UserName;
-        user.Email = userDto.Email;
-        user.PhoneNumber = userDto.PhoneNumber;
-        user.Name = userDto.Name;
-        user.Surname = userDto.Surname;
-        user.BirthDate = userDto.BirthDate;
-        user.DrivingLicenseNumber = userDto.DrivingLicenseNumber;
-        user.DrivingLicenseIssueDate = userDto.DrivingLicenseIssueDate;
-        user.DrivingLicenseExpirationDate = userDto.DrivingLicenseExpirationDate;
-        user.StreetAndNumber = userDto.StreetAndNumber;
-        user.PostalCode = userDto.PostalCode;
-        user.City = userDto.City;
-        user.PersonalNumber = userDto.PersonalNumber;
-        user.IdCardIssuedBy = userDto.IdCardIssuedBy;
-        user.IdCardIssueDate = userDto.IdCardIssueDate;
-        user.IdCardExpirationDate = userDto.IdCardExpirationDate;
+        return new UserDetails
+        {
+            Email = registerModel.Email,
+            UserName = registerModel.UserName,
+            Name = registerModel.Name,
+            Surname = registerModel.Surname,
+            PhoneNumber = registerModel.PhoneNumber,
+            BirthDate = registerModel.DateOfBirth,
+            StreetAndNumber = registerModel.StreetAndNumber,
+            PostalCode = registerModel.PostalCode,
+            City = registerModel.City,
+            DrivingLicenseNumber = registerModel.DrivingLicenseNumber,
+            DrivingLicenseIssueDate = registerModel.DrivingLicenseIssueDate,
+            DrivingLicenseExpirationDate = registerModel.DrivingLicenseExpirationDate,
+            PersonalNumber = registerModel.PersonalNumber,
+            IdCardIssuedBy = registerModel.IdCardIssuedBy,
+            IdCardIssueDate = registerModel.IdCardIssueDate,
+            IdCardExpirationDate = registerModel.IdCardExpirationDate
+        };
     }
 }

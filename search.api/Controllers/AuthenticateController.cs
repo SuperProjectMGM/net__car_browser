@@ -58,8 +58,6 @@ public class AuthenticateController: ControllerBase
             IdCardIssuedBy = model.IdCardIssuedBy,
             IdCardIssueDate = model.IdCardIssueDate,
             IdCardExpirationDate = model.IdCardExpirationDate,
-            // It should be changed whenever any cridential was changed???
-            SecurityStamp = Guid.NewGuid().ToString()
         };
         var result = await _userManager.CreateAsync(user, model.Password!);
         if (!result.Succeeded)
