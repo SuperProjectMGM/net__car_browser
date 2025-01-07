@@ -15,6 +15,12 @@ export class AuthService {
   private _isAuthenticated: boolean = false;
   constructor(private http: HttpClient) {}
 
+  
+  googleLogin() {
+    window.location.href = `${this.apiUrl}/Authenticate/login/google-login`;
+  }
+
+
   login(email: string, password: string): Observable<any> {
     const loginModel = { email, password };
 

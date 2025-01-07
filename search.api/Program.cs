@@ -65,7 +65,6 @@ builder.Services.AddIdentity<UserDetails, IdentityRole<int>>().AddEntityFramewor
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    // Changed here for google auth.
     options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
@@ -82,12 +81,12 @@ builder.Services.AddAuthentication(options =>
     };
 }).AddCookie()
     // TODO: naprawic google autotcation cos nie tak...
-    // .AddGoogle(googleOptions =>
-    // {
-    //     googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
-    //     googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
-    //     //googleOptions.CallbackPath = "/search.api/Authenticate/login/google-callback";
-    // })
+    .AddGoogle(googleOptions =>
+    {
+        googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
+        googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
+        //googleOptions.CallbackPath = "/search.api/Authenticate/login/google-callback";
+    })
     ;
 
 builder.Services.AddAuthorization(options =>
