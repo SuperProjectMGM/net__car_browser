@@ -54,6 +54,7 @@ builder.Services.AddScoped<IEmailInterface, EmailService>();
 builder.Services.AddScoped<IRentalInterface, RentalRepository>();
 builder.Services.AddScoped<IAuthorizationHandler, DrivingLicenseRequirementHandler>();
 builder.Services.AddScoped<IMessageHandler, MessageHandler>();
+builder.Services.AddScoped<IAuthInterface, AuthRepository>();
 builder.Services.AddSingleton<RabbitMessageService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>

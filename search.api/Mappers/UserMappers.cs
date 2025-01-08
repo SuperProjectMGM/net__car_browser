@@ -49,6 +49,26 @@ public static class UserMappers
         };
     }
 
+    public static void ToUserDetails(this UserDto userDto, UserDetails user)
+    {
+        user.UserName = userDto.UserName;
+        user.Email = userDto.Email;
+        user.PhoneNumber = userDto.PhoneNumber;
+        user.Name = userDto.Name;
+        user.Surname = userDto.Surname;
+        user.BirthDate = userDto.BirthDate;
+        user.DrivingLicenseNumber = userDto.DrivingLicenseNumber;
+        user.DrivingLicenseIssueDate = userDto.DrivingLicenseIssueDate;
+        user.DrivingLicenseExpirationDate = userDto.DrivingLicenseExpirationDate;
+        user.StreetAndNumber = userDto.StreetAndNumber;
+        user.PostalCode = userDto.PostalCode;
+        user.City = userDto.City;
+        user.PersonalNumber = userDto.PersonalNumber;
+        user.IdCardIssuedBy = userDto.IdCardIssuedBy;
+        user.IdCardIssueDate = userDto.IdCardIssueDate;
+        user.IdCardExpirationDate = userDto.IdCardExpirationDate;
+    }
+
     public static UserDetails ToUserDetails(this RegisterModel registerModel)
     {
         return new UserDetails
