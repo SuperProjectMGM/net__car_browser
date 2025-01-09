@@ -14,6 +14,7 @@ export class AuthService {
 
   private apiUrl = environment.apiBaseUrl;
   private _isAuthenticated: boolean = false;
+  private key: string = '';
   constructor(private http: HttpClient, private router: Router) {}
 
   
@@ -33,6 +34,7 @@ export class AuthService {
           if (response && response.token) {
             localStorage.setItem('loggedIn', 'true');
             localStorage.setItem('token', response.token);
+            this.key =response.token;
             console.log('Zalogowano pomyślnie, ustawiono flagę i zapisano token.');
             this._isAuthenticated = true;
           }
@@ -41,19 +43,20 @@ export class AuthService {
     }
     
     isAuthenticated(): boolean {
-      // Tu możesz w przyszłości dodać logikę sprawdzającą sesję
       if (localStorage.getItem('loggedIn') == 'true') {
         return true;
       }
       return false;
     }
+    
     googleLogin() {
       window.location.href = `${this.apiUrl}/Authenticate/login/google-login`;
     }
     
      handleGoogleCallback(token: string) {
       localStorage.setItem('loggedIn', 'true');
-      localStorage.setItem('authToken', token);
+      localStorage.setItem('token', token);
+      this.key = token;
       this._isAuthenticated = true;
       this.router.navigate(['/dashboard']);
     }
@@ -82,6 +85,9 @@ export class AuthService {
   logout() {
     this._isAuthenticated = false;
     console.log('User logged out.');
+    localStorage.clear();
+    localStorage.setItem('loggedIn', 'false');
+    localStorage.setItem('token', '');
   }
 
   isLoggedIn(): boolean {
@@ -101,6 +107,10 @@ export class AuthService {
         }
       })
     );
+  }
+
+  gettoken(){
+    return this.key;
   }
 }
 

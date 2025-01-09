@@ -79,7 +79,7 @@ export class DashboardComponent {
   }
 
   goToProfile() {
-    if (this.authService.isLoggedIn()) {
+    if (this.authService.isAuthenticated()) {
       this.router.navigate(['/profile']);
     } else {
       this.router.navigate(['/login']);
@@ -148,6 +148,7 @@ export class DashboardComponent {
   }
 
   get isLoggedIn(): boolean {
-    return this.authService.isLoggedIn();
+    console.log("tu jestem", this.authService.isAuthenticated());
+    return this.authService.isAuthenticated();
   }
 }

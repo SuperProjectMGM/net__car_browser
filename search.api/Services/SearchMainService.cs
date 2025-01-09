@@ -28,5 +28,14 @@ namespace search.api.Services
             info.Vehicles = listOfVehiclesDto.Select(dto => dto.VehicleOurDtoToVehicle()).ToList();
             return info;
         }
+
+        public decimal CalculatePrice(VehicleOurDto veh, UserDto user, DateTime start, DateTime end)
+        {
+            decimal baseCostPerDay = veh.Price;
+            int totalDays = (int)Math.Ceiling((end - start).TotalDays);
+            int numberOfYearsLicense = (int)Math.Floor((end - start).TotalDays);
+            decimal resCostPerDay = 1.2m * baseCostPerDay - baseCostPerDay * 0.05m * (numberOfYearsLicense / 10m);
+            return resCostPerDay * totalDays;
+        }
     }
 }
