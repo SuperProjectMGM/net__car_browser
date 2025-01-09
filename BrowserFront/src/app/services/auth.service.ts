@@ -14,7 +14,6 @@ export class AuthService {
 
   private apiUrl = environment.apiBaseUrl;
   private _isAuthenticated: boolean = false;
-  private key: string = '';
   constructor(private http: HttpClient, private router: Router) {}
 
   
@@ -34,7 +33,6 @@ export class AuthService {
           if (response && response.token) {
             localStorage.setItem('loggedIn', 'true');
             localStorage.setItem('token', response.token);
-            this.key =response.token;
             console.log('Zalogowano pomyślnie, ustawiono flagę i zapisano token.');
             this._isAuthenticated = true;
           }
@@ -56,7 +54,6 @@ export class AuthService {
      handleGoogleCallback(token: string) {
       localStorage.setItem('loggedIn', 'true');
       localStorage.setItem('token', token);
-      this.key = token;
       this._isAuthenticated = true;
       this.router.navigate(['/dashboard']);
     }
@@ -107,10 +104,6 @@ export class AuthService {
         }
       })
     );
-  }
-
-  gettoken(){
-    return this.key;
   }
 }
 
