@@ -120,6 +120,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddHttpClient<ISearchInterface, SearchMainService>(c =>
 c.BaseAddress = new Uri(builder.Configuration["HttpClientSettingsBaseUrl"]!));
 
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

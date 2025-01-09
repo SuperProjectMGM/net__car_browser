@@ -19,6 +19,6 @@ public class Vehicle
     [Column(TypeName = "money")]
     public float Rate { get; set; }
     public string Localization { get; set; } = string.Empty;
-    public int RentalFirmId { get; set; } 
+    public string RentalFirmName { get; set; } = string.Empty; 
     public string PhotoUrl { get; set; } = string.Empty;
 }

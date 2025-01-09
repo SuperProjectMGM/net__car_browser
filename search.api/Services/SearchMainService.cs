@@ -9,23 +9,47 @@ namespace search.api.Services
     {
         // Here We must ask api and after that create a SearchInfo object
         private readonly HttpClient _client;
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IConfiguration _configuration;
         // Now it's hardcoded path. I think that we should develop something more interesting than hardcoded paths.
         public const string BasePath = "/api/Vehicle/available";
+        public const string ExternalFirstPath = "";
 
-        public SearchMainService(HttpClient client)
+        public SearchMainService(HttpClient client, IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
+            _configuration = configuration;
+            _httpClientFactory = httpClientFactory;
             _client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
-        // TODO: tu musimy daty przekazywac i pobierac juz samochody dla danego zakresu
         public async Task<SearchInfo> Search(DateTime start, DateTime end)
         {
             var queryString = $"?start={start:O}&end={end:O}";
-            var response = await _client.GetAsync($"{BasePath}{queryString}");
+            // Here we go to endpoint and have cars
+            var baseUrl = _configuration["HttpClientSettingsBaseUrl"];
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(baseUrl!);
+            var response = await client.GetAsync($"{BasePath}{queryString}");
             var listOfVehiclesDto = await response.ReadContentAsync<List<VehicleOurDto>>();
+            // After ours vehicles we should obtain url from another apis and get from them
+
+    //---------------
+            // var baseUrl = _configuration["HttpClientSettingsBaseUrl"];
+            // var client = _httpClientFactory.CreateClient();
+            // client.BaseAddress = new Uri(baseUrl!);
+            // var response = await client.GetAsync($"{BasePath}{queryString}");
+            // var listOfVehiclesDto = await response.ReadContentAsync<List<VehicleOurDto>>();
+            var resList = new List<Vehicle>();
+            // (Here is important to change data from dto of another api to ours)
+            // Main idea is to add every list from every soure to one big list and to store it to frontend
+    //---------------
+
+            // Here our VehicleDto   
             // I don't know now how to manage Id from logged or authenticated user
             SearchInfo info = new SearchInfo();
+            
             info.Vehicles = listOfVehiclesDto.Select(dto => dto.VehicleOurDtoToVehicle()).ToList();
+
             return info;
         }
     }

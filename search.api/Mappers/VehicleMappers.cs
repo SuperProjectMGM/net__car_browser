@@ -23,10 +23,8 @@ namespace search.api.Mappers
                 Type = dto.Type,
                 Rate = dto.Rate,
                 Localization = dto.Localization,
-                RentalFirmId = 0,
+                RentalFirmName = dto.RentalFirmName,
                 PhotoUrl = dto.PhotoUrl
-                // TODO: Uzupełnij dane RentalFirm, jeśli są dostępne !!! Musimy sięgnąć w database sprawdzić adres i dopasować
-                // TODO: !!! BARDZO WAzNE
             };
         }
 
@@ -47,7 +45,26 @@ namespace search.api.Mappers
                 Type = veh.Type,
                 Rate = veh.Rate,  
                 Localization = veh.Localization,
-                PhotoUrl = veh.PhotoUrl
+                PhotoUrl = veh.PhotoUrl,
+                RentalFirmName = veh.RentalFirmName
+            };
+        }
+
+        public static VehicleOurDto VehicleKEJDtoToOurDto(this VehicleKEJDto kejDto)
+        {
+            return new VehicleOurDto
+            {
+                Brand = kejDto.Producer,
+                Model = kejDto.Model,
+                YearOfProduction = kejDto.YearOfProduction,
+                // TODO: Ask another team about price for a car and vin
+                Price = 999999,
+                // TODO: It's temporary solution. Concatenate vin and RentalService 
+                Vin = string.Join("", [$"{kejDto.RentalService}".ToUpper(), kejDto.Id.ToString()]),
+                PhotoUrl = "https://returnimages.blob.core.windows.net/vehicles/vehicles/zygzag.jpg",
+                Localization = kejDto.Location,
+                RentalFirmName = kejDto.RentalService,
+                Type = kejDto.Type
             };
         }
     }
