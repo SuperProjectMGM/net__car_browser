@@ -36,9 +36,9 @@ export class LoginComponent {
     });
   }
 
-  loginWithGoogle() {
-    this.authService.googleLogin();
-  }
+    loginWithGoogle() {
+      this.authService.googleLogin()
+    }
 
   onSignUpClick() {
     this.isLoading = true;

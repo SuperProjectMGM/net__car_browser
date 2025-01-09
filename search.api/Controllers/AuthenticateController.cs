@@ -85,10 +85,8 @@ public class AuthenticateController: ControllerBase
         if (claimsRet is null)
         return Unauthorized("Can't crate user");
         var token = _authRepository.GetToken(claimsRet!);
-        return Ok(new
-        {
-            token = new JwtSecurityTokenHandler().WriteToken(token),
-            expiration = token.ValidTo
-        });
+        // TODO: Change hardcoded values
+        var redirectUrl = $"http://localhost:4199/auth/google-callback?token={new JwtSecurityTokenHandler().WriteToken(token)}";
+        return Redirect(redirectUrl);
     }
 }
