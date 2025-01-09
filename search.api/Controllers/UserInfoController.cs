@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using search.api.Interfaces;
 using search.api.Models;
 
 namespace search.api.Controllers;
@@ -14,37 +15,25 @@ namespace search.api.Controllers;
 [ApiController]
 public class UserInfoController: ControllerBase
 {
-    // TODO: Przerobic na Repositories for interface i injektowaC. Tak samo w authentykacji
-    private readonly AuthDbContext _context;
-    private readonly IConfiguration _configuration;
-    public UserInfoController(IConfiguration configuration, AuthDbContext context)
+    private readonly IUserInfoInterface _userRepository;
+    public UserInfoController(IConfiguration configuration, AuthDbContext context, IUserInfoInterface userRepository)
     {
-        _configuration = configuration;
-        _context = context;
+        _userRepository = userRepository;
     }
 
     [HttpGet]
     [Route("user-info")]
     public async Task<IActionResult> UserInfo([FromQuery] string token)
     {
-        // TODO: Przerobic na jakas metode zamiast tego, bo juz po raz 3 to powtarzam
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.UTF8.GetBytes(_configuration["JWT_KEY"]);
-        var claimsPrincipal = tokenHandler.ValidateToken(token, new TokenValidationParameters
+        var id = _userRepository.ReturnIdFromToken(token);
+        if (id is null)
         {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(key),
-            ValidIssuer = _configuration["JWT_ISSUER"],
-            ValidAudience = _configuration["JWT_AUDIENCE"]
-        }, out SecurityToken validatedToken);
-        var id = int.Parse(claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
-        var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
+            return NotFound("Something is wrong with token!");
+        }
+        var user = await _userRepository.FindUserById(id.Value);
         if (user is null)
         {
-            return NotFound("Usera nie istnieje w bazie!");
+            return NotFound("User doesn't exist!");
         }
         return Ok(user.ToUserDto());
     }
@@ -53,27 +42,18 @@ public class UserInfoController: ControllerBase
     [Route("change-user-info")]
     public async Task<IActionResult> ChangeUserInfo([FromQuery] string token, [FromBody] UserDto userDto)
     {
-        // AJAJAJAJ jak nieladnie. -1000 pointow respektu
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.UTF8.GetBytes(_configuration["JWT_KEY"]);
-        var claimsPrincipal = tokenHandler.ValidateToken(token, new TokenValidationParameters
+        var id = _userRepository.ReturnIdFromToken(token);
+        if (id is null)
         {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(key),
-            ValidIssuer = _configuration["JWT_ISSUER"],
-            ValidAudience = _configuration["JWT_AUDIENCE"]
-        }, out SecurityToken validatedToken);
-        var id = int.Parse(claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
-        var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
+            return NotFound("Somethins is wrong with token!");
+        }
+        var user = await _userRepository.FindUserById(id.Value);
         if (user is null)
         {
-            return NotFound("Usera nie istnieje w bazie!");
+            return NotFound("User doesn't exist!");
         }
         userDto.ToUserDetails(user);
-        _context.SaveChanges();
+        await _userRepository.ChangeDataAboutUser();
         return Content("Data changed", "text/plain");
     }
 }

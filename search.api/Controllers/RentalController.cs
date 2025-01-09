@@ -24,8 +24,8 @@ public class RentalController : Controller
         _rentalRepo = rentalRepo;
     }
 
-    [Authorize]
-    //[Authorize(Policy = "DrivingLicenseRequired")]
+    //[Authorize]
+    [Authorize(Policy = "DrivingLicenseRequired")]
     [HttpPost("rent-car")]
     public async Task<IActionResult> RentCar([FromBody] VehicleRentRequest request)
     {
@@ -71,6 +71,7 @@ public class RentalController : Controller
         return View("RentalConfirm", new Tuple<Rental, string, string>(rental, succeed.Item2, succeed.Item4));
     }
 
+    [Authorize(Policy = "DrivingLicenseRequired")]
     [HttpPut("return-rental")]
     public async Task<IActionResult> ReturnRental([FromQuery] string slug)
     {

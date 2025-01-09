@@ -55,6 +55,7 @@ builder.Services.AddScoped<IRentalInterface, RentalRepository>();
 builder.Services.AddScoped<IAuthorizationHandler, DrivingLicenseRequirementHandler>();
 builder.Services.AddScoped<IMessageHandler, MessageHandler>();
 builder.Services.AddScoped<IAuthInterface, AuthRepository>();
+builder.Services.AddScoped<IUserInfoInterface, UserRepository>();
 builder.Services.AddSingleton<RabbitMessageService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -100,7 +101,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireLowercase = true;
     options.Password.RequireUppercase = true;
     options.Password.RequireNonAlphanumeric = true;
-    options.Password.RequiredLength = 6; // Example
+    options.Password.RequiredLength = 6; 
 });
 
 // Konfiguracja CORS
