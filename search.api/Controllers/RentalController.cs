@@ -51,24 +51,21 @@ public class RentalController : Controller
     [HttpGet("confirm-rental")]
     public async Task<IActionResult> ConfirmRental([FromQuery] string token)
     {
-        var succeed = _rentalRepo.ValidateRentalConfirmationToken(token);
-
-        int item3 = int.Parse(succeed.Item3);
-        int item5 = int.Parse(succeed.Item5);
-
-        if (!succeed.Item1)
+        if (!_rentalRepo.ValidateIfTokenHasExpired(token))
         {
-            return BadRequest("Invalid or expired token.");
+            return View("TokenExpired");
         }
 
-        var rental = await _rentalRepo.CompleteRentalAndSend(item3, item5);
+        (string email, string userId, string userName, string rentId) = _rentalRepo.ValidateClaims(token);
+        
+        var rental = await _rentalRepo.CompleteRentalAndSend(int.Parse(userId), int.Parse(rentId));
 
         if (rental is null)
         {
-            return NotFound("Something went wrong :(");
+            return NotFound("Something went wrong.");
         }
-
-        return View("RentalConfirm", new Tuple<Rental, string, string>(rental, succeed.Item2, succeed.Item4));
+        
+        return View("RentalConfirm", new Tuple<Rental, string, string>(rental, email, userName));
     }
 
     [HttpPut("return-rental")]

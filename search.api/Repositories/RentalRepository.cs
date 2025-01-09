@@ -36,14 +36,13 @@ public class RentalRepository : IRentalInterface
     }
 
     
-    
-    // TODO: delete rental if link expired or token invalid!!!
     public async Task<bool> SendConfirmationEmail(string userEmail, string userName, int userId, string scheme,
         string host,
         VehicleRentRequest request)
     {
         // TODO: We have got do add some logic handling different vehicle providers
         var rentalModel = await CreateRental(request, userId);
+        
         var token = _emailService.GenerateConfirmationRentToken(userEmail, userName, userId, rentalModel.Id,
             _configuration);
         
@@ -52,14 +51,17 @@ public class RentalRepository : IRentalInterface
         return await Task.FromResult(true);
     }
 
-
-    public (bool, string, string, string, string) ValidateRentalConfirmationToken(string token)
+    public bool ValidateIfTokenHasExpired(string token)
     {
-        if (string.IsNullOrEmpty(token))
-        {
-            return (false, null, null, null, null);
-        }
-        
+        var jwtTokenHandler = new JwtSecurityTokenHandler();
+        var jwtToken = jwtTokenHandler.ReadJwtToken(token);
+        if (jwtToken.ValidTo < DateTime.UtcNow)
+            return false;
+        return true;
+    }
+    
+    public (string, string, string, string) ValidateClaims(string token)
+    {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF8.GetBytes(_configuration["JWT_KEY"]);
         var claimsPrincipal = tokenHandler.ValidateToken(token, new TokenValidationParameters
@@ -72,7 +74,7 @@ public class RentalRepository : IRentalInterface
             ValidIssuer = _configuration["JWT_ISSUER"],
             ValidAudience = _configuration["JWT_AUDIENCE"]
         }, out SecurityToken validatedToken);
-
+        
         var email = claimsPrincipal.FindFirst(ClaimTypes.Email)?.Value;
         var id = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         var username = claimsPrincipal.FindFirst(ClaimTypes.Name)?.Value;
@@ -82,12 +84,13 @@ public class RentalRepository : IRentalInterface
                                         || string.IsNullOrEmpty(username)
                                         || string.IsNullOrEmpty(rentId))
         {
-            return (false, null, null, null, null);
+            return (null, null, null, null);
         }
 
-        return (true, email, id, username, rentId);
+        return (email, id, username, rentId);
     }
 
+    
     public async Task<Rental?> CompleteRentalAndSend(int userId, int rentId)
     {
         var rental = await _context.Rentals.FirstOrDefaultAsync(x => x.Id == rentId);
@@ -97,10 +100,12 @@ public class RentalRepository : IRentalInterface
         if (userDetails == null)
             return null;
 
-        rental.Status = RentalStatus.Confirmed;
+        rental.Status = RentalStatus.ConfirmedByUser;
         await _context.SaveChangesAsync();
-        var message = CreateRentMessage(rental, userDetails);
-        message.MessageType = MessageType.RentalMessageConfirmation;
+        
+        
+        var message = Message.MessageFactoryRentalConfirmedByUser(rental, userDetails);
+        
         string jsonString = JsonSerializer.Serialize(message);
         var success = await _messageService.SendMessage(jsonString);
         if (!success)
@@ -108,7 +113,6 @@ public class RentalRepository : IRentalInterface
         return rental;
     }
 
-    // TODO: we do this now!!!
     public async Task RentalCompletion(RentalMessage mess)
     {
         var dbRental = await _context.Rentals.FirstOrDefaultAsync(x => x.Slug == mess.Slug);
@@ -119,7 +123,7 @@ public class RentalRepository : IRentalInterface
         if (user is null)
             throw new Exception("User invalid.");
 
-        dbRental.Status = RentalStatus.Completed;
+        dbRental.Status = RentalStatus.CompletedByEmployee;
         await _context.SaveChangesAsync();
         await _emailService.SendRentalCompletionEmailAsync(user.Email!, user.UserName!, dbRental.Slug);
     }
@@ -161,35 +165,16 @@ public class RentalRepository : IRentalInterface
             throw new Exception("User invalid.");
         
         dbRental.Status = RentalStatus.Returned;
+        
         await _context.SaveChangesAsync();
     }
 
-    private RentalMessage CreateRentMessage(Rental rental, UserDetails userDetails)
-    {
-        RentalMessage message = new RentalMessage
-        {
-            //MessageType = MessageType.RentalMessageConfirmation,
-            Slug = rental.Slug,
-            Name = userDetails.Name!,
-            Surname = userDetails.Surname!,
-            BirthDate = userDetails.BirthDate,
-            DrivingLicenseIssueDate = userDetails.DrivingLicenseIssueDate!,
-            PersonalNumber = userDetails.PersonalNumber!,
-            LicenseNumber = userDetails.DrivingLicenseNumber!,
-            Email = userDetails.Email!,
-            City = userDetails.City,
-            StreetAndNumber = userDetails.StreetAndNumber,
-            PostalCode = userDetails.PostalCode,
-            PhoneNumber = userDetails.PhoneNumber!,
-            Vin = rental.Vin,
-            Start = rental.Start,
-            End = rental.End,
-            Status = rental.Status,
-            Description = rental.Description
-        };
-
-        return message;
-    }
+    // private RentMessage CreateRentMessage(Rental rental, UserDetails userDetails)
+    // {
+    //
+    //
+    //     return message;
+    // }
 
     public async Task<List<Rental>> ReturnUsersRentals(string personalNumber)
     {

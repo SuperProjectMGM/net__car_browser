@@ -11,9 +11,9 @@ namespace search.api.Services;
 
 public class RabbitMessageService
 {
-    private readonly string _queueName = "messageBox";
+    private readonly string _queueName = "browserToRental";
     
-    private readonly string _queueName2 = "messageBox2";
+    private readonly string _queueName2 = "rentalToBrowser";
 
     private  IConnection? _connection;
 

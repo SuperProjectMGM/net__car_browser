@@ -10,6 +10,7 @@ public class Rental
     
     // Temporary, till we figure out how we are supposed to handle multiple vehicle providers logic
     //public int RentalFirmId { get; set; }
+    public string CarProviderIdentifier { get; set; } = string.Empty;
     public string Vin { get; set; } = string.Empty;
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
@@ -20,8 +21,8 @@ public class Rental
 public enum RentalStatus
 {
     Pending = 1,  
-    Confirmed = 2, 
-    Completed = 3,
+    ConfirmedByUser = 2, 
+    CompletedByEmployee = 3,
     WaitingForReturnAcceptance = 4,
     Returned = 5
 }
