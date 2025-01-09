@@ -27,7 +27,7 @@ public class RentalController : Controller
     [Authorize]
     //[Authorize(Policy = "DrivingLicenseRequired")]
     [HttpPost("rent-car")]
-    public async Task<IActionResult> RentCar([FromBody] VehicleRentRequest request)
+    public async Task<IActionResult> RentCar([FromBody] VehicleRentRequestDto requestDto)
     {
         var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
         var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
@@ -37,7 +37,7 @@ public class RentalController : Controller
             return BadRequest("Invalid user credentials");
 
         var success = await _rentalRepo.SendConfirmationEmail(userEmail, userName, userId,
-            Request.Scheme, Request.Host.ToString(), request);
+            Request.Scheme, Request.Host.ToString(), requestDto);
 
         if (!success)
         {
@@ -49,7 +49,7 @@ public class RentalController : Controller
 
     [AllowAnonymous]
     [HttpGet("confirm-rental")]
-    public async Task<IActionResult> ConfirmRental([FromQuery] string token)
+    public async Task<IActionResult> RentalConfirmedByUser([FromQuery] string token)
     {
         if (!_rentalRepo.ValidateIfTokenHasExpired(token))
         {
@@ -58,7 +58,7 @@ public class RentalController : Controller
 
         (string email, string userId, string userName, string rentId) = _rentalRepo.ValidateClaims(token);
         
-        var rental = await _rentalRepo.CompleteRentalAndSend(int.Parse(userId), int.Parse(rentId));
+        var rental = await _rentalRepo.UserConfirmedRentalSendMessToProvider(int.Parse(userId), int.Parse(rentId));
 
         if (rental is null)
         {
