@@ -2,11 +2,11 @@ using System.Runtime.InteropServices.JavaScript;
 
 namespace search.api.DTOs;
 
-public class VehicleRentRequest
+public class VehicleRentRequestDto
 {
     public string VehicleVin { get; set; } = string.Empty;
 
-    //public int RentalFirmId { get; set; }
+    public string CarProviderIdentifier { get; set; } = string.Empty;
     
     public DateTime Start { get; set; }
     

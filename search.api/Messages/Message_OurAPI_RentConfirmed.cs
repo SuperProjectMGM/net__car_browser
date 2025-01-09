@@ -2,7 +2,7 @@ using search.api.Repositories;
 
 namespace search.api.Models;
 
-public class RentMessage : Message
+public class Message_OurAPI_RentConfirmed : Message
 {
      public string Slug { get; set; } = string.Empty;
      public string Name { get; set; } = string.Empty;
