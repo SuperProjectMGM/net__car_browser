@@ -87,6 +87,7 @@ public class AuthenticateController: ControllerBase
         var token = _authRepository.GetToken(claimsRet!);
         // TODO: Change hardcoded values
         var redirectUrl = $"http://localhost:4199/auth/google-callback?token={new JwtSecurityTokenHandler().WriteToken(token)}";
+        
         return Redirect(redirectUrl);
     }
 }
