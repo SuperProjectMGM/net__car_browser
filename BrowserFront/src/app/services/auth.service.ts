@@ -11,14 +11,11 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class AuthService {
-
   private apiUrl = environment.apiBaseUrl;
   private _isAuthenticated: boolean = false;
+
   constructor(private http: HttpClient, private router: Router) {}
 
-  
-  
-  
   login(email: string, password: string): Observable<any> {
     const loginModel = { email, password };
 
@@ -31,81 +28,80 @@ export class AuthService {
       .pipe(
         tap((response) => {
           if (response && response.token) {
-            localStorage.setItem('loggedIn', 'true');
-            localStorage.setItem('token', response.token);
-            console.log('Zalogowano pomyślnie, ustawiono flagę i zapisano token.');
+            sessionStorage.setItem('token', response.token);
             this._isAuthenticated = true;
+            console.log('Login successful. Token stored.');
           }
         })
       );
-    }
-    
-    isAuthenticated(): boolean {
-      if (localStorage.getItem('loggedIn') == 'true') {
-        return true;
-      }
-      return false;
-    }
-    
-    googleLogin() {
-      window.location.href = `${this.apiUrl}/Authenticate/login/google-login`;
-    }
-    
-     handleGoogleCallback(token: string) {
-      localStorage.setItem('loggedIn', 'true');
-      localStorage.setItem('token', token);
-      this._isAuthenticated = true;
-      this.router.navigate(['/dashboard']);
-    }
-  
-  wantRentVehicle(car: VehicleDetail, pickupDateTime: Date | null, returnDateTime: Date| null): Observable<any> {
+  }
 
-    if(!pickupDateTime || !returnDateTime) return throwError(() => new Error('Pickup date and return date are required'));
+  isAuthenticated(): boolean {
+    const token = sessionStorage.getItem('token');
+    return !!token;
+  }
 
-    const token = localStorage.getItem('token');
+  getToken(): string | null {
+    return sessionStorage.getItem('token');
+  }
+  googleLogin() {
+    window.location.href = `${this.apiUrl}/Authenticate/login/google-login`;
+  }
+
+  handleGoogleCallback(token: string) {
+    sessionStorage.setItem('token', token);
+    this._isAuthenticated = true;
+    this.router.navigate(['/dashboard']);
+    console.log('Google login successful.');
+  }
+
+  wantRentVehicle(
+    car: VehicleDetail,
+    pickupDateTime: Date | null,
+    returnDateTime: Date | null
+  ): Observable<any> {
+    if (!pickupDateTime || !returnDateTime)
+      return throwError(
+        () => new Error('Pickup date and return date are required')
+      );
+
+    const token = this.getToken();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
     const vehicleRentRequest = {
-      vehicleVin: car.vin,        
-      rentalFirmId: '1',  // TODO: zrobić wybieranie firmy          
-      start: pickupDateTime,        
-      end: returnDateTime,          
-      description: car.description
+      vehicleVin: car.vin,
+      rentalFirmId: '1', // TODO: zrobić wybieranie firmy
+      start: pickupDateTime,
+      end: returnDateTime,
+      description: car.description,
     };
     return this.http.post<any>(
-      `${this.apiUrl}/Rental/rent-car`, 
-      vehicleRentRequest, 
+      `${this.apiUrl}/Rental/rent-car`,
+      vehicleRentRequest,
       { headers }
-    )
+    );
   }
 
   logout() {
     this._isAuthenticated = false;
     console.log('User logged out.');
-    localStorage.clear();
-    localStorage.setItem('loggedIn', 'false');
-    localStorage.setItem('token', '');
-  }
-
-  isLoggedIn(): boolean {
-    return this._isAuthenticated;
+    sessionStorage.clear();
+    this.router.navigate(['/login']);
+    console.log('User logged out.');
   }
 
   takeRegister(registerModel: RegisterModel): Observable<any> {
     return this.http
-    .post<RegisterModel>(
-      `${this.apiUrl}/Authenticate/register`,
-      registerModel,
-    )
-    .pipe(
-      tap((response) => {
-        if (response) {
-          alert("Pomyślnie zarejestrowane!");
-        }
-      })
-    );
+      .post<RegisterModel>(
+        `${this.apiUrl}/Authenticate/register`,
+        registerModel
+      )
+      .pipe(
+        tap((response) => {
+          if (response) {
+            alert('Pomyślnie zarejestrowane!');
+          }
+        })
+      );
   }
 }
-
-
-

@@ -76,7 +76,7 @@ export class ViewDealComponent {
   }
 
   rentCar(): void {
-    if (!this.authService.isLoggedIn()) {
+    if (!this.authService.isAuthenticated()) {
       this.toastr.warning(
         'You must log in to rent a vehicle.',
         'You are not logged in'
