@@ -82,11 +82,11 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT_KEY"]))
     };
 }).AddCookie()
-    .AddGoogle(googleOptions =>
-    {
-        googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
-        googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
-    })
+     .AddGoogle(googleOptions =>
+     {
+         googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
+         googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
+     })
     ;
 
 builder.Services.AddAuthorization(options =>
@@ -101,7 +101,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireLowercase = true;
     options.Password.RequireUppercase = true;
     options.Password.RequireNonAlphanumeric = true;
-    options.Password.RequiredLength = 6; 
+    options.Password.RequiredLength = 6;
 });
 
 // Konfiguracja CORS

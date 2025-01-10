@@ -47,9 +47,9 @@ namespace search.api.Controllers
         }
 
         [HttpGet("price")]
-        public ActionResult<decimal> GetPriceForCar([FromBody] PriceRequestDto priceDto)
+        public async Task<ActionResult<decimal>> GetPriceForCar([FromQuery] decimal price, [FromQuery] string token, [FromQuery] DateTime start, [FromQuery] DateTime end)
         {
-            return Ok(_service.CalculatePrice(priceDto.Vehicle, priceDto.User, priceDto.Start, priceDto.End));
+            return Ok(await _service.CalculatePrice(price, token, start, end));
         }
     }
 }

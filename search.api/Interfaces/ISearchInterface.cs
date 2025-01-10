@@ -7,6 +7,6 @@ namespace search.api.Interfaces
     public interface ISearchInterface
     {
         public Task<SearchInfo> Search(DateTime start, DateTime end);
-        public decimal CalculatePrice(VehicleOurDto veh, UserDto user, DateTime start, DateTime end);
+        public Task<decimal> CalculatePrice(decimal price, string Token, DateTime start, DateTime end);
     }
 }

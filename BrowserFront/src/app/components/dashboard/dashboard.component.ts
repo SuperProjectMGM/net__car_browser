@@ -148,7 +148,6 @@ export class DashboardComponent {
   }
 
   get isLoggedIn(): boolean {
-    console.log("tu jestem", this.authService.isAuthenticated());
     return this.authService.isAuthenticated();
   }
 }

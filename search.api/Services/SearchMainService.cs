@@ -9,12 +9,14 @@ namespace search.api.Services
     {
         // Here We must ask api and after that create a SearchInfo object
         private readonly HttpClient _client;
+        private readonly IUserInfoInterface _userRepo;
         // Now it's hardcoded path. I think that we should develop something more interesting than hardcoded paths.
         public const string BasePath = "/api/Vehicle/available";
 
-        public SearchMainService(HttpClient client)
+        public SearchMainService(HttpClient client, IUserInfoInterface userRepo)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
+            _userRepo = userRepo;
         }
 
         // TODO: tu musimy daty przekazywac i pobierac juz samochody dla danego zakresu
@@ -29,9 +31,13 @@ namespace search.api.Services
             return info;
         }
 
-        public decimal CalculatePrice(VehicleOurDto veh, UserDto user, DateTime start, DateTime end)
+
+
+        public async Task<decimal> CalculatePrice(decimal price, string Token, DateTime start, DateTime end)
         {
-            decimal baseCostPerDay = veh.Price;
+            var userID = _userRepo.ReturnIdFromToken(Token);
+            var user = await _userRepo.FindUserById(userID!.Value);
+            decimal baseCostPerDay = price;
             int totalDays = (int)Math.Ceiling((end - start).TotalDays);
             int numberOfYearsLicense = (int)Math.Floor((end - start).TotalDays);
             decimal resCostPerDay = 1.2m * baseCostPerDay - baseCostPerDay * 0.05m * (numberOfYearsLicense / 10m);

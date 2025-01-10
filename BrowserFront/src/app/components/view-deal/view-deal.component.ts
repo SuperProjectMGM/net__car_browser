@@ -6,6 +6,7 @@ import { VehicleToRentService } from '../../services/VehicleToRent.service';
 import { AuthService } from '../../services/auth.service';
 import { ProfileService } from '../../services/profile.service';
 import { ToastrService } from 'ngx-toastr';
+import { PriceService } from '../../services/price.service';
 
 @Component({
   selector: 'app-view-deal',
@@ -26,7 +27,8 @@ export class ViewDealComponent {
     private vehicleToRentService: VehicleToRentService,
     private router: Router,
     private profileService: ProfileService,
-    private toastr: ToastrService // Dodano ToastrService
+    private toastr: ToastrService, // Dodano ToastrService
+    private priceService: PriceService
   ) {}
 
   ngOnInit(): void {
@@ -43,14 +45,25 @@ export class ViewDealComponent {
   }
 
   calculateTotalPrice(): void {
-    console.log(this.returnDateTime);
     if (this.pickupDateTime && this.returnDateTime && this.car) {
-      const timeDiff = Math.abs(
-        new Date(this.returnDateTime).getTime() -
-          new Date(this.pickupDateTime).getTime()
-      );
-      const days = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-      this.totalPrice = days * this.car.price;
+      const vehicle = this.car;
+      let token = localStorage.getItem('token');
+      const start = this.pickupDateTime;
+      const end = this.returnDateTime;
+
+      if (token === null || token === undefined)
+        throw new Error('Token is required but was not provided.');
+
+      this.priceService
+        .getPriceForCar(vehicle.price, token, start, end)
+        .subscribe(
+          (price) => {
+            this.totalPrice = price;
+          },
+          (error) => {
+            console.error('Error fetching price:', error);
+          }
+        );
     }
   }
 
