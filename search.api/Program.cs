@@ -110,7 +110,6 @@ builder.Services.Configure<IdentityOptions>(options =>
 
 
 builder.Services.AddScoped<ISearchInterface, SearchMainService>();
-//builder.Services.AddScoped<IVehicleGetter, OurVehicleGetter>();
 
 builder.Services.AddHttpClient<IVehicleGetter, OurVehicleGetter>(c =>
 c.BaseAddress = new Uri(builder.Configuration["HttpClientSettingsBaseUrl"]!));
