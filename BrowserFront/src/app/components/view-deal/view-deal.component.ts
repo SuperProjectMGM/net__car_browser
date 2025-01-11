@@ -47,7 +47,7 @@ export class ViewDealComponent {
   calculateTotalPrice(): void {
     if (this.pickupDateTime && this.returnDateTime && this.car) {
       const vehicle = this.car;
-      let token = localStorage.getItem('token');
+      let token = this.authService.getToken()
       const start = this.pickupDateTime;
       const end = this.returnDateTime;
 
