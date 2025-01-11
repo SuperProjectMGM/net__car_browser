@@ -106,7 +106,10 @@ public class Message
                 Start = rental.Start,
                 End = rental.End,
                 Status = rental.Status,
-                Description = rental.Description
+                Description = rental.Description,
+                ReturnClientDescription = rental.ReturnClientDescription,
+                ReturnLatitude = rental.ReturnLatitude,
+                ReturnLongtitude = rental.ReturnLongtitude
             };
             messageOurApi.MessageType = MessageType.RentalConfirmedByUser_OurAPI;
             return messageOurApi;
