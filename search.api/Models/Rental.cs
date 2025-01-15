@@ -13,6 +13,10 @@ public class Rental
     public DateTime End { get; set; }
     public RentalStatus Status { get; set; }
     public string Description { get; set; } = string.Empty;
+    public decimal Price { get; set; }
+    public float? ReturnLatitude { get; set; } = null;
+    public float? ReturnLongtitude { get; set; } = null;
+    public string? ReturnClientDescription { get; set; } = null;
 }
 
 public enum RentalStatus

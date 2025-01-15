@@ -43,7 +43,7 @@ namespace search.api.DTOs
 
         [JsonPropertyName("registryNo")]
         public string RegistryNo { get; set; } = string.Empty; 
-
+        public string RentalFirmName { get; set; } = string.Empty;
         public string PhotoUrl { get; set; } = string.Empty;
     }
 }

@@ -107,6 +107,22 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequiredLength = 6; // Example
 });
 
+
+
+
+builder.Services.AddScoped<ISearchInterface, SearchMainService>();
+
+builder.Services.AddHttpClient<IVehicleGetter, OurVehicleGetter>(c =>
+c.BaseAddress = new Uri(builder.Configuration["HttpClientSettingsBaseUrl"]!));
+// TODO: Here should be injected Uris for other remote sources
+//builder.Services.AddHttpClient<KEJVehicleGetter>(client => 
+//{
+//    client.BaseAddress = new Uri(builder.Configuration["UriKEJ"]);
+//});
+
+// TODO: Uncomment when second api will be ready
+// builder.Services.AddTransient<IVehicleGetter, KEJVehicleGetter>();
+
 // Konfiguracja CORS
 builder.Services.AddCors(options =>
 {
@@ -119,8 +135,6 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddHttpClient<ISearchInterface, SearchMainService>(c =>
-c.BaseAddress = new Uri(builder.Configuration["HttpClientSettingsBaseUrl"]!));
 
 var app = builder.Build();
 
