@@ -122,12 +122,13 @@ export class MyRentalsComponent implements OnInit {
   }
 
   getStatusText(status: string): string {
+    console.log(status);
     switch (status) {
       case 'Pending':
         return 'Pending Approval';
-      case 'Confirmed':
+      case 'ConfirmedByUser':
         return 'Confirmed';
-      case 'Completed':
+      case 'CompletedByEmployee':
         return 'Completed';
       case 'WaitingForReturnAcceptance':
         return 'Waiting for Return Acceptance';
@@ -142,9 +143,9 @@ export class MyRentalsComponent implements OnInit {
     switch (status) {
       case 'Pending':
         return 'status-pending';
-      case 'Confirmed':
+      case 'ConfirmedByUser':
         return 'status-confirmed';
-      case 'Completed':
+      case 'CompletedByEmployee':
         return 'status-completed';
       case 'WaitingForReturnAcceptance':
         return 'status-waiting';

@@ -70,7 +70,7 @@ export class AuthService {
 
     const vehicleRentRequest = {
       vehicleVin: car.vin,
-      rentalFirmId: '1', // TODO: zrobić wybieranie firmy
+      carProviderIdentifier: car.rentalFirmName,
       start: pickupDateTime,
       end: returnDateTime,
       description: car.description,

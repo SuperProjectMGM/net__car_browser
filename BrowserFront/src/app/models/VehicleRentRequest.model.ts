@@ -1,6 +1,6 @@
 export interface VehicleRentRequest {
     vehicleVin: string;
-    rentalFirmId: string;
+    carProviderIdentifier: string;
     start: Date;
     end: Date;
     description: string;

@@ -37,13 +37,13 @@
             <!-- Wyświetlanie przycisków w zależności od statusu -->
             <button
               class="btn btn-return"
-              *ngIf="rental.status === 'Completed'"
+              *ngIf="rental.status === 'CompletedByEmployee'"
               (click)="openReturnModal(rental)">
               Return Car
             </button>
             <button
               class="btn btn-cancel"
-              *ngIf="rental.status === 'Pending' || rental.status === 'Confirmed'"
+              *ngIf="rental.status === 'Pending' || rental.status === 'ConfirmedByUser'"
               (click)="openCancelModal(rental)">
               Cancel Reservation
             </button>
