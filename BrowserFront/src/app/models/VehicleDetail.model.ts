@@ -12,5 +12,6 @@ export class VehicleDetail {
   type: string = '';
   rate: number = 0.0;
   localization: string = '';
+  rentalFirmName: string = '';
   photoUrl: string = '';
 }

@@ -64,7 +64,6 @@ namespace search.api.Mappers
                 RentalFirmName = "KEJCO",
                 Type = kejDto.Type.ToString(),
                 Rate = 11
-
             };
         }
 
