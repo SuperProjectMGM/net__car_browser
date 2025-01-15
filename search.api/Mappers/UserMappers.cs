@@ -68,4 +68,27 @@ public static class UserMappers
         user.IdCardIssueDate = userDto.IdCardIssueDate;
         user.IdCardExpirationDate = userDto.IdCardExpirationDate;
     }
+
+    public static UserDetails ToUserDetails(this RegisterModel registerModel)
+    {
+        return new UserDetails
+        {
+            Email = registerModel.Email,
+            UserName = registerModel.UserName,
+            Name = registerModel.Name,
+            Surname = registerModel.Surname,
+            PhoneNumber = registerModel.PhoneNumber,
+            BirthDate = registerModel.DateOfBirth,
+            StreetAndNumber = registerModel.StreetAndNumber,
+            PostalCode = registerModel.PostalCode,
+            City = registerModel.City,
+            DrivingLicenseNumber = registerModel.DrivingLicenseNumber,
+            DrivingLicenseIssueDate = registerModel.DrivingLicenseIssueDate,
+            DrivingLicenseExpirationDate = registerModel.DrivingLicenseExpirationDate,
+            PersonalNumber = registerModel.PersonalNumber,
+            IdCardIssuedBy = registerModel.IdCardIssuedBy,
+            IdCardIssueDate = registerModel.IdCardIssueDate,
+            IdCardExpirationDate = registerModel.IdCardExpirationDate
+        };
+    }
 }

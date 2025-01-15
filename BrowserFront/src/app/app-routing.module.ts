@@ -7,6 +7,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
 import { MyRentalsComponent } from './components/my-rentals/my-rentals.component';
 import { ViewDealComponent } from './components/view-deal/view-deal.component';
+import { GoogleCallbackComponent } from './components/login/login.googleCallbackComponent';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -17,6 +18,7 @@ export const routes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'my-rentals', component: MyRentalsComponent },
   { path: 'view-deals', component: ViewDealComponent },
+  { path: 'auth/google-callback', component: GoogleCallbackComponent },
   { path: '**', redirectTo: 'dashboard' },
 ];
 

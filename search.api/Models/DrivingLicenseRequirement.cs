@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using search.api.Models;
 
 public class DrivingLicenseRequirement : IAuthorizationRequirement
@@ -18,21 +19,29 @@ public class DrivingLicenseRequirementHandler : AuthorizationHandler<DrivingLice
 
     protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, DrivingLicenseRequirement requirement)
     {
-        throw new NotImplementedException();
-        //if (context.User.Identity?.IsAuthenticated ?? false)
-        //{
-        //    var userEmail = context.User.FindFirst(ClaimTypes.Email)?.Value;
-        //    if (userEmail != null)
-        //    {
-        //        var user = await _userManager.FindByIdAsync(userEmail);
-        //        if (user != null && !string.IsNullOrEmpty(user.DrivingLicenseNumber) &&
-        //            !string.IsNullOrEmpty(user.DrivingLicenseIssueDate) &&
-        //            !string.IsNullOrEmpty(user.DrivingLicenseExpirationDate) && 
-        //            (DateTime.Parse(user.DrivingLicenseExpirationDate).CompareTo(DateTime.Now) == 1))  // Sprawdzamy czy walidne dane
-        //        {
-        //            context.Succeed(requirement);
-        //        }
-        //    }
-        //}
+        if (context.User.Identity?.IsAuthenticated ?? false)
+        {
+            var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId != null)
+            {
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user != null && !string.IsNullOrEmpty(user.DrivingLicenseNumber) &&
+                    (user.DrivingLicenseIssueDate != default) &&
+                    (user.DrivingLicenseExpirationDate != default) && 
+                    (user.DrivingLicenseExpirationDate.CompareTo(DateTime.Now) == 1))
+                {
+                    context.Succeed(requirement);
+                    return;
+                }
+            }
+        }
+
+        var httpContext = context.Resource as Microsoft.AspNetCore.Http.HttpContext;
+        if (httpContext != null)
+        {
+            httpContext.Response.StatusCode = StatusCodes.Status403Forbidden;
+            await httpContext.Response.WriteAsync("User must update driving license information.");
+        }
+        context.Fail(); 
     }
 }

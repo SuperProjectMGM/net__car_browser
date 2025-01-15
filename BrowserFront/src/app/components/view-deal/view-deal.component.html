@@ -12,7 +12,7 @@
     <!-- Lewa sekcja: Szczegóły samochodu -->
     <div class="car-summary">
       <h2 class="top-pick">🚘{{ car.brand }} {{ car.model }}</h2>
-      <img src="assets/car-placeholder.png" alt="{{ car.brand }} {{ car.model }}" />
+      <img src="{{car.photoUrl}}" alt="{{ car.brand }} {{ car.model }}" />
       <ul>
         <li>🚗 {{ car.type || 'N/A' }}</li>
         <li>🛠 Transmission: {{ car.transmission }}</li>

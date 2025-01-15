@@ -56,6 +56,8 @@ builder.Services.AddScoped<IEmailInterface, EmailService>();
 builder.Services.AddScoped<IRentalInterface, RentalRepository>();
 builder.Services.AddScoped<IAuthorizationHandler, DrivingLicenseRequirementHandler>();
 builder.Services.AddScoped<IMessageHandlerInterface, MessageHandler>();
+builder.Services.AddScoped<IAuthInterface, AuthRepository>();
+builder.Services.AddScoped<IUserInfoInterface, UserRepository>();
 builder.Services.AddSingleton<RabbitMessageService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -67,7 +69,6 @@ builder.Services.AddIdentity<UserDetails, IdentityRole<int>>().AddEntityFramewor
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    // Changed here for google auth.
     options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
@@ -83,13 +84,11 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT_KEY"]))
     };
 }).AddCookie()
-    // TODO: naprawic google autotcation cos nie tak...
-    // .AddGoogle(googleOptions =>
-    // {
-    //     googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
-    //     googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
-    //     //googleOptions.CallbackPath = "/search.api/Authenticate/login/google-callback";
-    // })
+      .AddGoogle(googleOptions =>
+      {
+          googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
+          googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
+      })
     ;
 
 builder.Services.AddAuthorization(options =>
@@ -104,7 +103,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireLowercase = true;
     options.Password.RequireUppercase = true;
     options.Password.RequireNonAlphanumeric = true;
-    options.Password.RequiredLength = 6; // Example
+    options.Password.RequiredLength = 6;
 });
 
 

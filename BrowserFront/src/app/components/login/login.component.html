@@ -39,7 +39,18 @@
               
               <button type="submit" class="btn btn-primary w-100">Login</button>
             </form>
-
+            <button 
+  (click)="loginWithGoogle()" 
+  class="btn btn-outline-primary google-login-btn w-100"
+>
+  <img 
+    src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/800px-Google_%22G%22_logo.svg.png" 
+    alt="Google Logo" 
+    width="20" 
+    class="google-logo"
+  />
+  <span class="google-login-text">Login with Google</span>
+</button>
             <!-- Registration section for users who don't have an account -->
           <div class="register-section text-center mt-3">
             <p>Don't have an account? <a href="javascript:void(0);" (click)="onSignUpClick()" class="btn btn-link">Sign up</a></p>

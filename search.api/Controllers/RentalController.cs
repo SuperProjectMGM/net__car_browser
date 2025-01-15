@@ -41,7 +41,6 @@ public class RentalController : Controller
         return Ok();
     }
 
-    [AllowAnonymous]
     [HttpGet("confirm-rental")]
     public async Task<IActionResult> RentalConfirmedByUser([FromQuery] string token)
     {

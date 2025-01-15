@@ -65,4 +65,70 @@ body {
   color: #0056b3;
 }
 
-  
+button.btn-outline-primary {
+  border: 2px solid #4285f4; /* Google blue border */
+  background-color: white;
+  color: #4285f4;
+  font-weight: bold;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px; /* Add padding for a better look */
+  transition: all 0.3s ease-in-out;
+  border-radius: 8px; /* Rounded corners */
+}
+
+button.btn-outline-primary img {
+  margin-right: 10px; /* Space between logo and text */
+}
+
+button.btn-outline-primary:hover {
+  background-color: #4285f4;
+  color: white;
+}
+
+button.btn-outline-primary:focus {
+  box-shadow: 0 0 5px #4285f4;
+  outline: none;
+}
+
+button.btn-outline-primary {
+  border: 2px solid #4285f4; /* Google blue border */
+  background-color: white;
+  color: #4285f4;
+  font-weight: bold;
+  font-size: 14px; /* Zmniejszono rozmiar tekstu */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px; /* Zmniejszono padding */
+  transition: all 0.3s ease-in-out;
+  border-radius: 30px; /* Zaokrąglenie dla nowoczesnego wyglądu */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtelny cień */
+  cursor: pointer; /* Wskaźnik kursora */
+  margin-top: 15px; /* Dodano przerwę między przyciskami */
+}
+
+button.btn-outline-primary img {
+  margin-right: 8px; /* Mniejszy odstęp między logo a tekstem */
+  width: 20px; /* Zmniejszono szerokość logo */
+  height: 20px; /* Dopasowanie proporcji logo */
+}
+
+button.btn-outline-primary:hover {
+  background-color: #4285f4;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+button.btn-outline-primary:focus {
+  box-shadow: 0 0 6px #4285f4;
+  outline: none;
+}
+
+button.btn-outline-primary:active {
+  transform: scale(0.97); /* Efekt kliknięcia */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+

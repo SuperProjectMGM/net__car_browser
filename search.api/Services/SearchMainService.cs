@@ -35,5 +35,18 @@ namespace search.api.Services
             info.Vehicles = resList;
             return info;
         }
+
+
+
+        public async Task<decimal> CalculatePrice(decimal price, string Token, DateTime start, DateTime end)
+        {
+            var userID = _userRepo.ReturnIdFromToken(Token);
+            var user = await _userRepo.FindUserById(userID!.Value);
+            decimal baseCostPerDay = price;
+            int totalDays = (int)Math.Ceiling((end - start).TotalDays);
+            int numberOfYearsLicense = (int)Math.Floor((end - start).TotalDays);
+            decimal resCostPerDay = 1.2m * baseCostPerDay - baseCostPerDay * 0.05m * (numberOfYearsLicense / 10m);
+            return resCostPerDay * totalDays;
+        }
     }
 }
