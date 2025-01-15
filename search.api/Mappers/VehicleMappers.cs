@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using search.api.DTOs;
 using search.api.Models;
 using System;
@@ -57,15 +58,22 @@ namespace search.api.Mappers
                 Brand = kejDto.Producer,
                 Model = kejDto.Model,
                 YearOfProduction = kejDto.YearOfProduction,
-                // TODO: Ask another team about price for a car and vin
                 Price = 999999,
-                // TODO: It's temporary solution. Concatenate vin and RentalService 
                 Vin = string.Join("", [$"{kejDto.RentalService}".ToUpper(), kejDto.Id.ToString()]),
-                PhotoUrl = "https://returnimages.blob.core.windows.net/vehicles/vehicles/zygzag.jpg",
-                Localization = kejDto.Location,
-                RentalFirmName = kejDto.RentalService,
-                Type = kejDto.Type
+                Localization = "Warsaw", 
+                RentalFirmName = "KEJCO",
+                Type = kejDto.Type.ToString(),
+                Rate = 11
+
             };
         }
+
+        public static string KEJParseLocalization(string loc)
+        {
+            string tmp = loc.Split(" ")[4];
+            tmp.Remove(tmp.Length - 1);
+            return tmp;
+        }
     }
+
 }

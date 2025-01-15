@@ -12,8 +12,6 @@ namespace search.api.Services
         private readonly IUserInfoInterface _userRepo;
         private readonly IEnumerable<IVehicleGetter> _vehicleGetters;
         // Now it's hardcoded path. I think that we should develop something more interesting than hardcoded paths.
-        public const string BasePath = "/api/Vehicle/available";
-        public const string ExternalFirstPath = "";
 
         public SearchMainService(IConfiguration configuration, IEnumerable<IVehicleGetter> vehicleGetters, IUserInfoInterface userRepo)
         {

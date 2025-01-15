@@ -111,23 +111,18 @@ builder.Services.Configure<IdentityOptions>(options =>
 
 builder.Services.AddScoped<ISearchInterface, SearchMainService>();
 
-builder.Services.AddHttpClient<IVehicleGetter, OurVehicleGetter>(c =>
-c.BaseAddress = new Uri(builder.Configuration["HttpClientSettingsBaseUrl"]!));
+builder.Services.AddHttpClient<IVehicleGetter, OurVehicleGetter>();
 // TODO: Here should be injected Uris for other remote sources
-//builder.Services.AddHttpClient<KEJVehicleGetter>(client => 
-//{
-//    client.BaseAddress = new Uri(builder.Configuration["UriKEJ"]);
-//});
+builder.Services.AddHttpClient<IVehicleGetter, KEJVehicleGetter>();
 
-// TODO: Uncomment when second api will be ready
-// builder.Services.AddTransient<IVehicleGetter, KEJVehicleGetter>();
 
 // Konfiguracja CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", builder =>
     {
-        builder.WithOrigins("http://localhost:4199", "https://nice-tree-06b2b2403.5.azurestaticapps.net", "http://localhost:4199/dashboard", "https://localhost:4199")
+        builder.WithOrigins("http://localhost:4199", "https://nice-tree-06b2b2403.5.azurestaticapps.net",
+         "http://localhost:4199/dashboard", "https://localhost:4199")
                .AllowAnyMethod()
                .AllowAnyHeader()
                 .AllowCredentials();

@@ -6,7 +6,7 @@ public class VehicleKEJDto
     public string Model { get; set; }
     public int YearOfProduction { get; set; }
     public int NumberOfSeats { get; set; }
-    public string Type { get; set; }
+    public int Type { get; set; }
     public bool IsAvailable { get; set; }
     public string Location { get; set; }
 }
