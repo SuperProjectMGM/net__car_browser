@@ -9,15 +9,17 @@ namespace search.api.Services
     {
         // Here We must ask api and after that create a SearchInfo object
         private readonly IConfiguration _configuration;
+        private readonly IUserInfoInterface _userRepo;
         private readonly IEnumerable<IVehicleGetter> _vehicleGetters;
         // Now it's hardcoded path. I think that we should develop something more interesting than hardcoded paths.
         public const string BasePath = "/api/Vehicle/available";
         public const string ExternalFirstPath = "";
 
-        public SearchMainService(IConfiguration configuration, IEnumerable<IVehicleGetter> vehicleGetters)
+        public SearchMainService(IConfiguration configuration, IEnumerable<IVehicleGetter> vehicleGetters, IUserInfoInterface userRepo)
         {
             _vehicleGetters = vehicleGetters;
             _configuration = configuration;
+            _userRepo = userRepo;
         }
 
         public async Task<SearchInfo> Search(DateTime start, DateTime end)

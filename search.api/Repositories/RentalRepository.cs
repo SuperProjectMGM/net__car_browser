@@ -172,7 +172,7 @@ public class RentalRepository : IRentalInterface
         dbRental.Status = RentalStatus.Returned;
         await _context.SaveChangesAsync();
 
-        await _emailService.ReturnEmailAsync(user.Email!, user.UserName!, mess.PaymentDue, dbRental.Slug);
+        await _emailService.ReturnEmailAsync(user.Email!, user.UserName!, (float)dbRental.Price, dbRental.Slug);
     }
 
     public async Task<List<Rental>> ReturnUsersRentals(string personalNumber)
