@@ -25,6 +25,7 @@ public class RentalRepository : IRentalInterface
 
     public RentalRepository(IEmailInterface emailService, IConfiguration configuration, AppDbContext context,
         AuthDbContext authDbContext, RabbitMessageService rabbitService)
+
     {
         _rabbitMessageService = rabbitService;
         _emailService = emailService;
@@ -32,7 +33,6 @@ public class RentalRepository : IRentalInterface
         _context = context;
         _authDbContext = authDbContext;
     }
-
     
     public async Task SendConfirmationEmail(
         string userEmail, string userName, int userId, string scheme, string host,

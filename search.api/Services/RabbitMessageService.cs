@@ -85,14 +85,15 @@ public class RabbitMessageService
             using var scope = _serviceProvider.CreateScope();
             var rentalInterface = scope.ServiceProvider.GetRequiredService<IMessageHandlerInterface>();
             await rentalInterface.ProcessMessage(message);
+
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error processing message: {ex.Message}");
         }
     }
-    
     public async Task SendMessage(string message)
+
     {
         var encodedMes = Encoding.UTF8.GetBytes(message);
         var memoryBody = new ReadOnlyMemory<byte>(encodedMes);
