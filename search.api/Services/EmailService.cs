@@ -20,7 +20,7 @@ public class EmailService : IEmailInterface
         _configuration = configuration;
     }
     
-    public async Task SendRentalConfirmationEmailAsync(string toUser, string username, string slug, string confirmationLink)
+    public async Task ConfirmationEmailAsync(string toUser, string username, string slug, string confirmationLink)
     {
         var apiKey = _configuration["SEND_GRID_API_KEY"];
         var client = new SendGridClient(apiKey);
@@ -46,13 +46,13 @@ public class EmailService : IEmailInterface
         var response = await client.SendEmailAsync(msg);
     }
 
-    public async Task SendRentalCompletionEmailAsync(string toUser, string username, string rentSlug)
+    public async Task CompletionEmailAsync(string toUser, string username, string rentSlug)
     {
         var apiKey = _configuration["SEND_GRID_API_KEY"];
         var client = new SendGridClient(apiKey);
         var from = new EmailAddress(_configuration["MAIL_SENDER"], _searchName);
         var to = new EmailAddress(toUser, username);
-        var plainTextContent = "Your rental has been completed successfully!";
+        var plainTextContent = $"Your rental {rentSlug} has been completed successfully!";
         string subject = "Rental completion!";
         
         var htmlContent = $@"
@@ -71,7 +71,37 @@ public class EmailService : IEmailInterface
         var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
         var response = await client.SendEmailAsync(msg);
     }
-    
+
+    public async Task ReturnEmailAsync(string toUser, string username, float paymentDue, string rentSlug)
+    {
+        var apiKey = _configuration["SEND_GRID_API_KEY"];
+        var client = new SendGridClient(apiKey);
+        var from = new EmailAddress(_configuration["MAIL_SENDER"], _searchName);
+        var to = new EmailAddress(toUser, username);
+        string subject = "Rental returned!";
+        var plainTextContent = 
+            $"Your rental {rentSlug} has been returned successfully!\n" +
+            $"Payment due is {paymentDue} PLN.\n" +
+            $"Your bank account has been charged.";
+        
+        var htmlContent = $@"
+        <html>
+            <body>
+                <h1>Rental returned!</h1>
+                <p>Dear {username},</p>
+                <p>{plainTextContent}</p>               
+                <p>Thank you for using {_searchName}!</p>
+                <footer>
+                    <p>--<br/>{_searchName} Team</p>
+                </footer>
+            </body>
+        </html>";
+        
+        var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+        var response = await client.SendEmailAsync(msg);
+    }
+
+
     public string GenerateConfirmationRentToken(string email, string username, int id, int rentId, IConfiguration configuration)
     {
         var claims = new List<Claim>

@@ -1,18 +1,17 @@
-using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using NanoidDotNet;
-using Newtonsoft.Json;
 using search.api.Data;
 using search.api.DTOs;
 using search.api.Interfaces;
 using search.api.Mappers;
+using search.api.Messages;
 using search.api.Models;
+using search.api.Providers;
 using search.api.Services;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace search.api.Repositories;
 
@@ -21,34 +20,32 @@ public class RentalRepository : IRentalInterface
     private readonly IEmailInterface _emailService;
     private readonly IConfiguration _configuration;
     private readonly AppDbContext _context;
-    private readonly RabbitMessageService _messageService;
     private readonly AuthDbContext _authDbContext;
+    private readonly RabbitMessageService _rabbitMessageService;
 
     public RentalRepository(IEmailInterface emailService, IConfiguration configuration, AppDbContext context,
-        RabbitMessageService messageService,
-        AuthDbContext authDbContext)
+        AuthDbContext authDbContext, RabbitMessageService rabbitService)
     {
+        _rabbitMessageService = rabbitService;
         _emailService = emailService;
         _configuration = configuration;
         _context = context;
-        _messageService = messageService;
         _authDbContext = authDbContext;
     }
 
     
-    public async Task<bool> SendConfirmationEmail(string userEmail, string userName, int userId, string scheme,
-        string host,
-        VehicleRentRequest request)
+    public async Task SendConfirmationEmail(
+        string userEmail, string userName, int userId, string scheme, string host,
+        VehicleRentRequestDto requestDto)
     {
-        // TODO: We have got do add some logic handling different vehicle providers
-        var rentalModel = await CreateRental(request, userId);
+        var rentalModel = await CreateRental(requestDto, userId);
         
         var token = _emailService.GenerateConfirmationRentToken(userEmail, userName, userId, rentalModel.Id,
             _configuration);
         
+        // TODO: We MAY change this, but do we want to? 
         var confirmationUrl = $"{scheme}://{host}/search.api/Rental/confirm-rental?token={token}";
-        await _emailService.SendRentalConfirmationEmailAsync(userEmail,userName, rentalModel.Slug, confirmationUrl);
-        return await Task.FromResult(true);
+        await _emailService.ConfirmationEmailAsync(userEmail,userName, rentalModel.Slug, confirmationUrl);
     }
 
     public bool ValidateIfTokenHasExpired(string token)
@@ -91,7 +88,7 @@ public class RentalRepository : IRentalInterface
     }
 
     
-    public async Task<Rental?> CompleteRentalAndSend(int userId, int rentId)
+    public async Task<Rental?> UserConfirmedRental(int userId, int rentId)
     {
         var rental = await _context.Rentals.FirstOrDefaultAsync(x => x.Id == rentId);
         if (rental == null)
@@ -103,39 +100,40 @@ public class RentalRepository : IRentalInterface
         rental.Status = RentalStatus.ConfirmedByUser;
         await _context.SaveChangesAsync();
         
-        
-        var message = Message.MessageFactoryRentalConfirmedByUser(rental, userDetails);
-        
-        string jsonString = JsonSerializer.Serialize(message);
-        var success = await _messageService.SendMessage(jsonString);
-        if (!success)
-            return null;
+        var provider = ProviderAdapterFactory.CreateProvider(rental.CarProviderIdentifier, _rabbitMessageService);
+        try
+        {
+            await provider.ConfirmRental(rental, userDetails);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error during confirmation of a rental: {ex.Message}");
+        }
         return rental;
     }
-
-    public async Task RentalCompletion(RentalMessage mess)
+    
+    public async Task RentalCompletion(Completed mess)
     {
         var dbRental = await _context.Rentals.FirstOrDefaultAsync(x => x.Slug == mess.Slug);
         if (dbRental is null)
-            throw new Exception("There is no such rental in DB");
-
+            throw new Exception("There is no such rental in DB.");
+    
         var user = await _authDbContext.Users.FirstOrDefaultAsync(x => x.Id == dbRental.UserId);
         if (user is null)
             throw new Exception("User invalid.");
-
+    
         dbRental.Status = RentalStatus.CompletedByEmployee;
         await _context.SaveChangesAsync();
-        await _emailService.SendRentalCompletionEmailAsync(user.Email!, user.UserName!, dbRental.Slug);
+        await _emailService.CompletionEmailAsync(user.Email!, user.UserName!, dbRental.Slug);
     }
-
-    private async Task<Rental> CreateRental(VehicleRentRequest request, int userId)
+    private async Task<Rental> CreateRental(VehicleRentRequestDto requestDto, int userId)
     {
-        var rentalModel = request.ToRentalFromRequest(userId, request.Description);
+        var rentalModel = requestDto.ToRentalFromRequest(userId, requestDto.Description);
         await _context.Rentals.AddAsync(rentalModel);
         await _context.SaveChangesAsync();
         return rentalModel;
     }
-
+    
     public async Task<bool> ReturnRental(string slug)
     {
         var rental = await _context.Rentals.FirstOrDefaultAsync((rental) => rental.Slug == slug);
@@ -144,37 +142,38 @@ public class RentalRepository : IRentalInterface
         var userDetails = await _authDbContext.Users.FirstOrDefaultAsync(x => x.Id == rental!.UserId);
         if (userDetails == null)
             return false;
-
+    
         rental.Status = RentalStatus.WaitingForReturnAcceptance;
         await _context.SaveChangesAsync();
-        var mess = CreateRentMessage(rental, userDetails);
-        mess.MessageType = MessageType.RentalToReturn;
-        var jsonStr = JsonSerializer.Serialize(mess);
-        var success = await _messageService.SendMessage(jsonStr);
-        return success;
+
+        var provider = ProviderAdapterFactory.CreateProvider(rental.CarProviderIdentifier, _rabbitMessageService);
+        try
+        {
+            await provider.ReturnRental(rental);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error while returning rental: {ex.Message}");
+        }
+
+        return true;
     }
 
-    public async Task RentalReturnAccepted(RentalMessage mess)
+    public async Task RentalReturnAccepted(EmployeeReturn mess)
     {
         var dbRental = await _context.Rentals.FirstOrDefaultAsync(x => x.Slug == mess.Slug);
         if (dbRental is null)
             throw new Exception("There is no such rental in DB");
-
+    
         var user = await _authDbContext.Users.FirstOrDefaultAsync(x => x.Id == dbRental.UserId);
         if (user is null)
             throw new Exception("User invalid.");
         
         dbRental.Status = RentalStatus.Returned;
-        
         await _context.SaveChangesAsync();
-    }
 
-    // private RentMessage CreateRentMessage(Rental rental, UserDetails userDetails)
-    // {
-    //
-    //
-    //     return message;
-    // }
+        await _emailService.ReturnEmailAsync(user.Email!, user.UserName!, mess.PaymentDue, dbRental.Slug);
+    }
 
     public async Task<List<Rental>> ReturnUsersRentals(string personalNumber)
     {
@@ -182,4 +181,5 @@ public class RentalRepository : IRentalInterface
         int id = user!.Id;
         return await _context.Rentals.Where((rent) => rent.UserId == id).ToListAsync();
     }
+
 }

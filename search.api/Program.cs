@@ -12,6 +12,8 @@ using search.api.Models;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authorization;
 using search.api.AppExtensions;
+using search.api.Messages;
+using search.api.Providers;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -53,7 +55,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddScoped<IEmailInterface, EmailService>();
 builder.Services.AddScoped<IRentalInterface, RentalRepository>();
 builder.Services.AddScoped<IAuthorizationHandler, DrivingLicenseRequirementHandler>();
-builder.Services.AddScoped<IMessageHandler, MessageHandler>();
+builder.Services.AddScoped<IMessageHandlerInterface, MessageHandler>();
 builder.Services.AddSingleton<RabbitMessageService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>

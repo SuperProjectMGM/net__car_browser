@@ -1,33 +1,31 @@
-
 using System.Text;
 using System.Text.Json;
-using Pomelo.EntityFrameworkCore.MySql.Storage.Internal;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using search.api.Interfaces;
+using search.api.Messages;
 using search.api.Models;
-
 namespace search.api.Services;
 
 public class RabbitMessageService
 {
-    private readonly string _queueName = "browserToRental";
+    private readonly string _queueProducer = "browserToRental";
     
-    private readonly string _queueName2 = "rentalToBrowser";
+    private readonly string _queueConsumer = "rentalToBrowser";
 
     private  IConnection? _connection;
 
-    private IChannel? _channel;
+    private IChannel? _channelProducer;
 
-    private IChannel? _channel2;
-    
-    private readonly IServiceProvider _serviceProvider;
+    private IChannel? _channelConsumer;
     
     private readonly IConfiguration _configuration;
-    public RabbitMessageService(IServiceProvider serviceProvider, IConfiguration configuration)
+
+    private readonly IServiceProvider _serviceProvider;
+    
+    public RabbitMessageService(IConfiguration configuration, IServiceProvider serviceProvider)
     {
-        _serviceProvider = serviceProvider;
         _configuration = configuration;
+        _serviceProvider = serviceProvider;
     }
     
     public async Task Register()
@@ -43,26 +41,26 @@ public class RabbitMessageService
             };
 
             _connection = await factory.CreateConnectionAsync();
-            _channel = await _connection.CreateChannelAsync();
-            _channel2 = await _connection.CreateChannelAsync();
+            _channelProducer = await _connection.CreateChannelAsync();
+            _channelConsumer = await _connection.CreateChannelAsync();
 
-            await _channel.QueueDeclareAsync(
-                queue: _queueName,
+            await _channelProducer.QueueDeclareAsync(
+                queue: _queueProducer,
                 durable: true,
                 exclusive: false,
                 autoDelete: false,
                 arguments: null);
 
-            await _channel2.QueueDeclareAsync(
-                queue: _queueName2,
+            await _channelConsumer.QueueDeclareAsync(
+                queue: _queueConsumer,
                 durable: true,
                 exclusive: false,
                 autoDelete: false,
                 arguments: null);
 
-            var consumer = new AsyncEventingBasicConsumer(_channel2);
+            var consumer = new AsyncEventingBasicConsumer(_channelConsumer);
             consumer.ReceivedAsync += async (sender, ea) => await MessageReceived(sender, ea);
-            await _channel2.BasicConsumeAsync(_queueName2, autoAck: true, consumer: consumer);
+            await _channelConsumer.BasicConsumeAsync(_queueConsumer, autoAck: true, consumer: consumer);
         }
         catch (Exception ex)
         {
@@ -82,33 +80,33 @@ public class RabbitMessageService
         {
             var body = eventArgs.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
+            if (message is null)
+                throw new Exception("Message corrupted.");
             using var scope = _serviceProvider.CreateScope();
-            var messageHandler = scope.ServiceProvider.GetRequiredService<IMessageHandler>();
-            await messageHandler.ProcessMessage(message);
+            var rentalInterface = scope.ServiceProvider.GetRequiredService<IMessageHandlerInterface>();
+            await rentalInterface.ProcessMessage(message);
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error processing message: {ex.Message}");
         }
     }
-
-    public async Task<bool> SendMessage(string message)
+    
+    public async Task SendMessage(string message)
     {
         var encodedMes = Encoding.UTF8.GetBytes(message);
         var memoryBody = new ReadOnlyMemory<byte>(encodedMes);
         try
         {
-            await _channel.BasicPublishAsync(
+            await _channelProducer.BasicPublishAsync(
                 exchange: "",
-                routingKey: _queueName,
+                routingKey: _queueProducer,
                 body: memoryBody
             );
         }
-        catch
+        catch (Exception ex)
         {
-            return false;
+            Console.WriteLine($"Error processing message: {ex.Message}");
         }
-
-        return true;
     }
 }

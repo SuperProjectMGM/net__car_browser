@@ -7,9 +7,6 @@ public class Rental
     public int Id { get; set; } 
     public string Slug { get; set; } = string.Empty;
     public int UserId { get; set; }
-    
-    // Temporary, till we figure out how we are supposed to handle multiple vehicle providers logic
-    //public int RentalFirmId { get; set; }
     public string CarProviderIdentifier { get; set; } = string.Empty;
     public string Vin { get; set; } = string.Empty;
     public DateTime Start { get; set; }

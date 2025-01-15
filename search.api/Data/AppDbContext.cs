@@ -10,5 +10,5 @@ public class AppDbContext : DbContext
         
     }
     public DbSet<Rental> Rentals { get; set; }
-    public DbSet<RentalFirm> Firms { get; set; }
+    //public DbSet<RentalFirm> Firms { get; set; }
 }
