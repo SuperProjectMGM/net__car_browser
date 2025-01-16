@@ -46,8 +46,8 @@ namespace search.api.Controllers
             return Ok(availableCars);
         }
 
-        [HttpGet("price")]
-        public async Task<ActionResult<decimal>> GetPriceForCar([FromQuery] decimal price, [FromQuery] string token, [FromQuery] DateTime start, [FromQuery] DateTime end)
+        [HttpPost("price")]
+        public async Task<ActionResult<decimal>> GetPriceForCar([FromBody] VehicleOurDto price, [FromQuery] string token, [FromQuery] DateTime start, [FromQuery] DateTime end)
         {
             return Ok(await _service.CalculatePrice(price, token, start, end));
         }

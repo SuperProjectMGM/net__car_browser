@@ -146,4 +146,5 @@ public class AuthRepository : IAuthInterface
         var shuffled = chars.OrderBy(c => rand.NextDouble()).ToArray();
         return new string(shuffled);
     }
+
 }

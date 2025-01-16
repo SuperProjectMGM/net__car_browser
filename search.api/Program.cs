@@ -107,16 +107,11 @@ builder.Services.Configure<IdentityOptions>(options =>
 });
 
 
-
-
 builder.Services.AddScoped<ISearchInterface, SearchMainService>();
 
 builder.Services.AddHttpClient<IVehicleGetter, OurVehicleGetter>();
-// TODO: Here should be injected Uris for other remote sources
 builder.Services.AddHttpClient<IVehicleGetter, KEJVehicleGetter>();
 
-
-// Konfiguracja CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", builder =>
