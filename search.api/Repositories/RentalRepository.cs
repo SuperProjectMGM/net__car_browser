@@ -149,7 +149,7 @@ public class RentalRepository : IRentalInterface
         rental.Status = RentalStatus.WaitingForReturnAcceptance;
         await _context.SaveChangesAsync();
 
-        var provider = ProviderAdapterFactory.CreateProvider(rental.CarProviderIdentifier, _rabbitMessageService);
+        var provider = ProviderAdapterFactory.CreateProvider(rental.CarProviderIdentifier, _rabbitMessageService, _httpClient);
         try
         {
             await provider.ReturnRental(rental);

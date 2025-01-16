@@ -59,7 +59,7 @@ namespace search.api.Mappers
                 Model = kejDto.Model,
                 YearOfProduction = kejDto.YearOfProduction,
                 Price = 999999,
-                Vin = string.Join("_", [$"{kejDto.RentalService}".ToUpper(), kejDto.Id.ToString()]),
+                //Vin = string.Join("_", [$"{kejDto.RentalService}".ToUpper(), kejDto.Id.ToString()]),
                 Localization = "Warsaw", 
                 RentalFirmName = "KEJCO",
                 Type = kejDto.Type.ToString(),
