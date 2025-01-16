@@ -30,6 +30,7 @@
       [(ngModel)]="vehicleToRentService.returnDateTime"
       class="search-input date-input return-date"
       placeholder="Return Date and Time"
+      [min]="vehicleToRentService.pickupDateTime"
     />
 
     
