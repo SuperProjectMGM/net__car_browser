@@ -53,23 +53,34 @@
     </div>
 
     <!-- Modals -->
-    <div class="modal-backdrop" *ngIf="isReturnModalVisible">
-      <div class="modal-content">
-        <h3>Return Confirmation</h3>
-        <div class="modal-form">
-          <label>Latitude:</label>
-          <input type="text" [(ngModel)]="returnData.latitude" placeholder="Enter car latitude" />
-          <label>Longtitude:</label>
-          <input type="text" [(ngModel)]="returnData.longtitude" placeholder="Enter car longtitude" />
-          <label>Feedback:</label>
-          <textarea [(ngModel)]="returnData.feedback" placeholder="Your opinion"></textarea>
-        </div>
-        <div class="modal-actions">
-          <button class="btn btn-confirm" (click)="confirmReturn()">Confirm Return</button>
-          <button class="btn btn-cancel" (click)="closeModal()">Cancel</button>
-        </div>
-      </div>
+<div class="modal-backdrop" *ngIf="isReturnModalVisible">
+  <div class="modal-content">
+    <h3>Return Confirmation</h3>
+    <div class="modal-form">
+      <label>Latitude:</label>
+      <input
+        type="number"
+        step="any"
+        [(ngModel)]="returnData.latitude"
+        placeholder="Enter car latitude"
+      />
+      <label>Longitude:</label>
+      <input
+        type="number"
+        step="any"
+        [(ngModel)]="returnData.longtitude"
+        placeholder="Enter car longitude"
+      />
+
+      <label>Feedback:</label>
+      <textarea [(ngModel)]="returnData.feedback" placeholder="Your opinion"></textarea>
     </div>
+    <div class="modal-actions">
+      <button class="btn btn-confirm" (click)="confirmReturn()">Confirm Return</button>
+      <button class="btn btn-cancel" (click)="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
 
     <div class="modal-backdrop" *ngIf="isCancelModalVisible">
       <div class="modal-content">
