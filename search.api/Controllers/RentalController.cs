@@ -1,15 +1,10 @@
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components.Forms.Mapping;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using search.api.DTOs;
 using search.api.Interfaces;
 using search.api.Mappers;
 using search.api.Models;
-using search.api.Repositories;
 
 namespace search.api.Controllers;
 
@@ -35,9 +30,10 @@ public class RentalController : Controller
 
         if (userEmail == null || userName == null)
             return BadRequest("Invalid user credentials");
-
+        
         await _rentalRepo.SendConfirmationEmail(userEmail, userName, userId,
             Request.Scheme, Request.Host.ToString(), requestDto);
+        
         return Ok();
     }
 

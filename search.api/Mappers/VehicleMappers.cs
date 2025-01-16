@@ -60,7 +60,7 @@ namespace search.api.Mappers
                 // TODO: Ask another team about price for a car and vin
                 Price = 999999,
                 // TODO: It's temporary solution. Concatenate vin and RentalService 
-                Vin = string.Join("", [$"{kejDto.RentalService}".ToUpper(), kejDto.Id.ToString()]),
+                Vin = $"{kejDto.RentalService}".ToUpper() + kejDto.Id,
                 PhotoUrl = "https://returnimages.blob.core.windows.net/vehicles/vehicles/zygzag.jpg",
                 Localization = kejDto.Location,
                 RentalFirmName = kejDto.RentalService,

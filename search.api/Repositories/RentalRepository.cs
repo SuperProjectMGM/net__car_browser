@@ -22,9 +22,10 @@ public class RentalRepository : IRentalInterface
     private readonly AppDbContext _context;
     private readonly AuthDbContext _authDbContext;
     private readonly RabbitMessageService _rabbitMessageService;
+    private readonly HttpClient _httpClient;
 
     public RentalRepository(IEmailInterface emailService, IConfiguration configuration, AppDbContext context,
-        AuthDbContext authDbContext, RabbitMessageService rabbitService)
+        AuthDbContext authDbContext, RabbitMessageService rabbitService, HttpClient httpClient)
 
     {
         _rabbitMessageService = rabbitService;
@@ -32,6 +33,7 @@ public class RentalRepository : IRentalInterface
         _configuration = configuration;
         _context = context;
         _authDbContext = authDbContext;
+        _httpClient = httpClient;
     }
     
     public async Task SendConfirmationEmail(
@@ -39,11 +41,9 @@ public class RentalRepository : IRentalInterface
         VehicleRentRequestDto requestDto)
     {
         var rentalModel = await CreateRental(requestDto, userId);
-        
         var token = _emailService.GenerateConfirmationRentToken(userEmail, userName, userId, rentalModel.Id,
             _configuration);
         
-        // TODO: We MAY change this, but do we want to? 
         var confirmationUrl = $"{scheme}://{host}/search.api/Rental/confirm-rental?token={token}";
         await _emailService.ConfirmationEmailAsync(userEmail,userName, rentalModel.Slug, confirmationUrl);
     }
@@ -86,7 +86,6 @@ public class RentalRepository : IRentalInterface
 
         return (email, id, username, rentId);
     }
-
     
     public async Task<Rental?> UserConfirmedRental(int userId, int rentId)
     {
@@ -96,11 +95,8 @@ public class RentalRepository : IRentalInterface
         var userDetails = await _authDbContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
         if (userDetails == null)
             return null;
-
-        rental.Status = RentalStatus.ConfirmedByUser;
-        await _context.SaveChangesAsync();
         
-        var provider = ProviderAdapterFactory.CreateProvider(rental.CarProviderIdentifier, _rabbitMessageService);
+        var provider = ProviderAdapterFactory.CreateProvider(rental.CarProviderIdentifier, _rabbitMessageService, _httpClient);
         try
         {
             await provider.ConfirmRental(rental, userDetails);
@@ -109,6 +105,9 @@ public class RentalRepository : IRentalInterface
         {
             Console.WriteLine($"Error during confirmation of a rental: {ex.Message}");
         }
+        
+        await _context.SaveChangesAsync();
+        
         return rental;
     }
     
@@ -126,6 +125,7 @@ public class RentalRepository : IRentalInterface
         await _context.SaveChangesAsync();
         await _emailService.CompletionEmailAsync(user.Email!, user.UserName!, dbRental.Slug);
     }
+    
     private async Task<Rental> CreateRental(VehicleRentRequestDto requestDto, int userId)
     {
         var rentalModel = requestDto.ToRentalFromRequest(userId, requestDto.Description);
@@ -142,11 +142,8 @@ public class RentalRepository : IRentalInterface
         var userDetails = await _authDbContext.Users.FirstOrDefaultAsync(x => x.Id == rental!.UserId);
         if (userDetails == null)
             return false;
-    
-        rental.Status = RentalStatus.WaitingForReturnAcceptance;
-        await _context.SaveChangesAsync();
 
-        var provider = ProviderAdapterFactory.CreateProvider(rental.CarProviderIdentifier, _rabbitMessageService);
+        var provider = ProviderAdapterFactory.CreateProvider(rental.CarProviderIdentifier, _rabbitMessageService, _httpClient);
         try
         {
             await provider.ReturnRental(rental);
@@ -156,6 +153,7 @@ public class RentalRepository : IRentalInterface
             Console.WriteLine($"Error while returning rental: {ex.Message}");
         }
 
+        await _context.SaveChangesAsync();
         return true;
     }
 
