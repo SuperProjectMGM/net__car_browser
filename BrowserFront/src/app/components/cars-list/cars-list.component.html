@@ -17,7 +17,9 @@
               <p class="car-item__firm-name">Provided by: {{ car.rentalFirmName }}</p>
             </div>
             <div class="car-item__price-group">
-              <p class="car-item__price">{{ car.price | currency:'PLN ':'symbol' }} / day</p>
+              <p class="car-item__price">
+                {{ car.price === 999999 ? 'unknown' : (car.price | currency:'PLN ':'symbol') }} / day
+              </p>
             </div>
           </div>
           <div class="car-item__features">

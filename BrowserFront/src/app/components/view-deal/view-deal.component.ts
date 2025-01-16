@@ -55,10 +55,10 @@ export class ViewDealComponent {
         throw new Error('Token is required but was not provided.');
 
       this.priceService
-        .getPriceForCar(vehicle.price, token, start, end)
+        .getPriceForCar(vehicle, token, start, end)
         .subscribe(
           (price) => {
-            this.totalPrice = price;
+            this.totalPrice = parseFloat(price.toFixed(2));
           },
           (error) => {
             console.error('Error fetching price:', error);

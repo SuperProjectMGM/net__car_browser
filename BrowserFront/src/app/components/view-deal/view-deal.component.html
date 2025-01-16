@@ -30,7 +30,7 @@
 
       <h3>Car price</h3>
       <p>Car hire charge: <strong>{{ totalPrice }} zł</strong></p>
-      <p><strong>Price for 1 day:</strong> {{ car.price }} zł</p>
+      <p><strong>Price for 1 day:</strong> {{ car.price === 999999 ? 'unknown' : (car.price | currency:'PLN ':'symbol') }} zł</p>
     </div>
   </div>
 
