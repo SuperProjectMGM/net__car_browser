@@ -59,6 +59,7 @@ builder.Services.AddScoped<IMessageHandlerInterface, MessageHandler>();
 builder.Services.AddScoped<IAuthInterface, AuthRepository>();
 builder.Services.AddScoped<IUserInfoInterface, UserRepository>();
 builder.Services.AddSingleton<RabbitMessageService>();
+builder.Services.AddHttpClient<IRentalInterface, RentalRepository>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Devconnection")));
