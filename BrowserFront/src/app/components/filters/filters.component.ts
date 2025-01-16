@@ -75,12 +75,9 @@ export class FiltersComponent {
           console.warn('No available cars to update models.');
           return;
         }
-
         this.models = availableCars
           .filter((car) => car.brand === selectedBrand)
           .map((car) => car.model);
-
-        // Remove duplicates
         this.models = [...new Set(this.models)];
       });
     }

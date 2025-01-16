@@ -55,7 +55,6 @@ export class RegistrationComponent {
       return;
     }
 
-    // Sprawdzenie znaku '@' w email
     if (!this.registerModel.email.includes('@')) {
       this.errorMessage = "Invalid email: must contain '@'.";
       return;

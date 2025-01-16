@@ -22,17 +22,15 @@ export class PriceService {
       throw new Error('RentalFrom and RentalTo dates must be provided and valid');
     }
   
-    // Składamy query parametry zgodnie z [FromQuery] w kontrolerze
     const params = new HttpParams()
       .set('token', token)
       .set('start', start.toString())
       .set('end', end.toString());
   
-    // Wysyłamy POST, bo kontroler ma [HttpPost("price")] i [FromBody] price
     return this.http.post<number>(
       `${this.apiUrl}/Search/price`, 
-      car,          // <-- Body (VehicleOurDto)
-      { params }    // <-- Query string z tokenem i datami
+      car, 
+      { params}
     );
   }
 }

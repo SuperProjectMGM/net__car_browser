@@ -76,7 +76,7 @@ export class MyRentalsComponent implements OnInit {
   }
 
   goToMyRentals(): void {
-    console.log('Już znajdujesz się na zakładce Moje Rezerwacje');
+    console.log('You are in the reservation screen');
   }
 
   openReturnModal(rental: Rental): void {
@@ -106,8 +106,8 @@ export class MyRentalsComponent implements OnInit {
       .put(`${this.baseUrl}/Rental/return-rental`, null, { params })
       .subscribe({
         next: () => {
-          console.log('Dane zwrotu:', this.returnData);
-          console.log(`Samochód ${this.selectedRental.vin} został zwrócony.`);
+          console.log('return data:', this.returnData);
+          console.log(`Vehicle ${this.selectedRental.vin} was returned.`);
         },
         error: (err) => {
           console.error('Error return:', err);
@@ -119,9 +119,8 @@ export class MyRentalsComponent implements OnInit {
   confirmCancel(): void {
     // TODO: wyslac anulowanie rezerwacji
     console.log(
-      `Rezerwacja samochodu ${this.selectedRental.vin} została anulowana.`
+      `car reservation ${this.selectedRental.vin} was cancel.`
     );
-    console.log('Przyczyna rezygnacji:', this.cancelReason);
     this.closeModal();
   }
 

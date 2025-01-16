@@ -50,7 +50,6 @@ export class ProfileComponent implements OnInit {
   }
 
   goToProfile(): void {
-    console.log('znajdujesz sie na tej zakładce');
   }
 
   goToMyRentals(): void {

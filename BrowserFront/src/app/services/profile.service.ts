@@ -47,20 +47,18 @@ export class ProfileService {
   }
 
   updateUserProfile(user: UserProfile): Observable<any> {
-    const token = localStorage.getItem('token');
+    const token = this.authService.getToken()
     if (token === null) {
       return throwError(() => new Error('Error with JWT token'));
     }
 
-    // Dodanie tokena jako parametru zapytania
     const params = new HttpParams().set('token', token);
 
-    // Przesyłanie `user` jako ciało zapytania (body)
     return this.http
       .put(
         `${this.apiUrl}/UserInfo/change-user-info`,
-        user, // Obiekt do edycji przesyłany w body
-        { params, responseType: 'text' as 'json' } // Token dodany jako parametr, oczekiwana odpowiedź tekstowa
+        user,
+        { params, responseType: 'text' as 'json' }
       )
       .pipe(
         catchError((error) => {
@@ -70,7 +68,6 @@ export class ProfileService {
       );
   }
 
-  // Wylogowanie użytkownika
   logout(): void {
     localStorage.removeItem('authToken');
     console.log('User has been logged out.');
@@ -100,7 +97,6 @@ export class ProfileService {
         } as UserProfile);
       }),
       map((profile: UserProfile) => {
-        // Lista wymaganych pól
         const requiredFields = [
           profile.name,
           profile.surname,
@@ -124,7 +120,6 @@ export class ProfileService {
           return field !== null && field !== undefined;
         });
 
-        console.log(isComplete);
         return isComplete;
       })
     );

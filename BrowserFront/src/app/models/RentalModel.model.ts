@@ -7,4 +7,3 @@ export interface Rental {
   description: string;
 }
 
-//TODO: dodac logie interface-u

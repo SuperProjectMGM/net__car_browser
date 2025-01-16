@@ -35,11 +35,10 @@ export class CarsListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Subscribe to filtered cars from CarsService
     this.carsService.getFilteredCars().subscribe((cars) => {
       this.allCars = cars;
-      this.isLoading = false; // Loading is finished when cars are available
-      this.updatePaginatedCars(); // Update the paginated list
+      this.isLoading = false;
+      this.updatePaginatedCars();
     });
   }
 

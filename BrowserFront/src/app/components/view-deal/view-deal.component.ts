@@ -27,7 +27,7 @@ export class ViewDealComponent {
     private vehicleToRentService: VehicleToRentService,
     private router: Router,
     private profileService: ProfileService,
-    private toastr: ToastrService, // Dodano ToastrService
+    private toastr: ToastrService,
     private priceService: PriceService
   ) {}
 
@@ -87,7 +87,7 @@ export class ViewDealComponent {
 
     this.profileService.isUserProfileComplete().subscribe((isComplete) => {
       if (isComplete) {
-        this.isModalVisible = true; // Pokaż modal
+        this.isModalVisible = true;
       } else {
         this.toastr.info(
           'Complete your profile details to rent a vehicle.',
@@ -99,9 +99,8 @@ export class ViewDealComponent {
   }
 
   confirmRentCar(): void {
-    this.isModalVisible = false; // Zamknij modal
+    this.isModalVisible = false;
     if (this.car) {
-      console.log(this.car.vin);
       this.authService
         .wantRentVehicle(this.car, this.pickupDateTime, this.returnDateTime)
         .subscribe(

@@ -23,8 +23,7 @@ export class LoginComponent {
     this.isLoading = true;
     this.authService.login(this.email, this.password).subscribe({
       next: (response) => {
-        console.log('logujemy sie');
-        localStorage.setItem('loggedIn', 'true'); //TODO: ajkoś ogarnąc to logawanie w kontescie klucza Ustaw flagę zalogowania
+        localStorage.setItem('loggedIn', 'true');
         this.router.navigate(['/dashboard']);
         this.isLoading = false;
       },

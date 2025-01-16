@@ -39,7 +39,6 @@ export class EditProfileComponent implements OnInit {
   loadUserProfile(): void {
     this.profileService.getUserProfile().subscribe((profile) => {
       if (profile) {
-        // Konwersja dat do formatu YYYY-MM-DD
         profile.birthDate = this.formatDate(profile.birthDate);
         profile.drivingLicenseIssueDate = this.formatDate(
           profile.drivingLicenseIssueDate
@@ -52,18 +51,18 @@ export class EditProfileComponent implements OnInit {
           profile.idCardExpirationDate
         );
 
-        this.user = profile; // Przypisanie do modelu
+        this.user = profile;
       }
       this.isLoading = false;
     });
   }
 
   formatDate(date: string | Date | null | undefined): string | undefined {
-    if (!date) return undefined; // Zwróć null zamiast undefined
+    if (!date) return undefined;
     const d = new Date(date);
     const month = String(d.getMonth() + 1).padStart(2, '0');
     const day = String(d.getDate()).padStart(2, '0');
-    return `${d.getFullYear()}-${month}-${day}`; // Format YYYY-MM-DD
+    return `${d.getFullYear()}-${month}-${day}`;
   }
 
   onSubmit(): void {
@@ -93,7 +92,7 @@ export class EditProfileComponent implements OnInit {
         }
       );
     } else {
-      console.log('cos nie tak z userem');
+      console.log('Failed to load user data');
     }
   }
 
@@ -103,17 +102,15 @@ export class EditProfileComponent implements OnInit {
 
   validateDates(): void {
     if (this.user) {
-      // Sprawdzenie daty urodzenia
       const birthDate = this.user.birthDate
         ? new Date(this.user.birthDate)
         : alert('enter date.');
       const eighteenYearsAgo = new Date(this.eighteenYearsAgo);
       if (birthDate > eighteenYearsAgo) {
         alert('Date of Birth must be at least 18 years in the past.');
-        this.user.birthDate = ''; // Resetuj nieprawidłową wartość
+        this.user.birthDate = '';
       }
 
-      // Sprawdzenie dat wydania i ważności prawa jazdy
       if (
         this.user.drivingLicenseIssueDate &&
         this.user.drivingLicenseExpirationDate
@@ -124,7 +121,7 @@ export class EditProfileComponent implements OnInit {
           alert(
             'Driving License Expiration Date must be after the Issue Date.'
           );
-          this.user.drivingLicenseExpirationDate = ''; // Resetuj nieprawidłową wartość
+          this.user.drivingLicenseExpirationDate = '';
         }
       }
 
@@ -133,7 +130,7 @@ export class EditProfileComponent implements OnInit {
         const idExpirationDate = new Date(this.user.idCardExpirationDate);
         if (idExpirationDate <= idIssueDate) {
           alert('ID Card Expiration Date must be after the Issue Date.');
-          this.user.idCardExpirationDate = ''; // Resetuj nieprawidłową wartość
+          this.user.idCardExpirationDate = '';
         }
       }
     }

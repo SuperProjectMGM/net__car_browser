@@ -42,7 +42,7 @@ export class DashboardComponent {
       this.vehicleToRentService.returnDateTime &&
       this.vehicleToRentService.pickupLocation
     ) {
-      const pickupDate = new Date(this.vehicleToRentService.pickupDateTime); // Konwersja string -> Date
+      const pickupDate = new Date(this.vehicleToRentService.pickupDateTime);
       const returnDate = new Date(this.vehicleToRentService.returnDateTime);
       this.vehicleToRentService.setDate(
         this.vehicleToRentService.pickupDateTime,
