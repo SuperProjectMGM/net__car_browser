@@ -15,6 +15,8 @@ public class MgmProvider
     
     public async Task ConfirmRental(Rental rental, UserDetails user)
     {
+        rental.Status = RentalStatus.ConfirmedByUser;
+
         var message = new Confirmed
         {
             BrowserProviderIdentifier = "MGMCO",
@@ -48,6 +50,7 @@ public class MgmProvider
 
     public async Task ReturnRental(Rental rental)
     {
+        rental.Status = RentalStatus.WaitingForReturnAcceptance;
         var message = new UserReturn
         {
             Slug = rental.Slug,
