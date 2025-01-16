@@ -23,9 +23,10 @@ public class RentalRepository : IRentalInterface
     private readonly AuthDbContext _authDbContext;
     private readonly RabbitMessageService _rabbitMessageService;
     private readonly HttpClient _httpClient;
+    private readonly IKEJHelper _kejHelper;
 
     public RentalRepository(IEmailInterface emailService, IConfiguration configuration, AppDbContext context,
-        AuthDbContext authDbContext, RabbitMessageService rabbitService, HttpClient httpClient)
+        AuthDbContext authDbContext, RabbitMessageService rabbitService, HttpClient httpClient, IKEJHelper kejHelper)
 
     {
         _rabbitMessageService = rabbitService;
@@ -34,6 +35,7 @@ public class RentalRepository : IRentalInterface
         _context = context;
         _authDbContext = authDbContext;
         _httpClient = httpClient;
+        _kejHelper = kejHelper;
     }
     
     public async Task SendConfirmationEmail(
@@ -96,7 +98,7 @@ public class RentalRepository : IRentalInterface
         if (userDetails == null)
             return null;
         
-        var provider = ProviderAdapterFactory.CreateProvider(rental.CarProviderIdentifier, _rabbitMessageService, _httpClient);
+        var provider = ProviderAdapterFactory.CreateProvider(rental.CarProviderIdentifier, _rabbitMessageService, _httpClient, _kejHelper);
         try
         {
             await provider.ConfirmRental(rental, userDetails);
@@ -149,7 +151,7 @@ public class RentalRepository : IRentalInterface
         rental.Status = RentalStatus.WaitingForReturnAcceptance;
         await _context.SaveChangesAsync();
 
-        var provider = ProviderAdapterFactory.CreateProvider(rental.CarProviderIdentifier, _rabbitMessageService, _httpClient);
+        var provider = ProviderAdapterFactory.CreateProvider(rental.CarProviderIdentifier, _rabbitMessageService, _httpClient, _kejHelper);
         try
         {
             await provider.ReturnRental(rental);

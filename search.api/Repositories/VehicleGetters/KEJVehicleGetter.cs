@@ -41,7 +41,7 @@ public class KEJVehicleGetter: IVehicleGetter
     {
         if (vehicle.RentalFirmName == _key)
         {
-            var offer = await _KEJHelper.GetOfferForCar(vehicle, user, start, end);
+            var offer = await _KEJHelper.GetOfferForCar(vehicle.Vin, user, start, end);
             return offer!.TotalCost;
         }
         return null;

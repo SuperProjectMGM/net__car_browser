@@ -6,14 +6,14 @@ public class EjkProviderAdapter : IProviderAdapterInterface
 {
     private readonly EjkProvider _adaptee;
 
-    public EjkProviderAdapter(HttpClient httpClient)
+    public EjkProviderAdapter(HttpClient httpClient, IKEJHelper kejHelper)
     {
-        _adaptee = new EjkProvider(httpClient);
+        _adaptee = new EjkProvider(httpClient, kejHelper);
     }
     
     public async Task ConfirmRental(Rental rental, UserDetails user)
     {
-        await _adaptee.CompleteRental(rental);
+        await _adaptee.CompleteRental(rental, user);
     }
 
     public Task ReturnRental(Rental rental)

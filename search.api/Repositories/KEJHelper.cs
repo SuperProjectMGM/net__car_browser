@@ -20,12 +20,12 @@ public class KEJHelper : IKEJHelper
         PricePath = _configuration["KEJ_PRICE_PATH"]!;
         AuthPath = _configuration["KEJ_AUTH_URI"]!;
     }
-    public async Task<KEJRentalOfferDto?> GetOfferForCar(VehicleOurDto vehicle, UserDetails user, DateTime start, DateTime end)
+    public async Task<KEJRentalOfferDto?> GetOfferForCar(string vehicleVin, UserDetails user, DateTime start, DateTime end)
     {
         string token = await GetTokenFromProvider();
         KEJOfferRequestDto dto = new KEJOfferRequestDto 
         {
-            CarId = int.Parse(vehicle.Vin.Split("_")[1]),
+            CarId = int.Parse(vehicleVin.Split("_")[1]),
             CustomerId = user.Id,
             firstName = user.Name,
             lastName = user.Surname,
