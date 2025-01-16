@@ -25,7 +25,7 @@ export class MyRentalsComponent implements OnInit {
 
   returnData = {
     latitude: '',
-    longitude: '',
+    longtitude: '',
     feedback: '',
   };
   cancelReason = '';
@@ -96,7 +96,11 @@ export class MyRentalsComponent implements OnInit {
   }
 
   confirmReturn(): void {
-    const params = new HttpParams().set('slug', this.selectedRental.slug);
+    const params = new HttpParams()
+    .set('slug', this.selectedRental.slug)
+    .set('latitude', this.returnData.latitude)
+    .set('longtitude', this.returnData.longtitude)
+    .set('description', this.returnData.feedback);
 
     this.client
       .put(`${this.baseUrl}/Rental/return-rental`, null, { params })
@@ -122,7 +126,6 @@ export class MyRentalsComponent implements OnInit {
   }
 
   getStatusText(status: string): string {
-    console.log(status);
     switch (status) {
       case 'Pending':
         return 'Pending Approval';

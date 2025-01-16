@@ -50,7 +50,11 @@ public class MgmProvider
     {
         var message = new UserReturn
         {
-            Slug = rental.Slug
+            Slug = rental.Slug,
+            Longtitude = rental.ReturnLongtitude,
+            Latitude = rental.ReturnLatitude,
+            Description = rental.ReturnClientDescription!
+
         };
         var jsonString = JsonSerializer.Serialize(message);
         var messageWrap = new MessageWrapper

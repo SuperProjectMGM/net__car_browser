@@ -11,7 +11,7 @@ public interface IRentalInterface
     public (string, string, string, string) ValidateClaims(string token);
     public bool ValidateIfTokenHasExpired(string token);
     public Task<Rental?> UserConfirmedRental(int userId, int rentId);
-    public Task<bool> ReturnRental(string slug);
+    public Task<bool> ReturnRental(string slug, float longtitude, float latitude, string description);
     public Task<List<Rental>> ReturnUsersRentals(string personalNumber);
     public Task RentalCompletion(Completed mess);
     public Task SendConfirmationEmail(string userEmail,

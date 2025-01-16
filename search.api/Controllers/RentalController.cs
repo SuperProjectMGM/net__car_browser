@@ -62,9 +62,10 @@ public class RentalController : Controller
     }
 
     [HttpPut("return-rental")]
-    public async Task<IActionResult> ReturnRental([FromQuery] string slug) 
+    public async Task<IActionResult> ReturnRental([FromQuery] string slug, 
+    [FromQuery] float longtitude, [FromQuery] float latitude, [FromQuery] string description) 
     {
-        var success = await _rentalRepo.ReturnRental(slug);
+        var success = await _rentalRepo.ReturnRental(slug, longtitude, latitude, description);
         if (!success)
             return NotFound("Something went wrong. :((");
 

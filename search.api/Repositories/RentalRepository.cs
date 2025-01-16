@@ -134,7 +134,7 @@ public class RentalRepository : IRentalInterface
         return rentalModel;
     }
     
-    public async Task<bool> ReturnRental(string slug)
+    public async Task<bool> ReturnRental(string slug, float longtitude, float latitude, string description)
     {
         var rental = await _context.Rentals.FirstOrDefaultAsync((rental) => rental.Slug == slug);
         if (rental == null)
@@ -143,6 +143,9 @@ public class RentalRepository : IRentalInterface
         if (userDetails == null)
             return false;
     
+        rental.ReturnLongtitude = longtitude;
+        rental.ReturnLatitude = latitude;
+        rental.ReturnClientDescription = description;    
         rental.Status = RentalStatus.WaitingForReturnAcceptance;
         await _context.SaveChangesAsync();
 
