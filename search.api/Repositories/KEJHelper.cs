@@ -31,7 +31,7 @@ public class KEJHelper : IKEJHelper
             lastName = user.Surname,
             birthday = DateOnly.FromDateTime(user.BirthDate),
             driverLicenseReceiveDate = DateOnly.FromDateTime(user.DrivingLicenseIssueDate),
-            RentalName = "MGMCO",
+            RentalName = "MGM Car Rental",
             PlannedStartDate = start,
             PlannedEndDate = end
         };

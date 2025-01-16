@@ -17,7 +17,7 @@ public class KEJVehicleGetter: IVehicleGetter
     private readonly IKEJHelper _KEJHelper;
     private readonly string BasePath;
 
-    public KEJVehicleGetter(HttpClient client, IConfiguration configuration, KEJHelper KEJHelper)
+    public KEJVehicleGetter(HttpClient client, IConfiguration configuration, IKEJHelper KEJHelper)
     {
         _client = client;
         _configuration = configuration;

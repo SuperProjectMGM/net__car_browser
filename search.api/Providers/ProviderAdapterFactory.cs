@@ -13,7 +13,7 @@ public static class ProviderAdapterFactory
         {
             case "MGMCO":
                 return new MgmProviderAdapter(service);
-            case "EJKCO":
+            case "KEJCO":
                 return new EjkProviderAdapter(httpClient, kejHelper);
             default:
                 throw new KeyNotFoundException("Unknown provider.");
