@@ -161,7 +161,6 @@ public class RentalRepository : IRentalInterface
             Console.WriteLine($"Error while returning rental: {ex.Message}");
         }
 
-        await _context.SaveChangesAsync();
         return true;
     }
 

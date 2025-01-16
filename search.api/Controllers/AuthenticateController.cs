@@ -22,9 +22,11 @@ namespace search.api.Controllers;
 public class AuthenticateController: ControllerBase
 {
     private IAuthInterface _authRepository; 
-    public AuthenticateController(IAuthInterface authRepo)
+    private IConfiguration _configuration;
+    public AuthenticateController(IAuthInterface authRepo, IConfiguration configuration)
     {
         _authRepository = authRepo;
+        _configuration = configuration;
     }
 
     [HttpPost]
@@ -85,8 +87,8 @@ public class AuthenticateController: ControllerBase
         if (claimsRet is null)
         return Unauthorized("Can't crate user");
         var token = _authRepository.GetToken(claimsRet!);
-        // TODO: Change hardcoded values
-        var redirectUrl = $"http://localhost:4199/auth/google-callback?token={new JwtSecurityTokenHandler().WriteToken(token)}";
+        var baseUri = _configuration["FRONTEND_URI"]!;
+        var redirectUrl = $"{baseUri}/auth/google-callback?token={new JwtSecurityTokenHandler().WriteToken(token)}";
         
         return Redirect(redirectUrl);
     }

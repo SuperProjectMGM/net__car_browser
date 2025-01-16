@@ -16,8 +16,8 @@ public class EjkProviderAdapter : IProviderAdapterInterface
         await _adaptee.CompleteRental(rental, user);
     }
 
-    public Task ReturnRental(Rental rental)
+    public async Task ReturnRental(Rental rental)
     {
-        throw new NotImplementedException();
+        await _adaptee.ReturnRental(rental);
     }
 }

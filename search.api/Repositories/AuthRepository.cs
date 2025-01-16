@@ -87,21 +87,15 @@ public class AuthRepository : IAuthInterface
         return properties;
     }
 
-    // Here we already know that user is authenticated by google, and only should 
-    // find if he has account in our system/
-    // I assume, that a person tha is signin in with google, will be signed in with google always 
-    // I'll generate random password
     public async Task<List<Claim>?> GoogleCallbackFunction(string email)
     {
         var user = await _userManager.FindByEmailAsync(email);
-        // Registration of new user
         UserDetails userTmp;
         if (user is null)
         {
             userTmp = new UserDetails();
             string password = RandomPassword(12);
             userTmp.Email = email;
-            // TODO: Change temporary solution
             userTmp.UserName = email;
             var result = await _userManager.CreateAsync(userTmp, password);
             if (!result.Succeeded)
@@ -129,20 +123,17 @@ public class AuthRepository : IAuthInterface
     
         List<char> chars = new List<char>(length);
     
-        // add one char from each category
         foreach(string cat in categories)
         {
             chars.Add(cat[rand.Next(cat.Length)]);
         }
     
-        // add random chars from any category until we hit the length
         string all = string.Concat(categories);            
         while (chars.Count < length)
         {
             chars.Add(all[rand.Next(all.Length)]);
         }
     
-        // shuffle and return our password
         var shuffled = chars.OrderBy(c => rand.NextDouble()).ToArray();
         return new string(shuffled);
     }

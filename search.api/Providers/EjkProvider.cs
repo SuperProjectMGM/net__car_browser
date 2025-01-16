@@ -25,45 +25,28 @@ public class EjkProvider
         var offer = await _kejHelper.GetOfferForCar(rental.Vin, user, rental.Start, rental.End);
         if (offer == null)
             throw new Exception("Ejk provider did not provide an offer.");
-        var dto = new KEJRental
+        var dto = new KEJRental();
+        dto.CustomerId = user.Id;
+        dto.OfferId = offer.Id;
+        dto.RentalName = "MGM Car Rental";
+        dto.PlannedStartDate = rental.Start;
+        dto.PlannedEndDate = rental.End;
+        var options = new JsonSerializerOptions
         {
-            CustomerId = user.Id,
-            OfferId = offer.Id,
-            RentalName = "MGM Car Rental",
-            PlannedStartDate = rental.Start,
-            PlannedEndDate = rental.End
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            WriteIndented = true
         };
-        try
-        {
-            var jsonContent = new StringContent(
-                JsonSerializer.Serialize(dto),
-                Encoding.UTF8, "application/json");
-            _httpClient.DefaultRequestHeaders.Authorization = 
-            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+        var jsonContent = new StringContent(JsonSerializer.Serialize(dto), Encoding.UTF8, "application/json");
+        Console.WriteLine(JsonSerializer.Serialize(dto));
+        _httpClient.DefaultRequestHeaders.Authorization = 
+        new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var response = await _httpClient.PostAsync("https://car-rental-api-chezbchwebfggwcd.canadacentral-01.azurewebsites.net/api/customer/rentals", jsonContent);
-            //var request = new HttpRequestMessage(HttpMethod.Post,
-            //    "http://car-rental-api-chezbchwebfggwcd.canadacentral-01.azurewebsites.net/api/customer/rentals");
-            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            //request.Content = JsonContent.Create(dto);
-            //var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
             KEJRentalReturn returnRentInfo = await response.ReadContentAsync<KEJRentalReturn>();
             rental.Slug += $"_{returnRentInfo.Id}";
-            if (!response.IsSuccessStatusCode)
-            {
-                string errorContent = await response.Content.ReadAsStringAsync();
-                Console.WriteLine($"Error: {response.StatusCode}, Details: {errorContent}");
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error during ejk rental completion: {ex.Message}");
-            throw;
-        }
     }
 
     public async Task ReturnRental(Rental rental)
     {
-        rental.Status = RentalStatus.WaitingForReturnAcceptance;
         var token = await _kejHelper.GetTokenFromProvider();
         KEJReturnRequest returnRequest = new KEJReturnRequest
         {
