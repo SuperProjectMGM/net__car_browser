@@ -36,9 +36,4 @@ public class OurVehicleGetter : IVehicleGetter
         }
         return null;
     }
-
-    public Task<string> GetTokenFromProvider()
-    {
-        throw new NotImplementedException();
-    }
 }
