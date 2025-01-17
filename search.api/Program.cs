@@ -119,7 +119,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAll", builder =>
     {
         builder.WithOrigins("http://localhost:4199", "https://nice-tree-06b2b2403.5.azurestaticapps.net",
-         "http://localhost:4199/dashboard", "https://localhost:4199")
+         "http://localhost:4199/dashboard", "https://localhost:4199", "https://nice-tree-06b2b2403.5.azurestaticapps.net/view-deals")
                .AllowAnyMethod()
                .AllowAnyHeader()
                 .AllowCredentials();
